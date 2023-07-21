@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      {% block title %}
+      {% endblock %}
+    </title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% include 'navbar.html' %}
+  </head>
+  <body>
+    <div>
+      {% block content %}
+
+      {% endblock %}
+    </div>
+  </body>
+  <script>
+    function openGoogle() {
+      window.open('https://google.com')
+    }
+  </script>
+</html>
