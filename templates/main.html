@@ -3,14 +3,15 @@
   <head>
     <title>
       {% block title %}
+
       {% endblock %}
     </title>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-    {% include 'navbar.html' %}
   </head>
   <body>
+    {% include 'navbar.html' %}
     <div>
       {% block content %}
 
