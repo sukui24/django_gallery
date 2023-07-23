@@ -7,6 +7,6 @@ urlpatterns = [
     path('register/', views.registerPage, name='register'),
     path('', views.home, name='home'),
     path('image_edit/', views.imageEdit, name='image_edit'),
-    path('image_view/', views.imagePage, name='view_image'),
+    path('image_view/<str:pk>', views.imagePage, name='view_image'),
     path('image_add/', views.imageAdd, name='add_image'),
 ]
