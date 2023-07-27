@@ -5,7 +5,11 @@
 __pycache__
 db.sqlite3
 media
+<<<<<<< HEAD
 
+=======
+static
+>>>>>>> 3059175a15a1141aae62dd945006ac891423502d
 # Backup files # 
 *.bak 
 
