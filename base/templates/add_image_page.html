@@ -1,0 +1,27 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+  <div class="row my-form">
+    <div class="col-md-8 offset-md-2">
+      <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="row mb-3">
+          <div class="col-md-8">
+            <label for="{{ field.name }}" class="form-label">{{ field.label_tag }}</label>
+            {{ field }}
+          </div>
+        </div>
+        {% endfor %}
+        <div class="row">
+          <div class="col-12 d-flex justify-content-center">
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary me-3">Go back</a>
+            <button type="submit" class="btn btn-success">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
