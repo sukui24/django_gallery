@@ -28,5 +28,9 @@ class ImageModel(models.Model):
         self.unique_name = os.path.basename(self.image.name)
         super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        os.remove(os.path.join("./media/images", self.unique_name))
+        super().delete(*args, **kwargs)
+
     def __str__(self):
         return self.image.name
