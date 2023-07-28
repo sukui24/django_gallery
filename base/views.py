@@ -1,7 +1,21 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+
 from .models import ImageModel
 from .forms import ImageForm
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+
+
+def loginUser(request):
+    pass
+
+
+@login_required(login_url='home')
+def logoutUser(request):
+    logout(request)
+    return redirect('home')
 
 
 def home(request):
@@ -20,3 +34,9 @@ def addImage(request):
         form = ImageForm()
     context = {'form': form}
     return render(request, 'base/add_image_page.html', context)
+
+
+def viewImage(request, unique_name):
+    image = get_object_or_404(ImageModel, unique_name=unique_name)
+    context = {'image': image}
+    return render(request, 'base/view_image_page.html', context)

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 {% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +10,12 @@
     <title>Gallery</title>
 </head>
 <body>
+    {% include 'navbar.html' %}
     <style>
+        main{
+            display: grid;
+            grid-template-columns:3fr;
+        }
         .bd-placeholder-img {
           font-size: 1.125rem;
           text-anchor: middle;
@@ -81,9 +88,6 @@
           z-index: 1500;
         }
       </style>
-    {% include 'navbar.html' %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
     {% block content %}
 
 

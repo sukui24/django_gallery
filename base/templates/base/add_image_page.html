@@ -9,15 +9,17 @@
         {% for field in form %}
         <div class="row mb-3">
           <div class="col-md-8">
-            <label for="{{ field.name }}" class="form-label">{{ field.label_tag }}</label>
+            <label for="{{ field.name }}" class="form-label">{{ field.name }}:</label>
             {{ field }}
           </div>
         </div>
         {% endfor %}
         <div class="row">
           <div class="col-12 d-flex justify-content-center">
-            <a href="{% url 'home' %}" class="btn btn-outline-secondary me-3">Go back</a>
-            <button type="submit" class="btn btn-success">Submit</button>
+            <div class="btn-group">
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary me-3">Go back</a>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
           </div>
         </div>
       </form>
