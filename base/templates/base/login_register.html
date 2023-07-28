@@ -1,0 +1,79 @@
+{% extends 'main.html' %}
+{% block content %}
+<style>
+    .custom-class {
+        width: 400px;
+        display: inline-block;
+}
+</style>
+<main class="form-signin w-100 m-auto">
+{% if page == 'login' %}
+    <!-- Login page start -->
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+        <div class="row my-form">
+            <div class="col-md-12 ">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h1 class="h3 mb-3 fw-normal">Please log in</h1>
+                    <div class="form-control">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" maxlength="150" autofocus="" required="" id="id_username">
+                    </div>
+                    <div class="form-control">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" maxlength="150" autofocus="" required="" id="password">
+                    </div>
+                    <div class="d-flex justify-content-between gap-4">
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100 py-2">Go back</a>
+                        <button class="btn btn-primary w-100 py-2" type="submit" value="Submit">Log in</button>
+                    </div>
+                    <!-- Error messages start -->
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <!-- Error messages end -->
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- login page end -->
+{% else %}
+    <!-- Register page start -->
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+        <div class="row my-form">
+            <div class="col-md-12 ">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+                    {% for field in form %}
+                    <div class="form-control">
+                        <label for="{{field.name}}">{{field.label}}:</label>
+                        {{field}}
+                    </div>
+                    {% endfor %}
+                    <div class="d-flex justify-content-between gap-4">
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100 py-2">Go back</a>
+                        <button class="btn btn-primary w-100 py-2" type="submit" value="Submit">Sign in</button>
+                    </div>
+                    <!-- Error messages start -->
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <!-- Error messages end -->
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Register page end -->
+{% endif %}
+</main>
+
+{% endblock content %}  

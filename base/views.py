@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
+from django.contrib import messages
+
 from .models import ImageModel
-from .forms import ImageForm
+from .forms import ImageForm, MyUserCreationForm
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -9,7 +11,38 @@ from django.contrib.auth.decorators import login_required
 
 
 def loginUser(request):
-    pass
+    page = 'login'
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == "POST":
+        username = request.POST.get('username').lower()
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Username or Password is incorrect')
+
+    context = {'page': page}
+    return render(request, 'base/login_register.html', context)
+
+
+def registerUser(request):
+    form = MyUserCreationForm()
+    if request.method == "POST":
+        form = MyUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Something went wrong during registration')
+    return render(request, 'base/login_register.html', {'form': form})
 
 
 @login_required(login_url='home')
@@ -27,9 +60,13 @@ def home(request):
 def addImage(request):
     if request.method == "POST":
         form = ImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
+        ImageModel.objects.create(
+            host=request.user,
+            title=request.POST.get('title'),
+            description=request.POST.get('description'),
+            image=request.FILES.get('image'),
+        )
+        return redirect('home')
     else:
         form = ImageForm()
     context = {'form': form}
@@ -40,3 +77,16 @@ def viewImage(request, unique_name):
     image = get_object_or_404(ImageModel, unique_name=unique_name)
     context = {'image': image}
     return render(request, 'base/view_image_page.html', context)
+
+
+def deleteImage(request, unique_name):
+    image = ImageModel.objects.get(unique_name=unique_name)
+
+    if request.user != image.host:
+        return redirect('home')
+
+    if request.method == "POST":
+        image.delete()
+        return redirect('home')
+
+    return render(request, 'base/delete_image.html', {'image': image})

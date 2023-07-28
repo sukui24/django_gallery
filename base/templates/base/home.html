@@ -45,7 +45,7 @@
                         <a href="{% url 'view-image' image.unique_name %}" type="button" class="btn btn-custom btn-sm btn-primary">View</a>
                         {% if request.user == image.host %}
                         <a href="/" type="button" class="btn btn-sm btn-outline-info mx-2">Edit</a>
-                        <a href="/" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+                        <a href="{% url 'delete-image' image.unique_name %}" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
                         {% endif %}
                     </div>
                     <small class="text-body-secondary">{{image.created_at|timesince}} ago</small>

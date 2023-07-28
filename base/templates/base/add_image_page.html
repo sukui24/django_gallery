@@ -9,8 +9,8 @@
         {% for field in form %}
         <div class="row mb-3">
           <div class="col-md-8">
-            <label for="{{ field.name }}" class="form-label">{{ field.name }}:</label>
-            {{ field }}
+                <label for="{{ field.name }}" class="form-label">{{ field.label }}:</label>
+                {{ field }}
           </div>
         </div>
         {% endfor %}

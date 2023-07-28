@@ -1,0 +1,21 @@
+{% extends 'main.html' %}
+{% block content %}
+    
+<main class="form-signin w-100 m-auto">
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+        <div class="row my-form">
+            <div class="col-md-12 ">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h1 class="h3 mb-3 fw-normal">Are you sure you want to delete {{image.unique_name}}?</h1>
+                    <div class="d-flex justify-content-between gap-4">
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100 py-2">Go back</a>
+                        <button class="btn btn-danger w-100 py-2" type="submit" value="Submit">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
