@@ -12,6 +12,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
 
+# TODO: if unique name - add random symbols
 class ImageModel(models.Model):
     unique_name = models.CharField(max_length=100, unique=True, null=True)
     title = models.CharField(max_length=300)

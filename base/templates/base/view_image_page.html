@@ -9,9 +9,9 @@
             <hr>
             <p class="lead text-body-secondary">{{image.description}}</p>
             <a href="/" class="btn btn-primary my-2">Download image</a>
-            {% if request.user == image.host %} 
+            {% if request.user == image.host %}
             <a href="/" type="button" class="btn btn-sm btn-outline-info">Edit</a>
-            <a href="/" type="button" class="btn btn-sm btn-outline-danger">Delete</a> 
+            <a href="{% url 'delete-image' image.unique_name %}" type="button" class="btn btn-sm btn-outline-danger">Delete</a> 
             {% endif %}
         </div>
     </div>

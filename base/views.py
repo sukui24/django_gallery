@@ -45,7 +45,7 @@ def registerUser(request):
     return render(request, 'base/login_register.html', {'form': form})
 
 
-@login_required(login_url='home')
+@login_required(login_url='login')
 def logoutUser(request):
     logout(request)
     return redirect('home')
@@ -57,6 +57,7 @@ def home(request):
     return render(request, 'base/home.html', context)
 
 
+@login_required(login_url='login')
 def addImage(request):
     if request.method == "POST":
         form = ImageForm(request.POST, request.FILES)
@@ -84,9 +85,9 @@ def deleteImage(request, unique_name):
 
     if request.user != image.host:
         return redirect('home')
-
-    if request.method == "POST":
-        image.delete()
-        return redirect('home')
+    else:
+        if request.method == "POST":
+            image.delete()
+            return redirect('home')
 
     return render(request, 'base/delete_image.html', {'image': image})
