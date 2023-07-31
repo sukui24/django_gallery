@@ -7,7 +7,6 @@ from .forms import ImageForm, MyUserCreationForm
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-# Create your views here.
 
 
 def loginUser(request):
@@ -56,6 +55,8 @@ def home(request):
     context = {'images': images}
     return render(request, 'base/home.html', context)
 
+# ! TODO: file extension checking
+
 
 @login_required(login_url='login')
 def addImage(request):
@@ -80,6 +81,7 @@ def viewImage(request, unique_name):
     return render(request, 'base/view_image_page.html', context)
 
 
+@login_required(login_url='login')
 def deleteImage(request, unique_name):
     image = ImageModel.objects.get(unique_name=unique_name)
 
@@ -87,6 +89,7 @@ def deleteImage(request, unique_name):
         return redirect('home')
     else:
         if request.method == "POST":
+
             image.delete()
             return redirect('home')
 
