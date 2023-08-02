@@ -5,10 +5,20 @@ from django.contrib import messages
 from random import randint
 
 
+def path_to_directory(instance):
+
+    # define path to user directory in media to handle exceptions
+    return f'./media/images/user_{instance.host.id}'
+
+
 def user_directory_path(instance, filename):
 
     # file will be uploaded to MEDIA_ROOT / user_<id>/<filename>
-    return 'user_{0}/{1}'.format(instance.host.id, filename)
+    return f'user_{instance.host.id}/{filename}'
+
+# in future way better would be initialize user method first and give it image argument
+# which will be ForeignKey. This means each user will have their images, not like rn
+# images have user (owner). That's ok but kinda not rigth :p
 
 
 class User(AbstractUser):
@@ -36,13 +46,17 @@ class ImageModel(models.Model):
 
     # * overriding save method for ImageModel
     def save(self, *args, **kwargs):
-        # getting future object id (last id + 1)
-        LastInsertId = (ImageModel.objects.last()).id + 1
-        # making unique image name to avoid errors
-        self.image.name = str(LastInsertId) + '_' + self.image.name
-        # declare the unique_name variable to use it in future
-        self.unique_name = os.path.basename(self.image.name)
-        super().save(*args, **kwargs)
+        # scanning if directory is empty and just save if it is
+        if not any(os.scandir(path_to_directory(self))):
+            super().save(*args, **kwargs)
+        else:
+            # getting future object id (last id + 1)
+            LastInsertId = (ImageModel.objects.last()).id + 1
+            # making unique image name to avoid errors
+            self.image.name = str(LastInsertId) + '_' + self.image.name
+            # declare the unique_name variable to use it in future
+            self.unique_name = os.path.basename(self.image.name)
+            super().save(*args, **kwargs)
 
     # * overriding delete method for ImageModel
     def delete(self, *args, **kwargs):
