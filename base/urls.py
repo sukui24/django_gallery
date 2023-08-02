@@ -12,4 +12,5 @@ urlpatterns = [
     path('view_image/<str:unique_name>', views.viewImage, name='view-image'),
     path('delete_image/<str:unique_name>',
          views.deleteImage, name='delete-image'),
+    path('edit_image/<str:unique_name>', views.editImage, name='edit-image')
 ]

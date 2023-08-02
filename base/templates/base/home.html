@@ -44,7 +44,7 @@
                     <div class="btn-group">
                         <a href="{% url 'view-image' image.unique_name %}" type="button" class="btn btn-custom btn-sm btn-primary">View</a>
                         {% if request.user == image.host %}
-                        <a href="/" type="button" class="btn btn-sm btn-outline-info mx-2">Edit</a>
+                        <a href="{% url 'edit-image' image.unique_name %}" type="button" class="btn btn-sm btn-outline-info mx-2">Edit</a>
                         <a href="{% url 'delete-image' image.unique_name %}" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
                         {% endif %}
                     </div>
