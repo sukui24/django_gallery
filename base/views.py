@@ -9,6 +9,22 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import os
 
+from django.forms.models import model_to_dict
+# // TODO: change register form: add first name, last, adress, phone number, avatar
+# TODO: settings page
+# TODO: files extension and size checking (probably max 2.5-3MB)
+# TODO: warning toasts
+# TODO: views counter
+# TODO: follow functional
+# TODO: download functional
+# TODO: search bar and tags functional
+# ? use class-based views in future
+# ? maybe add an image size supressing functional
+
+# ! possible erorrs
+# * password to similar to first/last or user name
+# *
+
 
 def loginUser(request):
     page = 'login'
@@ -31,15 +47,19 @@ def loginUser(request):
 
 
 def registerUser(request):
+    future_id = (User.objects.last().id) + 1
     form = MyUserCreationForm()
     if request.method == "POST":
-        form = MyUserCreationForm(request.POST)
+        form = MyUserCreationForm(request.POST, request.FILES)
+
         if form.is_valid():
+            os.mkdir(f'./media/images/user_{future_id}')
+
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
             login(request, user)
-            return redirect('home')
+            return redirect('profile', user.id)
         else:
             messages.error(request, 'Something went wrong during registration')
     return render(request, 'base/login_register.html', {'form': form})
@@ -131,6 +151,7 @@ def deleteImage(request, unique_name):
 
 def userProfile(request, id):
     user = User.objects.get(id=id)
+    user_dict = User.objects.filter(id=id)
     images = ImageModel.objects.filter(host_id=id).order_by('-created_at')
     context = {'user': user, 'images': images, }
     return render(request, 'base/profile.html', context)

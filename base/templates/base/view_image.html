@@ -5,7 +5,16 @@
     <div class="row my-form">
         <div class="col-md-8 offset-md-2">
             <img class="rounded img-fluid mx-auto p-2" style="max-height: 1500px;" src="{{ image.image.url }}" alt="{{ image.title }}">
-            <h1 class="fw-light">{{image.title}}</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h1 class="fw-light"><b>{{image.title}}</b></h1>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'profile' image.host.id %}" class="text-black" style="text-decoration: none;"><img class="bg-info rounded-circle justify-content-end" src="{{image.host.avatar.url}}" style="width: 55px;">  @{{image.host.username}}</a>
+                    </div>
+                </div>
+            </div>
             <hr>
             <p class="lead text-body-secondary">{{image.description}}</p>
             <a href="/" class="btn btn-primary my-2">Download image</a>
