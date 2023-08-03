@@ -5,7 +5,7 @@ urlpatterns = [
     path('register/', views.registerUser, name='register'),
     path('logout/', views.logoutUser, name='logout'),
     path('login/', views.loginUser, name='login'),
-
+    path('profile/<str:id>', views.userProfile, name='profile'),
 
     path('', views.home, name='home'),
     path('add_image/', views.addImage, name='add-image'),

@@ -2,14 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse, 
 
 from django.contrib import messages
 
-from .models import ImageModel
+from .models import ImageModel, User
 from .forms import ImageForm, MyUserCreationForm
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import os
-
-# ! TODO: Get rid of unique_name variable
 
 
 def loginUser(request):
@@ -54,7 +52,7 @@ def logoutUser(request):
 
 
 def home(request):
-    images = ImageModel.objects.all()
+    images = ImageModel.objects.all().order_by('-created_at')
     context = {'images': images}
     return render(request, 'base/home.html', context)
 
@@ -64,6 +62,10 @@ def home(request):
 @login_required(login_url='login')
 def addImage(request):
     if request.method == "POST":
+        # making sure to create user folder when he try to post image
+        if not os.path.exists(f'./media/images/user_{request.user.id}'):
+            os.mkdir(f'./media/images/user_{request.user.id}')
+
         form = ImageForm(request.POST, request.FILES)
         ImageModel.objects.create(
             host=request.user,
@@ -76,13 +78,13 @@ def addImage(request):
     else:
         form = ImageForm()
     context = {'form': form}
-    return render(request, 'base/add_image_page.html', context)
+    return render(request, 'base/add_image.html', context)
 
 
 def viewImage(request, unique_name):
     image = get_object_or_404(ImageModel, unique_name=unique_name)
     context = {'image': image}
-    return render(request, 'base/view_image_page.html', context)
+    return render(request, 'base/view_image.html', context)
 
 
 def editImage(request, unique_name):
@@ -109,7 +111,7 @@ def editImage(request, unique_name):
             return redirect('view-image', image.unique_name)
 
     context = {'form': form}
-    return render(request, 'base/edit_image_page.html', context)
+    return render(request, 'base/edit_image.html', context)
 
 
 @login_required(login_url='login')
@@ -125,3 +127,10 @@ def deleteImage(request, unique_name):
             return redirect('home')
 
     return render(request, 'base/delete_image.html', {'image': image})
+
+
+def userProfile(request, id):
+    user = User.objects.get(id=id)
+    images = ImageModel.objects.filter(host_id=id).order_by('-created_at')
+    context = {'user': user, 'images': images, }
+    return render(request, 'base/profile.html', context)
