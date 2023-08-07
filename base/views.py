@@ -10,20 +10,6 @@ from django.contrib.auth.decorators import login_required
 import os
 
 from django.forms.models import model_to_dict
-# // TODO: change register form: add first name, last, adress, phone number, avatar
-# TODO: settings page
-# TODO: files extension and size checking (probably max 2.5-3MB)
-# TODO: warning toasts
-# TODO: views counter
-# TODO: follow functional
-# TODO: download functional
-# TODO: search bar and tags functional
-# ? use class-based views in future
-# ? maybe add an image size supressing functional
-
-# ! possible erorrs
-# * password to similar to first/last or user name
-# *
 
 
 def loginUser(request):
@@ -92,7 +78,6 @@ def addImage(request):
             title=request.POST.get('title'),
             description=request.POST.get('description'),
             image=request.FILES.get('image'),
-            image_flag=True,
         )
         return redirect('home')
     else:
@@ -118,16 +103,9 @@ def editImage(request, unique_name):
     if request.method == "POST":
         form = ImageForm(request.POST, request.FILES, instance=image)
         if form.is_valid():
-            if 'image' in request.FILES:
-                image.image_flag = True
-                os.remove(
-                    f'./media/images/user_{image.host.id}/{image.unique_name}')
-
-            image.image = form.cleaned_data['image']
-            image.title = form.cleaned_data['title']
-            image.description = form.cleaned_data['description']
-            image.save()
-
+            form.save()
+            if 'image' in form.changed_data:
+                image.unique_name = form.cleaned_data['image']
             return redirect('view-image', image.unique_name)
 
     context = {'form': form}
