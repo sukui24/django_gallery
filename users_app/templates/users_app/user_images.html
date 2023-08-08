@@ -10,14 +10,14 @@
 </style>
 <main>
 
-    <section class="text-center container">
+    <section class="py-5 text-center container">
         <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light py-4"><strong>Main Gallery</strong></h1>
-            <p class="lead text-body-secondary">Step into our online gallery and experience a world of captivating visuals. Discover a curated selection of stunning photographs that capture beauty, emotions, and stories, all at your fingertips.</p>
+            <h1 class="fw-light">Images by {{user.username}}</h1>
+            <p class="lead text-body-secondary">Here you can see all images that {{user.username}} posts on our website :).</p>
             <p>
-            <a href="{% url 'add-image' %}" class="btn btn-primary btn-lg my-2">Add your own image</a>
-            </p>
+            <a href="{% url 'profile' user.id %}" class="btn btn-outline-dark btn-lg my-2">Go back</a>
+            </p> 
         </div>
         </div>
     </section>
@@ -26,7 +26,6 @@
     <!-- image container class starts -->
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
-        <h3 class="d-flex justify-content-center py-5"><p>Gallery feed</p></h3>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {% for image in images %}
             <div class="col">

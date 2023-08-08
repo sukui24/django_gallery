@@ -27,10 +27,16 @@ def delete_old_avatar(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=User)
 def update_avatar_name(sender, instance, **kwargs):
+    # if image doesn't change we return nothing(True)
+    _old_instance = sender.objects.get(id=instance.id)
+    if _old_instance.avatar.name == instance.avatar.name:
+        return True
+
     _name_start = instance.avatar.name.split('.')[0]
     _name_end = instance.avatar.name.split('.')[-1]
     _filename = f'{_name_start}_avatar.{_name_end}'
-    instance.avatar.name = _filename  # rename avatar to visually see it in user folder
+    # rename avatar to visually see it in user folder/DB
+    instance.avatar.name = _filename
 
 
 @receiver(post_save, sender=User)

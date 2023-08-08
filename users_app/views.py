@@ -56,7 +56,6 @@ def logoutUser(request):
 
 def userProfile(request, id):
     user = User.objects.get(id=id)
-    user_dict = User.objects.filter(id=id)
     images = ImageModel.objects.filter(host_id=id).order_by('-created_at')
     context = {'user': user, 'images': images, }
     return render(request, 'users_app/profile.html', context)
@@ -77,3 +76,11 @@ def editUser(request, id):
             return redirect('profile', id)
     context = {'form': form}
     return render(request, 'users_app/edit_user.html', context)
+
+
+def userImages(request, id):
+
+    user = User.objects.get(id=id)
+    images = ImageModel.objects.filter(host_id=id).order_by('-created_at')
+    context = {'images': images, 'user': user}
+    return render(request, 'users_app/user_images.html', context)
