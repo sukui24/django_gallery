@@ -20,9 +20,6 @@ class FileValidator(object):
             ie. 100
         max_size: maximum number of bytes allowed
             ie. 24 * 1024 * 1024 for 24 MB
-     Usage example::
-        MyModel(models.Model):
-            myfile = FileField(validators=FileValidator(max_size=24*1024*1024), ...)
     """
 
     extension_message = (
@@ -35,10 +32,11 @@ class FileValidator(object):
         'The current file %(size)s, which is too large. The maximum file size is %(allowed_size)s.')
 
     def __init__(self, *args, **kwargs):
-        self.allowed_extensions = kwargs.pop('allowed_extensions', None)
-        self.allowed_mimetypes = kwargs.pop('allowed_mimetypes', None)
-        self.min_size = kwargs.pop('min_size', 0)
-        self.max_size = kwargs.pop('max_size', None)
+        # get argument if exists or set default (None/0)
+        self.allowed_extensions = kwargs.get('allowed_extensions', None)
+        self.allowed_mimetypes = kwargs.get('allowed_mimetypes', None)
+        self.min_size = kwargs.get('min_size', 0)
+        self.max_size = kwargs.get('max_size', None)
 
     def __call__(self, value):
         """

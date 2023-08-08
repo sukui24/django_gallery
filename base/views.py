@@ -7,14 +7,16 @@ from django.contrib.auth.decorators import login_required
 import os
 
 from django.forms.models import model_to_dict
+from django.db.models import Q
 
 
 def home(request):
-    images = ImageModel.objects.all().order_by('-created_at')
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    images = ImageModel.objects.filter(
+        Q(title__icontains=q) |
+        Q(description__icontains=q)).order_by('-created_at')
     context = {'images': images}
     return render(request, 'base/home.html', context)
-
-# ! TODO: file extension checking
 
 
 @login_required(login_url='login')
