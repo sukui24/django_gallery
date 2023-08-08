@@ -60,13 +60,15 @@
                         <button class="btn btn-primary w-100 py-2" type="submit" value="Submit">Sign in</button>
                     </div>
                     <!-- Error messages start -->
-                    {% if messages %}
+                    {% for field in form %}
+                    {% if field.errors %}
                     <ul class="messages">
-                        {% for message in messages %}
-                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% for error in field.errors %}
+                        <li {% if error.tags %} class="{{ error.tags }}"{% endif %}>{{ field.label }}: {{ error }}</li>
                         {% endfor %}
                     </ul>
                     {% endif %}
+                    {% endfor %}
                     <!-- Error messages end -->
                 </form>
             </div>

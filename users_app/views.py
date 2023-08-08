@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from .models import User
 from base.models import ImageModel
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import os
 from django.contrib import messages
-from .forms import MyUserCreationForm
+from .forms import MyUserCreationForm, UserForm
 # Create your views here.
 
 
@@ -62,3 +62,21 @@ def userProfile(request, id):
     images = ImageModel.objects.filter(host_id=id).order_by('-created_at')
     context = {'user': user, 'images': images, }
     return render(request, 'users_app/profile.html', context)
+
+
+@login_required(login_url='login')
+def editUser(request, id):
+
+    user = User.objects.get(id=id)
+    form = UserForm(instance=user)
+
+    if user != request.user:
+        return HttpResponse("You're not allowed here!")
+
+    if request.method == "POST":
+        form = UserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', id)
+    context = {'form': form}
+    return render(request, 'users_app/edit_user.html', context)

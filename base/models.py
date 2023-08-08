@@ -15,7 +15,7 @@ def user_directory_path(instance, filename):
 
 class ImageModel(models.Model):
 
-    unique_name = models.CharField(max_length=100, unique=True, null=True)
+    unique_name = models.CharField(max_length=100, null=True)
     title = models.CharField(max_length=300)
     image = models.ImageField(upload_to=user_directory_path)
 
