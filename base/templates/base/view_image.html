@@ -11,13 +11,13 @@
                         <h1 class="fw-light"><b>{{image.title}}</b></h1>
                     </div>
                     <div class="col-md-3">
-                        <a href="{% url 'profile' image.host.id %}" class="text-black" style="text-decoration: none;"><img class="bg-info rounded-circle justify-content-end" src="{{image.host.avatar.url}}" style="width: 55px;">  @{{image.host.username}}</a>
+                        <a href="{% url 'profile' image.host.id %}" class="text-black" style="text-decoration: none;"><img class="bg-info rounded-circle justify-content-end" src="{{image.host.avatar.url}}" style="width: 55px; text-decoration: none;">  @{{image.host.username}}</a>
                     </div>
                 </div>
             </div>
             <hr>
             <p class="lead text-body-secondary">{{image.description}}</p>
-            <a href="/" class="btn btn-primary my-2">Download image</a>
+            <a href="{% url 'download-image' image.unique_name %}" class="btn btn-primary my-2">Download image</a>
             {% if request.user == image.host %}
             <a href="{% url 'edit-image' image.unique_name %}" type="button" class="btn btn-sm btn-outline-info">Edit</a>
             <a href="{% url 'delete-image' image.unique_name %}" type="button" class="btn btn-sm btn-outline-danger">Delete</a> 

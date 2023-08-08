@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse, Http404
-
+from django.http import FileResponse
 from .models import ImageModel
 from .forms import ImageForm
-
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import os
 
@@ -20,18 +20,18 @@ def home(request):
 @login_required(login_url='login')
 def addImage(request):
     if request.method == "POST":
-        # making sure to create user folder when he try to post image
-        if not os.path.exists(f'./media/images/user_{request.user.id}'):
-            os.mkdir(f'./media/images/user_{request.user.id}')
 
         form = ImageForm(request.POST, request.FILES)
-        ImageModel.objects.create(
-            host=request.user,
-            title=request.POST.get('title'),
-            description=request.POST.get('description'),
-            image=request.FILES.get('image'),
-        )
-        return redirect('home')
+        if form.is_valid():
+            ImageModel.objects.create(
+                host=request.user,
+                title=request.POST.get('title'),
+                description=request.POST.get('description'),
+                image=request.FILES.get('image'),
+            )
+            return redirect('home')
+        else:
+            return render(request, 'base/add_image.html', {'form': form})
     else:
         form = ImageForm()
     context = {'form': form}
@@ -77,3 +77,8 @@ def deleteImage(request, unique_name):
             return redirect('home')
 
     return render(request, 'base/delete_image.html', {'image': image})
+
+
+def downloadImage(request, unique_name):
+    image = ImageModel.objects.get(unique_name=unique_name)
+    return FileResponse(image.image.open(), as_attachment=True)

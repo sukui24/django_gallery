@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-import os
 from django.contrib import messages
 from phonenumber_field.modelfields import PhoneNumberField
-import fnmatch
 from users_app.models import User
+from .validators import FileValidator
+import os
+import fnmatch
 
 
 def user_directory_path(instance, filename):
@@ -17,7 +18,14 @@ class ImageModel(models.Model):
 
     unique_name = models.CharField(max_length=100, null=True)
     title = models.CharField(max_length=300)
-    image = models.ImageField(upload_to=user_directory_path)
+    image = models.ImageField(upload_to=user_directory_path, validators=[
+        FileValidator(
+            allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'ico'],
+            allowed_mimetypes=['image/jpeg', 'image/x-png',
+                               'image/png', 'image/webp', 'image/x-icon'],
+            max_size=(15 * 1024 * 1024)
+        )
+    ])
 
     description = models.TextField(max_length=3000, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)

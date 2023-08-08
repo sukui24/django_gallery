@@ -24,6 +24,17 @@
           </div>
         </div>
       </form>
+      <!-- Error messages start -->
+      {% for field in form %}
+      {% if field.errors %}
+      <ul class="messages">
+          {% for error in field.errors %}
+          <li {% if error.tags %} class="{{ error.tags }}"{% endif %}>{{ field.label }}: {{ error }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      {% endfor %}
+      <!-- Error messages end -->
     </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
-# Create your models here.
+from base.validators import FileValidator
 
 
 def user_avatar_path(instance, filename):
@@ -22,7 +22,15 @@ class User(AbstractUser):
 
     bio = models.TextField(max_length=8000, null=True, blank=True)
     avatar = models.ImageField(
-        upload_to=user_avatar_path, default="avatar.svg")
+        upload_to=user_avatar_path, default="avatar.svg", validators=[
+            FileValidator(
+                allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'ico'],
+                allowed_mimetypes=['image/jpeg', 'image/x-png',
+                                   'image/png', 'image/webp', 'image/x-icon'],
+                min_size=0,
+                max_size=(5 * 1024 * 1024)
+            )
+        ])
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['first_name', 'email']
 
