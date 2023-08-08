@@ -5,8 +5,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 def user_avatar_path(instance, filename):
-    future_id = (User.objects.last().id) + 1
-    return f'user_{future_id}/{filename}'
+
+    return f'user_{instance.id}/{filename}'
 
 
 class User(AbstractUser):

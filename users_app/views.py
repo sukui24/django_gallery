@@ -32,13 +32,11 @@ def loginUser(request):
 
 
 def registerUser(request):
-    future_id = (User.objects.last().id) + 1
     form = MyUserCreationForm()
     if request.method == "POST":
         form = MyUserCreationForm(request.POST, request.FILES)
 
         if form.is_valid():
-            os.mkdir(f'./media/images/user_{future_id}')
 
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -69,7 +67,6 @@ def editUser(request, id):
 
     user = User.objects.get(id=id)
     form = UserForm(instance=user)
-
     if user != request.user:
         return HttpResponse("You're not allowed here!")
 
