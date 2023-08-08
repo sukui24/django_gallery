@@ -1,60 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse, Http404
 
-from django.contrib import messages
+from .models import ImageModel
+from .forms import ImageForm
 
-from .models import ImageModel, User
-from .forms import ImageForm, MyUserCreationForm
-
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import os
 
 from django.forms.models import model_to_dict
-
-
-def loginUser(request):
-    page = 'login'
-    if request.user.is_authenticated:
-        return redirect('home')
-
-    if request.method == "POST":
-        username = request.POST.get('username').lower()
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            return redirect('home')
-        else:
-            messages.error(request, 'Username or Password is incorrect')
-
-    context = {'page': page}
-    return render(request, 'base/login_register.html', context)
-
-
-def registerUser(request):
-    future_id = (User.objects.last().id) + 1
-    form = MyUserCreationForm()
-    if request.method == "POST":
-        form = MyUserCreationForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            os.mkdir(f'./media/images/user_{future_id}')
-
-            user = form.save(commit=False)
-            user.username = user.username.lower()
-            user.save()
-            login(request, user)
-            return redirect('profile', user.id)
-        else:
-            messages.error(request, 'Something went wrong during registration')
-    return render(request, 'base/login_register.html', {'form': form})
-
-
-@login_required(login_url='login')
-def logoutUser(request):
-    logout(request)
-    return redirect('home')
 
 
 def home(request):
@@ -125,11 +77,3 @@ def deleteImage(request, unique_name):
             return redirect('home')
 
     return render(request, 'base/delete_image.html', {'image': image})
-
-
-def userProfile(request, id):
-    user = User.objects.get(id=id)
-    user_dict = User.objects.filter(id=id)
-    images = ImageModel.objects.filter(host_id=id).order_by('-created_at')
-    context = {'user': user, 'images': images, }
-    return render(request, 'base/profile.html', context)
