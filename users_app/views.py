@@ -43,8 +43,6 @@ def registerUser(request):
             user.save()
             login(request, user)
             return redirect('profile', user.id)
-        else:
-            messages.error(request, 'Something went wrong during registration')
     return render(request, 'users_app/login_register.html', {'form': form})
 
 

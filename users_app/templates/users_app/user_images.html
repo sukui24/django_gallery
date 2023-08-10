@@ -13,7 +13,7 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light">Images by {{user.username}}</h1>
+            <h1 class="fw-light">Images by <strong>{{user.username}}</strong></h1>
             <p class="lead text-body-secondary">Here you can see all images that {{user.username}} posts on our website :).</p>
             <p>
             <a href="{% url 'profile' user.id %}" class="btn btn-outline-dark btn-lg my-2">Go back</a>
@@ -42,10 +42,10 @@
                 </p>
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
-                        <a href="{% url 'view-image' image.unique_name %}" type="button" class="btn btn-custom btn-sm btn-primary">View</a>
+                        <a href="{% url 'view-image' image.id image.unique_name %}" type="button" class="btn btn-custom btn-sm btn-primary">View</a>
                         {% if request.user == image.host %}
-                        <a href="{% url 'edit-image' image.unique_name %}" type="button" class="btn btn-sm btn-outline-info mx-2">Edit</a>
-                        <a href="{% url 'delete-image' image.unique_name %}" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+                        <a href="{% url 'edit-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-outline-info mx-2">Edit</a>
+                        <a href="{% url 'delete-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
                         {% endif %}
                     </div>
                     <small class="text-body-secondary">{{image.created_at|timesince}} ago</small>

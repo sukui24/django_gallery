@@ -32,6 +32,7 @@ AUTH_USER_MODEL = 'users_app.User'
 # Application definition
 
 INSTALLED_APPS = [
+    # django apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,11 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # custom libraries
+    'taggit',
     'phonenumber_field',
 
+    # my apps
     'base.apps.BaseConfig',
     'users_app.apps.UsersAppConfig',
 
+    # styling
     'bootstrap5',
 ]
 

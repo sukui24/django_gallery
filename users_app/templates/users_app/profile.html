@@ -81,13 +81,12 @@
                     {% if forloop.counter < 5 %}
                         {% if forloop.counter0|divisibleby:2 %}
                         <div class="col">
-                            <a href="{% url 'view-image' image.unique_name %}"><img src="{{image.image.url}}"
+                            <a href="{% url 'view-image' image.id image.unique_name %}"><img src="{{image.image.url}}"
                                 alt="image 1" class="w-100 rounded-3" style="max-height: 500px;"></a>
-                            
                             {% else %}
-                            <a href="{% url 'view-image' image.unique_name %}"><img src="{{image.image.url}}"
+                            <a href="{% url 'view-image' image.id image.unique_name %}"><img src="{{image.image.url}}"
                                 alt="image 1" class="w-100 rounded-3" style="max-height: 500px;"></a>
-                        </div>
+                        </div> 
                         {% endif %}
                     {% endif %}
                     {% endfor %}

@@ -6,6 +6,7 @@ from users_app.models import User
 from .validators import FileValidator
 import os
 import fnmatch
+from taggit.managers import TaggableManager
 
 
 def user_directory_path(instance, filename):
@@ -26,13 +27,13 @@ class ImageModel(models.Model):
             max_size=(15 * 1024 * 1024)
         )
     ])
-
+    tags = TaggableManager()
     description = models.TextField(max_length=3000, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     host = models.ForeignKey(User, max_length=100,
-                             null=True, on_delete=models.SET_NULL)
+                             null=True, on_delete=models.DO_NOTHING)
 
     # displaying image.name in DB
 

@@ -25,12 +25,9 @@ def addImage(request):
 
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
-            ImageModel.objects.create(
-                host=request.user,
-                title=request.POST.get('title'),
-                description=request.POST.get('description'),
-                image=request.FILES.get('image'),
-            )
+            image = form.save(commit=False)
+            image.host = request.image
+            image.save()
             return redirect('home')
         else:
             return render(request, 'base/add_image.html', {'form': form})
@@ -40,14 +37,15 @@ def addImage(request):
     return render(request, 'base/add_image.html', context)
 
 
-def viewImage(request, unique_name):
-    image = get_object_or_404(ImageModel, unique_name=unique_name)
+def viewImage(request, unique_name, id):
+    image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
     context = {'image': image}
     return render(request, 'base/view_image.html', context)
 
 
-def editImage(request, unique_name):
-    image = get_object_or_404(ImageModel, unique_name=unique_name)
+@login_required(login_url='login')
+def editImage(request, unique_name, id):
+    image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
     form = ImageForm(instance=image)
 
     if request.user != image.host:
@@ -60,15 +58,15 @@ def editImage(request, unique_name):
             form.save()
             if 'image' in form.changed_data:
                 image.unique_name = form.cleaned_data['image']
-            return redirect('view-image', image.unique_name)
+            return redirect('view-image', image.id, image.unique_name)
 
     context = {'form': form}
     return render(request, 'base/edit_image.html', context)
 
 
 @login_required(login_url='login')
-def deleteImage(request, unique_name):
-    image = ImageModel.objects.get(unique_name=unique_name)
+def deleteImage(request, unique_name, id):
+    image = ImageModel.objects.get(id=id, unique_name=unique_name)
 
     if request.user != image.host:
         return redirect('home')
@@ -81,6 +79,6 @@ def deleteImage(request, unique_name):
     return render(request, 'base/delete_image.html', {'image': image})
 
 
-def downloadImage(request, unique_name):
-    image = ImageModel.objects.get(unique_name=unique_name)
+def downloadImage(request, id):
+    image = ImageModel.objects.get(id=id)
     return FileResponse(image.image.open(), as_attachment=True)
