@@ -15,7 +15,7 @@ def home(request):
     images = ImageModel.objects.filter(
         Q(title__icontains=q) |
         Q(description__icontains=q) |
-        Q(tags__name__in=[q])).order_by('-created_at').distinct()
+        Q(tags__name__in=[q])).order_by('-image_views').distinct()
     context = {'images': images}
     return render(request, 'base/home.html', context)
 
@@ -42,6 +42,8 @@ def addImage(request):
 
 def viewImage(request, unique_name, id):
     image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+    image.image_views += 1
+    image.save(update_fields=['image_views'])
     image_tags = image.tags.all()
     context = {'image': image, 'image_tags': image_tags}
     return render(request, 'base/view_image.html', context)

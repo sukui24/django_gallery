@@ -1,25 +1,38 @@
 {% extends 'main.html' %}
 {% block content %}
-
+<style>
+    .img-fluid{
+        max-width: 1422px;
+        max-height: 800px;
+        min-width: 426px;
+        min-height: 240px;
+    }
+</style>
 <div class="container min-vh-100 d-flex justify-content-center align-items-center">
     <div class="row">
         <div class="col-md-12 shadow">
-            <img class="rounded img-fluid mx-auto p-2" style="max-width: 1280px; max-height: 720;" src="{{ image.image.url }}" alt="{{ image.title }}">
+            <img class="rounded img-fluid mx-auto p-2" src="{{ image.image.url }}" alt="{{ image.title }}">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-10">
                         <h1 class="fw-light"><b>{{image.title}}</b></h1>
                         <p style="font-size: 12px; color: grey;">created {{image.created_at|timesince}} ago</p>
                     </div>
-                    <div class="col-md-3">
-                            <a href="{% url 'profile' image.host.id %}" style="text-decoration: none; color: var(--bs-secodary-color)"><img class="bg-info rounded-circle justify-content-end" src="{{image.host.avatar.url}}" style="width: 55px; text-decoration: none;">  @{{image.host.username}}</a>
+                    <div class="col-md-2 text-center">
+                        {% if image.host == null %}
+                        <p style="color: var(--bs-secodary-color)">user deleted :(</p>
+                        {% else %}
+                        <a href="{% url 'profile' image.host.id %}" style="text-decoration: none; color: var(--bs-secodary-color)"><img class="bg-info rounded-circle justify-content-end" src="{{image.host.avatar.url}}" style="width: 55px; text-decoration: none;">  @{{image.host.username}}</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             <hr>
             <p>{{image.description}}</p>
+            {% if image_tags %}
             <hr>
             <p class="lead text-body-secondary">Tags: {% for tag in image_tags %} {{tag.name}} {% endfor %}</p>
+            {% endif %}
             <div class="col-md-12">
                 <a href="{% url 'download-image' image.id %}" class="btn btn-primary my-2 col-md-5">Download image</a>
                 {% if request.user == image.host %}

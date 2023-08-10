@@ -79,6 +79,16 @@ def editUser(request, id):
 def userImages(request, id):
 
     user = User.objects.get(id=id)
-    images = ImageModel.objects.filter(host_id=id).order_by('-created_at')
+    images = ImageModel.objects.filter(host_id=id).order_by('-image_views')
     context = {'images': images, 'user': user}
     return render(request, 'users_app/user_images.html', context)
+
+
+def deleteAccout(request, id):
+
+    user = User.objects.get(id=id)
+    if request.method == "POST":
+        user.delete()
+        return redirect('home')
+    context = {'user': user}
+    return render(request, 'users_app/delete_account.html', context)

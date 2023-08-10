@@ -14,9 +14,10 @@
                     {{field}}
                 </div>
                 {% endfor %}
+                <a href="{% url 'delete-account' request.user.id %}" class="btn btn-outline-danger w-25 py-2">Delete Accout</a>
                 <div class="d-flex justify-content-between gap-4">
-                    <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100 py-2">Cancel</a>
-                    <button class="btn btn-primary w-100 py-2" type="submit" value="Submit">Update</button>
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary w-50 py-2">Cancel</a>
+                    <button class="btn btn-primary w-50 py-2" type="submit" value="Submit">Update</button>
                 </div>
                 <!-- Error messages start -->
                 {% for field in form %}

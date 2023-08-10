@@ -31,14 +31,15 @@ class ImageModel(models.Model):
 
     tags = TaggableManager(blank=True)
 
+    image_views = models.IntegerField(default=0)
     description = models.TextField(max_length=3000, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     host = models.ForeignKey(User, max_length=100,
-                             null=True, on_delete=models.DO_NOTHING)
+                             null=True, on_delete=models.SET_NULL)
 
-    # displaying image.name in DB
+    # DB displaying
 
     def __str__(self):
-        return self.image.name
+        return f'id: {str(self.id)} | image: {self.image}'

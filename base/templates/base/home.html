@@ -1,6 +1,5 @@
 <!doctype html>
 {% extends 'main.html' %}
-
 {% block content %}
 <style>
     .btn-sm {
@@ -21,45 +20,6 @@
         </div>
         </div>
     </section>
-
-<!--TODO: add 'new' heading to new images-->
-    <!-- image container class starts -->
-    <div class="album py-5 bg-body-tertiary">
-        <div class="container">
-        <h3 class="d-flex justify-content-center py-5"><p>Gallery feed</p></h3>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 shadow-sm">
-            {% for image in images %}
-            <div class="col">
-            <div class="card shadow">
-                <img class="rounded image-thumbnail" src="{{ image.image.url }}" alt="{{ image.title }}" width="100%" height="325">
-                <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h5 class="card-title">{{image.title}}</h5>
-                    <a href="{% url 'profile' image.host.id %}" style="text-decoration: none; color: var(--bs-secodary-color)">@{{image.host.username}}</a>
-                </div>
-                <p class="card-text">{% if image.description|length > 200 %}{{image.description|slice:200}}...
-                    {% else %}{{image.description}}
-                    {% endif %}
-                </p>
-                <div class="d-flex justify-content-between align-items-center container">
-                    <div class="btn-group row"> 
-                        <a href="{% url 'view-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-primary col-md-auto">View</a>
-                        {% if request.user == image.host %}
-                        <a href="{% url 'edit-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-outline-info mx-2 col-md-auto">Edit</a>
-                        <a href="{% url 'delete-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-outline-danger col-md-auto">Delete</a>
-                        {% endif %}
-                    </div>
-                    <small class="text-body-secondary">{{image.created_at|timesince}} ago</small>
-                </div>
-                </div>
-            </div>
-            </div>
-            {% endfor %}
-        </div>
-        </div>
-    </div>
-    <!-- image container class ends -->
-
-
+{% include 'album_component.html' %}
 </main>
 {% endblock content %}
