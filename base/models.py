@@ -19,6 +19,7 @@ class ImageModel(models.Model):
 
     unique_name = models.CharField(max_length=100, null=True)
     title = models.CharField(max_length=300)
+
     image = models.ImageField(upload_to=user_directory_path, validators=[
         FileValidator(
             allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'ico'],
@@ -27,7 +28,9 @@ class ImageModel(models.Model):
             max_size=(15 * 1024 * 1024)
         )
     ])
-    tags = TaggableManager()
+
+    tags = TaggableManager(blank=True)
+
     description = models.TextField(max_length=3000, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)

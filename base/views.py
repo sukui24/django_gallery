@@ -14,7 +14,8 @@ def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     images = ImageModel.objects.filter(
         Q(title__icontains=q) |
-        Q(description__icontains=q)).order_by('-created_at')
+        Q(description__icontains=q) |
+        Q(tags__name__in=[q])).order_by('-created_at').distinct()
     context = {'images': images}
     return render(request, 'base/home.html', context)
 
@@ -26,8 +27,10 @@ def addImage(request):
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
             image = form.save(commit=False)
-            image.host = request.image
+            image.host = request.user
             image.save()
+            # Without this next line the tags won't be saved.
+            form.save_m2m()
             return redirect('home')
         else:
             return render(request, 'base/add_image.html', {'form': form})
@@ -39,7 +42,8 @@ def addImage(request):
 
 def viewImage(request, unique_name, id):
     image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
-    context = {'image': image}
+    image_tags = image.tags.all()
+    context = {'image': image, 'image_tags': image_tags}
     return render(request, 'base/view_image.html', context)
 
 

@@ -47,9 +47,6 @@ INSTALLED_APPS = [
     # my apps
     'base.apps.BaseConfig',
     'users_app.apps.UsersAppConfig',
-
-    # styling
-    'bootstrap5',
 ]
 
 MIDDLEWARE = [

@@ -6,19 +6,19 @@
     <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-lg-9 col-xl-7">
-        <div class="card">
+        <div class="card shadow-lg">
             <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
             <div class="ms-4 mt-5 d-flex flex-column" style="width: 235px;">
                 <img src="{{ user.avatar.url }}"
                 alt="avatar" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 235px; z-index: 1">
                 {% if user.id == request.user.id %}
-                <a href="{% url 'edit-user' user.id %}" type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                <a href="{% url 'edit-user' user.id %}" type="button" class="btn btn-outline-light" data-mdb-ripple-color="dark"
                 style="z-index: 1;">
                 Edit profile
                 </a>
                 {% else %}
-                <a href="/" type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                <a href="/" type="button" class="btn btn-outline-light" data-mdb-ripple-color="dark"
                 style="z-index: 1;">
                 Follow ✓
                 </a>
@@ -29,7 +29,7 @@
                 <p>{{user.country|add:" | "}}{{user.city}}</p>
             </div>
             </div>
-            <div class="p-4 text-black" style="background-color: #f8f9fa;">
+            <div class="p-4">
                 <div class="d-flex justify-content-end text-center py-1">
                     <div>
                         <p class="mb-1 h5">{{images.count}}</p>
@@ -47,31 +47,33 @@
                     </div>
                 </div>
             </div>
-            <div class="p-4 text-black" style="background-color: #f8f9fa;">
-                <h4><strong>User info:</strong></h4>
-                <br>
-                <ul>
-                    <li>
-                        <strong>Username:</strong> {{user.username}}
-                    </li>
-                    <li>
-                        <strong>Phone_number:</strong> {{user.phone_number}}
-                    </li>
-                    <li>
-                        <strong>Email:</strong> {{user.email}}
-                    </li>
-                    <li>
-                        <strong>Adress:</strong> {{user.adress}}
-                    </li>
-                </ul>
-            </div>
-            <div class="card-body p-4 text-black">
-                <div class="mb-5">
-                    <p class="lead fw-normal mb-1">About</p>
-                    <div class="p-4" style="background-color: #f8f9fa;">
-                    <p class="font-italic mb-1">{{user.bio}}</p>
-                    </div>
+            <div class="container">
+                <div class="p-4">
+                    <br>
+                    <h4>User info:</h4>
+                    <br>
+                    <ul>
+                        <li>
+                            <strong>Username:</strong> {{user.username}}
+                        </li>
+                        <li>
+                            <strong>Phone_number:</strong> {{user.phone_number}}
+                        </li>
+                        <li>
+                            <strong>Email:</strong> {{user.email}}
+                        </li>
+                        <li>
+                            <strong>Adress:</strong> {{user.adress}}
+                        </li>
+                    </ul>
                 </div>
+            </div>
+            <div class="container p-4">
+                <p class="lead fw-normal mb-1">About</p>
+                <p class="font-italic mb-1">{{user.bio}}</p>
+            </div>
+            <div class="card-body p-4 bg-body-tertiary">
+                
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <p class="lead fw-normal mb-0">Recent photos</p>
                     <p class="mb-0"><a href="{% url 'user-images' user.id %}" class="text-muted">Show all</a></p>
@@ -82,10 +84,10 @@
                         {% if forloop.counter0|divisibleby:2 %}
                         <div class="col">
                             <a href="{% url 'view-image' image.id image.unique_name %}"><img src="{{image.image.url}}"
-                                alt="image 1" class="w-100 rounded-3" style="max-height: 500px;"></a>
+                                alt="image {{forloop.counter}}" class="w-100 rounded-3 shadow" style="max-height: 500px;"></a>
                             {% else %}
                             <a href="{% url 'view-image' image.id image.unique_name %}"><img src="{{image.image.url}}"
-                                alt="image 1" class="w-100 rounded-3" style="max-height: 500px;"></a>
+                                alt="image {{forloop.counter}}" class="w-100 rounded-3 shadow" style="max-height: 500px;"></a>
                         </div> 
                         {% endif %}
                     {% endif %}
