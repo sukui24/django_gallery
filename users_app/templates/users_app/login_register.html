@@ -1,81 +1,125 @@
 {% extends 'main.html' %}
 {% block content %}
 <style>
-    .custom-class {
-        width: 400px;
-        display: inline-block;
-}
+    #id_phone_number_1{
+        flex: 1 0 50% !important;
+        
+    }
+    textarea{
+        resize: none;
+    }
 </style>
-<main class="form-signin w-100 m-auto">
+<main>
 {% if page == 'login' %}
     <!-- Login page start -->
-    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
-        <div class="row my-form">
-            <div class="col-md-12 ">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <h1 class="h3 mb-3 fw-normal">Please log in</h1>
-                    <div class="form-control">
-                        <label for="username">Username:</label>
-                        <input type="text" name="username" maxlength="150" autofocus="" required="" id="id_username">
-                    </div>
-                    <div class="form-control">
-                        <label for="password">Password:</label>
-                        <input type="password" name="password" maxlength="150" autofocus="" required="" id="password">
-                    </div>
-                    <div class="d-flex justify-content-between gap-4">
-                        <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100 py-2">Go back</a>
-                        <button class="btn btn-primary w-100 py-2" type="submit" value="Submit">Log in</button>
-                    </div>
-                    <!-- Error messages start -->
-                    {% if messages %}
-                    <ul class="messages list-group-item list-group-item-action list-group-item-danger ">
-                        {% for message in messages %}
-                        <li {% if message.tags %} class="{{ message.tags }} mx-2"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                    <!-- Error messages end -->
-                </form>
+    <div class="container py-5 my-5 d-flex justify-content-center align-items-center">
+        <div class="row col-5">
+            <form action="" method="POST" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <h3 class="mb-3 fw-normal">Please log in</h3>
+                <div class="row">
+                    <label for="username">Username:</label>
+                    <input type="text" name="username" maxlength="150" class="col m-2 form-control">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" maxlength="150" class="col m-2 form-control">
+                </div>
+                <div class="row">
+                    <a href="{% url 'home' %}" class="btn btn-lg btn-outline-secondary col mx-2 my-4">Go back</a>
+                    <button class="btn btn-lg btn-primary col mx-2 my-4" type="submit" value="Submit">Log in</button>
+                </div>
+                <!-- Error messages start -->
+                {% if messages %}
+                <ul class="messages list-group-item list-group-item-action list-group-item-danger ">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }} mx-2"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <!-- Error messages end -->
+            </form>
             </div>
         </div>
     </div>
     <!-- login page end -->
 {% else %}
     <!-- Register page start -->
-    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
-        <div class="row my-form">
-            <div class="col-md-12 ">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="row col-5">
+            <form action="" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
+                {% csrf_token %}
+                <div class="row">
+                    <h3 class="mb-3 fw-normal">Please sign in</h3>
                     {% for field in form %}
-                    <div class="form-control">
+                    {% if field.name in excluded_fields %}
+                    <div class="col-lg-12 row row-gap-1">
                         <label for="{{field.name}}">{{field.label}}:</label>
                         {{field}}
                     </div>
-                    {% endfor %}
-                    <div class="d-flex justify-content-between gap-4">
-                        <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100 py-2">Go back</a>
-                        <button class="btn btn-primary w-100 py-2" type="submit" value="Submit">Sign in</button>
+                    {% else %}
+                    <div class="col-lg-6 row row-gap-1">
+                        <label for="{{field.name}}">{{field.label}}:</label>
+                        {{field}}
                     </div>
-                    <!-- Error messages start -->
-                    {% for field in form %}
-                    {% if field.errors %}
-                    <ul class="messages">
-                        {% for error in field.errors %}
-                        <li {% if error.tags %} class="{{ error.tags }}"{% endif %}>{{ field.label }}: {{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
+                    {% endif %}    
                     {% endfor %}
-                    <!-- Error messages end -->
-                </form>
-            </div>
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary w-50 me-1 my-3">Go back</a>
+                        <button class="btn btn-primary w-50 ms-1 my-3 me-5" type="submit" value="Submit">Sign in</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
+    <!-- Error messages start -->
+    <div class="container">
+    {% for field in form %}
+    {% if field.errors %}
+    
+        <!-- <ul class="messages list-group-item list-group-item-action list-group-item-danger "> -->
+            
+            <div aria-live="polite" aria-atomic="true" class="bg-dark position-relative">
+                <div class="toast-container position-absolute p-3 bottom-0 end-0">
+                    {% for error in field.errors %}
+                    <div class="toast bg-danger fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto fs-6">{{field.name}}</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                        </div>
+                            <div class="toast-body">
+                            {{error}}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+              </div>
+        <!-- </ul> -->
+    {% endif %}
+    {% endfor %}
+    </div>
+    <!-- Error messages end -->
     <!-- Register page end -->
 {% endif %}
 </main>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+// (() => {
+//   'use strict'
 
+//   // Fetch all the forms we want to apply custom Bootstrap validation styles to
+//   const forms = document.querySelectorAll('.needs-validation')
+//   const toasts = document.querySelectorAll('.toasts')
+
+//   // Loop over them and prevent submission
+//   Array.from(forms).forEach(form => {
+//     form.addEventListener('submit', event => {
+//       if (!form.checkValidity()) {
+//         event.preventDefault()
+//         event.stopPropagation()
+//       }
+
+//       forms.classList.add('show')
+//     }, false)
+//   })
+// })()
+// </script>
 {% endblock content %}  

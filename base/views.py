@@ -10,6 +10,11 @@ from django.forms.models import model_to_dict
 from django.db.models import Q
 
 
+def Test(request):
+    image = ImageModel.objects.filter(id=16)
+    return render(request, 'album_component_new.html', {'image': image})
+
+
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     images = ImageModel.objects.filter(
@@ -22,6 +27,7 @@ def home(request):
 
 @login_required(login_url='login')
 def addImage(request):
+    page = 'add'
     if request.method == "POST":
 
         form = ImageForm(request.POST, request.FILES)
@@ -33,11 +39,11 @@ def addImage(request):
             form.save_m2m()
             return redirect('home')
         else:
-            return render(request, 'base/add_image.html', {'form': form})
+            return render(request, 'base/add_image.html', {'form': form, 'page': page})
     else:
         form = ImageForm()
-    context = {'form': form}
-    return render(request, 'base/add_image.html', context)
+    context = {'form': form, 'page': page}
+    return render(request, 'base/add_edit_image.html', context)
 
 
 def viewImage(request, unique_name, id):
@@ -67,7 +73,7 @@ def editImage(request, unique_name, id):
             return redirect('view-image', image.id, image.unique_name)
 
     context = {'form': form}
-    return render(request, 'base/edit_image.html', context)
+    return render(request, 'base/add_edit_image.html', context)
 
 
 @login_required(login_url='login')

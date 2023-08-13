@@ -4,7 +4,7 @@
         letter-spacing: 1.15px;
     }
 </style>
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar_top">
     <div class="container-fluid">
         <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center px-5">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -30,7 +30,7 @@
         <ul class="navbar-nav">
             <li class="nav-item dropdown">
               <a class="nav-link text-white dropdown-toggle px-5" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 22px; letter-spacing: 1.75px;">
-                <img class="rounded-circle" src="{{ request.user.avatar.url }}" style="width: 45px; text-decoration: none;">  Profile
+                <img class="rounded-circle" src="{{ request.user.avatar.url }}" style="width: 45px; height: 39px; text-decoration: none;">  Profile
               </a>
               <ul class="dropdown-menu dropdown-menu-dark col-md-12 " aria-labelledby="navbarDarkDropdownMenuLink">
                 <li><a class="dropdown-item nav-link text-white text-center" href="{% url 'profile' request.user.id %}">My profile</a></li>
@@ -46,11 +46,19 @@
       </div>
     </div>
 </nav>
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-      </ul>
-{% endif %}
-  
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 1) {
+        document.getElementById('navbar_top').classList.add('fixed-top');
+        // add padding top to show content behind navbar
+        navbar_height = document.querySelector('.navbar').offsetHeight;
+        document.body.style.paddingTop = navbar_height + 'px';
+      } else {
+        document.getElementById('navbar_top').classList.remove('fixed-top');
+        // remove padding top from body
+        document.body.style.paddingTop = '0';
+      } 
+  });
+}); 
+</script>

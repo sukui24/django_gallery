@@ -1,0 +1,70 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<style>
+    textarea{
+        resize: none;
+    }
+</style>
+{% if page == 'add' %}
+<div class="container my-5 py-5 d-flex justify-content-center align-items-center">
+    <div class="row my-form">
+        <div class="col-md-8 offset-md-2">
+            <form action="" method="POST" enctype="multipart/form-data">
+                <div class="container">
+                    <p class="h2">Add image</p>
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="col my-3">
+                        <label for="{{ field.label }}">{{ field.label }}:</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <div class="row">
+                        <div class="btn-group">
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary me-2 mx-2 my-4">Go back</a>
+                            <button type="submit" class="btn btn-success ms-2 mx-2 my-4">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+{% else %}
+<div class="container my-5 py-5 d-flex justify-content-center align-items-center">
+    <div class="row my-form">
+        <div class="col-md-8 offset-md-2">
+            <form action="" method="POST" enctype="multipart/form-data">
+                <div class="container">
+                    <p class="h2">Edit image</p>
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="col my-3">
+                        <label for="{{ field.label }}">{{ field.label }}:</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <div class="row">
+                        <div class="btn-group">
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary me-2 mx-2 my-4">Go back</a>
+                            <button type="submit" class="btn btn-success ms-2 mx-2 my-4">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+{% endif %}
+        <!-- Error messages start -->
+        {% for field in form %}
+        {% if field.errors %}
+        <ul class="messages">
+            {% for error in field.errors %}
+            <li {% if error.tags %} class="{{ error.tags }}"{% endif %}>{{ field.label }}: {{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endfor %}
+        <!-- Error messages end -->
+        </div>
+    </div>
+</div>
+{% endblock content %}

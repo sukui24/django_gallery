@@ -35,10 +35,12 @@ def update_avatar_name(sender, instance, **kwargs):
     if instance.avatar.name == 'avatar.svg':
         return True
 
-    # if image doesn't change we return nothing(True)
-    _old_instance = sender.objects.get(id=instance.id)
-    if _old_instance.avatar.name == instance.avatar.name:
-        return True
+    # if
+    if not instance._state.adding:
+        # if image doesn't change we return nothing(True)
+        _old_instance = sender.objects.get(id=instance.id)
+        if _old_instance.avatar.name == instance.avatar.name:
+            return True
 
     # if image changes or created user with avatar we change
     # avatar name to format "imagename_avatar.jpg"

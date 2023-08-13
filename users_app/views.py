@@ -28,11 +28,14 @@ def loginUser(request):
     context = {'page': page}
     return render(request, 'users_app/login_register.html', context)
 
-# TODO: i don't like future_id idea, try to rewrite it also fix default avatar displaying
-
 
 def registerUser(request):
     form = MyUserCreationForm()
+    # using excluded_fields to manage frontend decoration
+    excluded_fields = [
+        'username', 'email', 'avatar',
+        'bio', 'phone_number', 'adress'
+    ]
     if request.method == "POST":
         form = MyUserCreationForm(request.POST, request.FILES)
 
@@ -43,7 +46,7 @@ def registerUser(request):
             user.save()
             login(request, user)
             return redirect('profile', user.id)
-    return render(request, 'users_app/login_register.html', {'form': form})
+    return render(request, 'users_app/login_register.html', {'form': form, 'excluded_fields': excluded_fields})
 
 
 @login_required(login_url='login')
@@ -64,6 +67,11 @@ def editUser(request, id):
 
     user = User.objects.get(id=id)
     form = UserForm(instance=user)
+    # using excluded_fields to manage frontend decoration
+    excluded_fields = [
+        'username', 'email', 'avatar',
+        'bio', 'phone_number', 'adress'
+    ]
     if user != request.user:
         return HttpResponse("You're not allowed here!")
 
@@ -72,7 +80,7 @@ def editUser(request, id):
         if form.is_valid():
             form.save()
             return redirect('profile', id)
-    context = {'form': form}
+    context = {'form': form, 'excluded_fields': excluded_fields}
     return render(request, 'users_app/edit_user.html', context)
 
 

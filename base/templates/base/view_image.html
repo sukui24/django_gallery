@@ -8,17 +8,17 @@
         min-height: 240px;
     }
 </style>
-<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+<div class="container py-1">
     <div class="row">
         <div class="col-md-12 shadow">
-            <img class="rounded img-fluid mx-auto p-2" src="{{ image.image.url }}" alt="{{ image.title }}">
+            <img class="col-12 rounded img-fluid mx-auto p-2" src="{{ image.image.url }}" alt="{{ image.title }}">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-sm-10">
                         <h1 class="fw-light"><b>{{image.title}}</b></h1>
                         <p style="font-size: 12px; color: grey;">created {{image.created_at|timesince}} ago</p>
                     </div>
-                    <div class="col-md-2 text-center">
+                    <div class="col-sm-2 text-center">
                         {% if image.host == null %}
                         <p style="color: var(--bs-secodary-color)">user deleted :(</p>
                         {% else %}
@@ -34,9 +34,9 @@
             <p class="lead text-body-secondary">Tags: {% for tag in image_tags %} {{tag.name}} {% endfor %}</p>
             {% endif %}
             <div class="col-md-12">
-                <a href="{% url 'download-image' image.id %}" class="btn btn-primary my-2 col-md-5">Download image</a>
+                <a href="{% url 'download-image' image.id %}" class="btn btn-primary my-2 col-md-5 me-5">Download image</a>
                 {% if request.user == image.host %}
-                <a href="{% url 'edit-image' image.id image.unique_name %}" type="button" class="btn btn-outline-info col-md-2">Edit</a>
+                <a href="{% url 'edit-image' image.id image.unique_name %}" type="button" class="btn btn-outline-info col-md-2 ms-5 me-5">Edit</a>
                 <a href="{% url 'delete-image' image.id image.unique_name %}" type="button" class="btn btn-outline-danger col-md-2">Delete</a>
             </div>
             {% endif %}

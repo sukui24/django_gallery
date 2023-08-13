@@ -8,37 +8,37 @@
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
         <h3 class="d-flex justify-content-center py-5"><p>Gallery feed</p></h3>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 shadow-sm">
+        <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3 shadow-sm">
             {% for image in images %}
             <div class="col">
             <div class="card shadow">
-                <img class="rounded image-thumbnail" src="{{ image.image.url }}" alt="{{ image.title }}" width="100%" height="325">
+                <a href="{% url 'view-image' image.id image.unique_name %}"><img class="rounded image-thumbnail" src="{{ image.image.url }}" alt="{{ image.title }}" width="100%" height="325"></a>
                 <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h5 class="card-title">{{image.title}}</h5>
-                    {% if image.host == null %}
-                    <p style="color: var(--bs-secodary-color)">user deleted :(</p>
-                    {% else %}
-                    <a href="{% url 'profile' image.host.id %}" style="text-decoration: none; color: var(--bs-secodary-color)">@{{image.host.username}}</a>
-                    {% endif %}
-                </div>
-                <p class="card-text">{% if image.description|length > 200 %}{{image.description|slice:200}}...
-                    {% else %}{{image.description}}
-                    {% endif %}
-                </p>
-                <div class="d-flex justify-content-between align-items-center container">
-                    <div class="btn-group row"> 
-                        <a href="{% url 'view-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-primary col-md-auto">View</a>
-                        {% if request.user == image.host %}
-                        <a href="{% url 'edit-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-outline-info mx-2 col-md-auto">Edit</a>
-                        <a href="{% url 'delete-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-outline-danger col-md-auto">Delete</a>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="card-title">{{image.title}}</h5>
+                        {% if image.host == null %}
+                        <p style="color: var(--bs-secodary-color)">user deleted :(</p>
+                        {% else %}
+                        <a href="{% url 'profile' image.host.id %}" style="text-decoration: none; color: var(--bs-secodary-color)">@{{image.host.username}}</a>
                         {% endif %}
                     </div>
-                    <small class="text-body-secondary">{{image.created_at|timesince}} ago</small>
-                </div>
-                <div>
-                    <small style="color: var(--bs-gray-500)"><img src="{% static 'images/views_eye.ico' %}">  {{image.image_views}}</small>
-                </div>
+                    <p class="card-text">{% if image.description|length > 200 %}{{image.description|slice:200}}...
+                        {% else %}{{image.description}}
+                        {% endif %}
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center container">
+                        <div class="btn-group row"> 
+                            <a href="{% url 'view-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-primary col-md-auto">View</a>
+                            {% if request.user == image.host %}
+                            <a href="{% url 'edit-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-outline-info mx-2 col-md-auto">Edit</a>
+                            <a href="{% url 'delete-image' image.id image.unique_name %}" type="button" class="btn btn-sm btn-outline-danger col-md-auto">Delete</a>
+                            {% endif %}
+                        </div>
+                        <small class="text-body-secondary">{{image.created_at|timesince}} ago</small>
+                    </div>
+                    <div>
+                        <small style="color: var(--bs-gray-500)"><img src="{% static 'images/views_eye.ico' %}">  {{image.image_views}}</small>
+                    </div>
                 </div>
             </div>
             </div>
