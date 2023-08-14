@@ -38,10 +38,18 @@
                     <p class="h2">Edit image</p>
                     {% csrf_token %}
                     {% for field in form %}
+                    {% if field.label == 'Tags' %}
+                    <div class="col my-3">
+                        <label for="{{ field.label }}">{{ field.label }}:</label>
+                        <input type="text" name="tags" value="{% for tag in image_tags %} {{tag.name}} {% endfor %}, "
+                        class = "form-control" id="id_tags" />
+                    </div>
+                    {% else %}
                     <div class="col my-3">
                         <label for="{{ field.label }}">{{ field.label }}:</label>
                         {{ field }}
                     </div>
+                    {% endif %}
                     {% endfor %}
                     <div class="row">
                         <div class="btn-group">

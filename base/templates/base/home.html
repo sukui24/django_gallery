@@ -6,17 +6,48 @@
     padding: 5px 18px;
     font-size: 14px;
 }
+    .modal-dialog{
+        height: 450px !important;
+    }
+    .modal-content{
+        height: 450px !important;
+    }
 </style>
 <main>
-
+<!-- Error messages start -->
+    {% if messages %}
+    <div class="container">
+        <div aria-live="polite" aria-atomic="true" class="bg-dark position-relative">
+            <div class="messages toast-container position-fixed p-3 top-0 start-50 translate-middle-x">
+                {% for message in messages %}
+                <div class="toast bg-danger mb-5 fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto fs-6">{{message.tags}}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="toast-body">
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+<!-- Error messages end -->
     <section class="text-center container">
-        <div class="row pb-lg-5">
+        <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light pb-4"><strong>Main Gallery</strong></h1>
+            <h1 class="fw-light py-4"><strong>Main Gallery</strong></h1>
             <p class="lead text-body-secondary">Step into our online gallery and experience a world of captivating visuals. Discover a curated selection of stunning photographs that capture beauty, emotions, and stories, all at your fingertips.</p>
             <p>
+            {% if user.is_authenticated %}
             <a href="{% url 'add-image' %}" class="btn btn-primary btn-lg my-2">Add your own image</a>
-            </p>
+            {% else %}
+            <!-- Modal for login -->
+            {% include 'base/login_modal.html' %}
+            {% endif %}
+            <!-- Modal End -->
         </div>
         </div>
     </section>

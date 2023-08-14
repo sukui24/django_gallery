@@ -10,7 +10,6 @@ from .forms import MyUserCreationForm, UserForm
 
 
 def loginUser(request):
-    page = 'login'
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -24,9 +23,7 @@ def loginUser(request):
             return redirect('home')
         else:
             messages.error(request, 'Username or Password is incorrect')
-
-    context = {'page': page}
-    return render(request, 'users_app/login_register.html', context)
+    return redirect('home')
 
 
 def registerUser(request):

@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 {% load static %}
+<style>
+    .card{
+        background-color: var(--bs-gray-800);
+    }
+</style>
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
@@ -10,11 +15,6 @@
 </head>
 <body>
     {% include 'navbar.html' %}
-    <style>
-    .card{
-        background-color: var(--bs-gray-800);
-    }
-    </style>
     {% block content %}
 
 

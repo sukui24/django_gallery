@@ -3,50 +3,75 @@
         font-size: 1.2rem;
         letter-spacing: 1.15px;
     }
+    .navbar{
+        height: 80px;
+    }
+    form{
+        height: 50px;
+    }
+    .navbar-toggler{
+        height: 50px;
+        width: 85px;
+    }
 </style>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar_top">
+
+
+<div class="navbar navbar-dark bg-dark" id="navbar_top">
     <div class="container-fluid">
-        <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center px-5">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            <strong>Album</strong>
-        </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav me-auto mb-2 mb-md-0">
-          <li class="nav-item">
-            <form class="d-flex mx-4" role="search">
-                <input name="q" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-            {% if request.user.is_staff %}
-            <li class="nav-item"><a class="d-flex mx-4 navbar-brand text-muted" href="http://127.0.0.1:8000/admin/">admin page</a></li>
+            <div class="col-3 ps-5 ms-5">
+                <a href="{% url 'home' %}" class="navbar-brand"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    <strong class="fs-4">Album</strong></a>
+            </div>
+            <div class="col">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <form class="d-flex" role="search">
+                            <input name="q" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            {% if request.user.is_authenticated %}
+            <div class="col-6 text-end me-5 pe-5">
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                <a href="{% url 'profile' request.user.id %}" class="h1 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover offcanvas-title" id="offcanvasNavbarLabel">
+                    <img class="rounded-circle" src="{{ request.user.avatar.url }}" style="width: 80px; height: 69.3px; text-decoration: none;">
+                    {{ request.user.username }}</a>
+                </div>
+                <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item pb-4">
+                    <a class="link-body-emphasis link-underline-opacity-0 link-opacity-50-hover fs-2" href="{% url 'profile' request.user.id %}">My profile</a>
+                    </li>
+                    <li class="nav-item pb-2">
+                    <a class="link-body-emphasis link-underline-opacity-0 link-opacity-50-hover fs-4" href="{% url 'edit-user' request.user.id %}">Settings</a>
+                    </li>
+                    <li class="nav-item pb-4">
+                        <a class="link-body-emphasis link-underline-opacity-0 link-opacity-50-hover fs-4" href="{% url 'user-images' request.user.id %}">My images</a>
+                    </li>
+                    <hr>
+                    <li class="nav-item">
+                        <a class="link-danger link-opacity-75 link-underline-opacity-0 link-opacity-25-hover fs-3" href="{% url 'logout' %}">Log out</a>
+                    </li>
+                </div>
+            </div>
+            {% else %}
+            <div class="row col-6 text-end me-5 pe-5">
+                <a data-bs-toggle="modal" data-bs-target="#modal" class="col nav-link text-white mx-4" style="font-size: 22px;" href="{% url 'login' %}">Login</a>
+                <a class="col-1 nav-link text-white" style="font-size: 22px;" href="{% url 'register' %}">Register</a>
+            </div>
             {% endif %}
-          </li>
-        </ul>
-        
-        {% if request.user.is_authenticated %}
-        <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-              <a class="nav-link text-white dropdown-toggle px-5" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 22px; letter-spacing: 1.75px;">
-                <img class="rounded-circle" src="{{ request.user.avatar.url }}" style="width: 45px; height: 39px; text-decoration: none;">  Profile
-              </a>
-              <ul class="dropdown-menu dropdown-menu-dark col-md-12 " aria-labelledby="navbarDarkDropdownMenuLink">
-                <li><a class="dropdown-item nav-link text-white text-center" href="{% url 'profile' request.user.id %}">My profile</a></li>
-                <li><a class="dropdown-item nav-link text-white text-center" href="{% url 'edit-user' request.user.id %}">Settings</a></li>
-                <li><a class="dropdown-item nav-link text-white text-center" href="{% url 'logout' %}">Logout</a></li>
-              </ul>
-            </li>
-        </ul>
-        {% else %}
-        <a class="nav-link text-white mx-4" style="font-size: 22px;" href="{% url 'login' %}">Login</a>
-        <a class="nav-link text-white" style="font-size: 22px;" href="{% url 'register' %}">Register</a>
-        {% endif %}
-      </div>
+        </div>
     </div>
-</nav>
+</div>
 <script>
+    // Function for making navbar fixed to the top only after scrolling down
     document.addEventListener("DOMContentLoaded", function(){
     window.addEventListener('scroll', function() {
         if (window.scrollY > 1) {

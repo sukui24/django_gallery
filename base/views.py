@@ -8,6 +8,7 @@ import os
 
 from django.forms.models import model_to_dict
 from django.db.models import Q
+from users_app.views import loginUser
 
 
 def Test(request):
@@ -22,6 +23,9 @@ def home(request):
         Q(description__icontains=q) |
         Q(tags__name__in=[q])).order_by('-image_views').distinct()
     context = {'images': images}
+    # login from modal when you try to load image unsigned in
+    if request.method == "POST":
+        return loginUser(request)
     return render(request, 'base/home.html', context)
 
 
@@ -47,9 +51,13 @@ def addImage(request):
 
 
 def viewImage(request, unique_name, id):
+
     image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+    # image views (doesn't depend on the user's IP)
+    # we save only image_views field so DB feels ok :)
     image.image_views += 1
     image.save(update_fields=['image_views'])
+
     image_tags = image.tags.all()
     context = {'image': image, 'image_tags': image_tags}
     return render(request, 'base/view_image.html', context)
@@ -57,8 +65,10 @@ def viewImage(request, unique_name, id):
 
 @login_required(login_url='login')
 def editImage(request, unique_name, id):
+
     image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
     form = ImageForm(instance=image)
+    image_tags = image.tags.all()
 
     if request.user != image.host:
         return HttpResponse("You're not allowed here !")
@@ -66,13 +76,15 @@ def editImage(request, unique_name, id):
     # updating image info
     if request.method == "POST":
         form = ImageForm(request.POST, request.FILES, instance=image)
+        # we have no need to force save method if user didn't change any data
+        if len(form.changed_data) <= 0:
+            return redirect('home')
+
         if form.is_valid():
             form.save()
-            if 'image' in form.changed_data:
-                image.unique_name = form.cleaned_data['image']
-            return redirect('view-image', image.id, image.unique_name)
+            return redirect('home')
 
-    context = {'form': form}
+    context = {'form': form, 'image_tags': image_tags}
     return render(request, 'base/add_edit_image.html', context)
 
 

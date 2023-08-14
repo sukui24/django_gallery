@@ -1,0 +1,30 @@
+<button data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-primary btn-lg my-2">Add your own image</button>
+</p>
+<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modallabel">Please log in</h2>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" maxlength="150" class="col m-2 form-control">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" maxlength="150" class="col m-2 form-control">
+                    </div>
+                    <div class="row">
+                        <a data-bs-dismiss="modal" aria-label="Dismiss" class="btn btn-lg btn-outline-secondary col mx-2 my-4">Go back</a>
+                        <button class="btn btn-lg btn-primary col mx-2 my-4" type="submit" value="Submit">Log in</button>
+                    </div>
+                    <div class="modal-footer d-grid justify-content-center">
+                        <small class="text-muted col">Haven't signed up yet?</small>
+                        <a href="{% url 'register' %}" class="link-light"><p class="col">Sign up</p></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
