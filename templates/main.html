@@ -14,11 +14,14 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 </head>
 <body>
+    <!-- Navigation bar start -->
     {% include 'navbar.html' %}
+    <!-- Navigation bar end -->
     {% block content %}
 
 
     {% endblock content %}
+    <!-- bootstrap js script -->
     <script src="{% static 'js/bootstrap.bundle.min.js' %}" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
 </html>

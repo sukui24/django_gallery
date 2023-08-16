@@ -12,5 +12,4 @@ urlpatterns = [
          views.editImage, name='edit-image'),
     path('download_image/<str:id>',
          views.downloadImage, name='download-image'),
-    path('test', views.Test, name='test'),
 ]

@@ -30,6 +30,7 @@ class ImageModel(models.Model):
     ])
 
     tags = TaggableManager(blank=True)
+    is_private = models.BooleanField(default=False, blank=False, null=False)
 
     image_views = models.IntegerField(default=0)
     description = models.TextField(max_length=3000, null=True, blank=True)

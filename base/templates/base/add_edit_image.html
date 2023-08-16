@@ -15,10 +15,17 @@
                     <p class="h2">Add image</p>
                     {% csrf_token %}
                     {% for field in form %}
+                    {% if field.label == 'Is private' %}
+                    <div class="col my-3 form-check form-switch">
+                        {{ field }}
+                        <label for="{{field.label}}" class="form-check-label"><small>Private image</small></label>
+                    </div>
+                    {% else %}
                     <div class="col my-3">
                         <label for="{{ field.label }}">{{ field.label }}:</label>
                         {{ field }}
                     </div>
+                    {% endif %}
                     {% endfor %}
                     <div class="row">
                         <div class="btn-group">
@@ -44,6 +51,11 @@
                         <input type="text" name="tags" value="{% for tag in image_tags %} {{tag.name}} {% endfor %}, "
                         class = "form-control" id="id_tags" />
                     </div>
+                    {% elif field.label == 'Is private' %}
+                    <div class="col my-3 form-check form-switch">
+                        {{ field }}
+                        <label for="{{field.label}}" class="form-check-label"><small>Private image</small></label>
+                    </div>
                     {% else %}
                     <div class="col my-3">
                         <label for="{{ field.label }}">{{ field.label }}:</label>
@@ -61,17 +73,17 @@
             </form>
         </div>
 {% endif %}
-        <!-- Error messages start -->
         {% for field in form %}
         {% if field.errors %}
+        <!-- Error messages start -->
         <ul class="messages">
             {% for error in field.errors %}
             <li {% if error.tags %} class="{{ error.tags }}"{% endif %}>{{ field.label }}: {{ error }}</li>
             {% endfor %}
         </ul>
+        <!-- Error messages end -->
         {% endif %}
         {% endfor %}
-        <!-- Error messages end -->
         </div>
     </div>
 </div>

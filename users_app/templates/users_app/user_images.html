@@ -2,25 +2,35 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
-<style>
-    .btn-sm {
-    padding: 5px 18px;
-    font-size: 14px;
-}
-</style>
 <main>
 
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-light">Images by <strong>{{user.username}}</strong></h1>
-            <p class="lead text-body-secondary">Here you can see all images that {{user.username}} posts on our website :).</p>
-            <p>
-            <a href="{% url 'profile' user.id %}" class="btn btn-outline-dark btn-lg my-2">Go back</a>
-            </p> 
+            <p class="lead text-body-secondary">Here you can see all the images that {{user.username}} publishes on our website.  :)</p>
+            <div class="button-group">
+                <a href="{% url 'home' %}" class="btn col col-xxl-5 btn-outline-secondary btn-lg my-2 me-2">Go home</a>
+                <a href="{% url 'profile' user.id %}" class="btn col-7 col-xxl-5 btn-primary btn-lg my-2 ms-2">Go to {{user.username}}'s profile</a>
+                {% if privacity == False and request.user == user %}
+                <a href = "{% url 'user-images-private' user.id %}" class="btn col-6 col-sm-4 mx-sm-0 px-sm-0 btn-outline-light btn-sm my-2 ms-2">Show private images</a>
+                {% elif request.user == user %}
+                <a href="{% url 'user-images' user.id %}" class="btn col-12 col-sm-4 btn-outline-light btn-sm my-2 ms-2">Show public images</a>
+                {% endif %}
+            </div>
         </div>
         </div>
     </section>
+
+{% if images %}
 {% include 'album_component.html' %}
+{% else %}
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <h3 class="d-flex justify-content-center py-5"><p class="text-center">User {{user.username}} don't have images yet or all of them are private...</p></h3>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 shadow-sm"></div>
+    </div>
+</div>
+{% endif %}
 </main>
 {% endblock content %}

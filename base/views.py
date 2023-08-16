@@ -11,17 +11,12 @@ from django.db.models import Q
 from users_app.views import loginUser
 
 
-def Test(request):
-    image = ImageModel.objects.filter(id=16)
-    return render(request, 'album_component_new.html', {'image': image})
-
-
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     images = ImageModel.objects.filter(
         Q(title__icontains=q) |
         Q(description__icontains=q) |
-        Q(tags__name__in=[q])).order_by('-image_views').distinct()
+        Q(tags__name__in=[q]), is_private=False).order_by('-image_views').distinct()
     context = {'images': images}
     # login from modal when you try to load image unsigned in
     if request.method == "POST":
@@ -29,7 +24,7 @@ def home(request):
     return render(request, 'base/home.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='register')
 def addImage(request):
     page = 'add'
     if request.method == "POST":
@@ -53,6 +48,8 @@ def addImage(request):
 def viewImage(request, unique_name, id):
 
     image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+    if image.is_private == True and request.user != image.host:
+        return redirect('home')
     # image views (doesn't depend on the user's IP)
     # we save only image_views field so DB feels ok :)
     image.image_views += 1
@@ -63,7 +60,7 @@ def viewImage(request, unique_name, id):
     return render(request, 'base/view_image.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='register')
 def editImage(request, unique_name, id):
 
     image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
@@ -80,15 +77,15 @@ def editImage(request, unique_name, id):
         if len(form.changed_data) <= 0:
             return redirect('home')
 
-        if form.is_valid():
+        elif form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('user-images', request.user.id)
 
     context = {'form': form, 'image_tags': image_tags}
     return render(request, 'base/add_edit_image.html', context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='register')
 def deleteImage(request, unique_name, id):
     image = ImageModel.objects.get(id=id, unique_name=unique_name)
 
@@ -103,6 +100,7 @@ def deleteImage(request, unique_name, id):
     return render(request, 'base/delete_image.html', {'image': image})
 
 
+@login_required(login_url='register')
 def downloadImage(request, id):
     image = ImageModel.objects.get(id=id)
     return FileResponse(image.image.open(), as_attachment=True)

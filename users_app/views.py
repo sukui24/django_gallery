@@ -81,12 +81,24 @@ def editUser(request, id):
     return render(request, 'users_app/edit_user.html', context)
 
 
-def userImages(request, id):
+def userImages(request, id, privacity=False):
 
     user = User.objects.get(id=id)
-    images = ImageModel.objects.filter(host_id=id).order_by('-image_views')
-    context = {'images': images, 'user': user}
+    images = ImageModel.objects.filter(
+        host_id=id, is_private=privacity).order_by('-image_views')
+    # send privacity in context to show the right button on page
+    context = {'images': images, 'user': user,
+               'privacity': privacity}
     return render(request, 'users_app/user_images.html', context)
+
+
+def userImagesPrivate(request, id):
+    # if user isn't host send him home
+    if request.user != User.objects.get(id=id):
+        return redirect('home')
+    # if we want to open private images page we just reuse userImages
+    # view but set the filter's 'is_private' attribute on True
+    return userImages(request=request, id=id, privacity=True)
 
 
 def deleteAccout(request, id):
