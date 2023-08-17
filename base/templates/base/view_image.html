@@ -15,7 +15,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-10">
-                        <h1 class="fw-light"><b>{{image.title}}</b></h1>
+                        <h1 class="fw-light"><b>{{image.title|title}}</b></h1>
                         <p style="font-size: 12px; color: grey;">created {{image.created_at|timesince}} ago</p>
                     </div>
                     <div class="col-sm-2 text-center">
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <hr>
-            <p>{{image.description}}</p>
+            <p>{{image.description|linebreaks }}</p>
             {% if image_tags %}
             <hr>
             <p class="lead text-body-secondary">Tags: {% for tag in image_tags %} {{tag.name}} {% endfor %}</p>

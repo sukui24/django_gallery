@@ -23,7 +23,7 @@
                     {% endif %}
                 </div>
                 <div class="ms-3" style="margin-top: 130px;">
-                    <h5>{{user.first_name}} {{user.last_name}}</h5>
+                    <h5>{{user.first_name|title}} {{user.last_name|title}}</h5>
                     <p>{{user.country|add:" | "}}{{user.city}}</p>
                     <div class="container">
                         <div class="row">
@@ -52,13 +52,13 @@
                     <br>
                     <ul>
                         <li>
-                            <strong>Username:</strong> {{user.username}}
+                            <strong>Username:</strong> {{user.username|title}}
                         </li>
                         <li>
                             <strong>Phone_number:</strong> {{user.phone_number}}
                         </li>
                         <li>
-                            <strong>Email:</strong> {{user.email}}
+                            <strong>Email:</strong> {{user.email|urlize}}
                         </li>
                         <li>
                             <strong>Adress:</strong> {{user.adress}}
@@ -68,7 +68,7 @@
             </div>
             <div class="container p-4">
                 <p class="lead fw-normal mb-1">About</p>
-                <p class="font-italic mb-1">{{user.bio}}</p>
+                <p class="font-italic mb-1">{{user.bio|linebreaks|urlize}}</p>
             </div>
             <div class="card-body p-4 bg-body-tertiary">
                 
