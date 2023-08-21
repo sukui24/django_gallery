@@ -4,10 +4,10 @@
     <div class="container">
         <h3 class="d-flex justify-content-center py-5"><p>Gallery feed</p></h3>
         <!-- Default dropright button -->
-        {% if s == '' %}
+        {% if q == '' %}
         <div class="row">
-            {% if q != '' %}
-            <p class="fs-4 col-12 text-center"><strong>{{ q }} images:</strong></p>
+            {% if sort != '' and sort != 'Most popular' %}
+            <p class="fs-4 col-12 text-center"><strong>{{ sort }} images:</strong></p>
             {% endif %}
             <form action="" method="GET">
                 {% csrf_token %}
@@ -18,10 +18,10 @@
                     <div class="dropdown-menu">
                         <!-- Dropdown menu links -->
                         <div class="row">
-                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?q=Most popular">Most popular (default)</a>
-                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?q=Most recent">Most recent</a>
-                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?q=Least recent">Least recent</a>
-                            <a class="ms-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?q=Least popular">Least popular</a>
+                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}">Most popular (default)</a>
+                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?sort=Most recent">Most recent</a>
+                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?sort=Least recent">Least recent</a>
+                            <a class="ms-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?sort=Least popular">Least popular</a>
                         </div>
                     </div>
                 </div>

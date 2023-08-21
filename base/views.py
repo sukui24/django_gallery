@@ -14,68 +14,41 @@ from users_app.views import loginUser
 # TemplateView - uses to show static pages or pages that uses GET request
 #
 
-# ? hopefully i'll change this filter system in future
-# ? maybe with using some django extensions
 
+def images_filter(q, sort):
+    order_options = {
+        'Most recent': '-created_at',
+        'Least recent': 'created_at',
+        'Least popular': 'image_views',
+        'Most popular': '-image_views',
+    }
 
-def images_filter(q, s):
-    # Hardcoding images filter
-    _order = None
-
-    if q == 'Most recent':
-        _order = '-created_at'
-
-    elif q == 'Least recent':
-        _order = 'created_at'
-
-    elif q == 'Least popular':
-        _order = 'image_views'
-
-    elif q == 'Most popular':
-        _order = '-image_views'
-
-    else:
-        _order = '-image_views'  # by default filter by views
+    _order = order_options.get(sort, '-image_views')
 
     images = ImageModel.objects.filter(
-        Q(title__icontains=s) |
-        Q(description__icontains=s) |
-        Q(tags__name__in=[s]), is_private=False).order_by(_order).distinct()
+        Q(title__icontains=q) |
+        Q(description__icontains=q) |
+        Q(tags__name__in=[q]), is_private=False).order_by(_order).distinct()
     # we use q and s for frontend displaying so sending it in context
-    return {'images': images, 'q': q, 's': s}
+    return {'images': images, 'q': q, 'sort': sort}
 
 
 class Home(View):
 
     def get(self, request):
         # searching from categories (for ex. most popular)
-        q = request.GET.get('q') if request.GET.get('q') != None else ''
+        q = request.GET.get('q', '')
 
         # serching from search bar
-        s = request.GET.get('s') if request.GET.get('s') != None else ''
+        sort = request.GET.get('sort', 'Most popular')
 
         # using my custom filter for images that returns context
-        context = images_filter(q, s)
+        context = images_filter(q, sort)
 
         return render(self.request, 'base/home.html', context)
 
     def post(self, request):  # here we got post request after logging in with using modal
         return loginUser(self.request)  # using login user view
-
-
-# def home(request):
-#     # searching from categories (for ex. most popular)
-#     q = request.GET.get('q') if request.GET.get('q') != None else ''
-#     # serching from search bar
-#     s = request.GET.get('s') if request.GET.get('s') != None else ''
-
-#     if request.method == "GET":
-#         # using my custom filter for images that returns context
-#         context = images_filter(q, s)
-#         return render(request, 'base/home.html', context)
-
-#     if request.method == "POST":  # here we got post request after logging in with using modal
-#         return loginUser(request)  # using login user view
 
 
 class AddImage(View):
