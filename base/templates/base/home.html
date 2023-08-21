@@ -5,12 +5,16 @@
     .btn-sm {
     padding: 5px 18px;
     font-size: 14px;
-}
+    }
     .modal-dialog{
         height: 450px !important;
+        max-width: 650px !important;
     }
     .modal-content{
         height: 450px !important;
+    }
+    .dropdown-menu{
+        width: 173px !important;
     }
 </style>
 <main>
@@ -46,10 +50,9 @@
             {% if user.is_authenticated %}
             <a href="{% url 'add-image' %}" class="btn btn-primary btn-lg my-2">Add your own image</a>
             {% else %}
-            <!-- Modal for login -->
-            {% include 'base/login_modal.html' %}
+            <!-- Modal button -->
+            <button data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-primary btn-lg my-2">Add your own image</button>
             {% endif %}
-            <!-- Modal End -->
         </div>
         </div>
     </section>

@@ -1,9 +1,8 @@
-<button data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-primary btn-lg my-2">Add your own image</button>
-</p>
+<!-- Logging Modal start -->
 <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header"> 
                 <h2 class="modal-title" id="modallabel">Please log in</h2>
             </div>
             <div class="modal-body">
@@ -20,11 +19,12 @@
                         <button class="btn btn-lg btn-primary col mx-2 my-4" type="submit" value="Submit">Log in</button>
                     </div>
                     <div class="modal-footer d-grid justify-content-center">
-                        <small class="text-muted col">Haven't signed up yet?</small>
-                        <a href="{% url 'register' %}" class="link-light"><p class="col">Sign up</p></a>
+                        <small class="text-muted text-center col">Haven't signed up yet?</small>
+                        <a href="{% url 'register' %}" class="link-body-emphasis link-underline-opacity-50 link-opacity-50-hover text-center fs-5"><p class="col">Sign up</p></a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+<!-- Logging Modal end -->

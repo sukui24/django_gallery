@@ -43,7 +43,7 @@ def registerUser(request):
             user.save()
             login(request, user)
             return redirect('profile', user.id)
-    return render(request, 'users_app/login_register.html', {'form': form, 'excluded_fields': excluded_fields})
+    return render(request, 'users_app/register.html', {'form': form, 'excluded_fields': excluded_fields})
 
 
 @login_required(login_url='login')

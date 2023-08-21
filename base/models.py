@@ -34,6 +34,7 @@ class ImageModel(models.Model):
 
     image_views = models.IntegerField(default=0)
     description = models.TextField(max_length=3000, null=True, blank=True)
+
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

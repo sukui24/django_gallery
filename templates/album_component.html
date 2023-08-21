@@ -3,6 +3,31 @@
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
         <h3 class="d-flex justify-content-center py-5"><p>Gallery feed</p></h3>
+        <!-- Default dropright button -->
+        {% if s == '' %}
+        <div class="row">
+            {% if q != '' %}
+            <p class="fs-4 col-12 text-center"><strong>{{ q }} images:</strong></p>
+            {% endif %}
+            <form action="" method="GET">
+                {% csrf_token %}
+                <div class="btn-group dropend">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter by
+                    </button>
+                    <div class="dropdown-menu">
+                        <!-- Dropdown menu links -->
+                        <div class="row">
+                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?q=Most popular">Most popular (default)</a>
+                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?q=Most recent">Most recent</a>
+                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?q=Least recent">Least recent</a>
+                            <a class="ms-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?q=Least popular">Least popular</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% endif %}
         <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3 shadow-sm">
             {% for image in images %}
             <div class="col">
