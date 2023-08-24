@@ -6,15 +6,32 @@
     padding: 5px 18px;
     font-size: 14px;
     }
-    .modal-dialog{
-        height: 450px !important;
-        max-width: 650px !important;
-    }
-    .modal-content{
-        height: 450px !important;
-    }
     .dropdown-menu{
         width: 173px !important;
+    }
+    a:hover img {
+        transform: scale(1.085);
+    }
+    img {
+    max-height: 325px;
+    transition: transform 0.3s;
+    }
+    .image {
+    overflow: hidden;
+    }
+    @media (max-width: 359px) {
+        .card-title{
+            height: 130px;
+        }
+        .card-image{
+            height: 230px !important;
+        }
+        .card-text{
+            height: 195px !important;
+        }
+    }
+    .card-image{
+        height: 325px;
     }
 </style>
 <main>

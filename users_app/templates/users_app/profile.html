@@ -1,7 +1,15 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
-    
+<style>
+    a:hover img {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    img {
+    transition: transform 0.28s;
+    }
+</style>
 <section class="gradient-custom-2">
     <div class="container py-1">
     <div class="row d-flex justify-content-center">
@@ -74,7 +82,7 @@
                 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <p class="lead fw-normal mb-0 fs-4"><strong>Recent images</strong></p>
-                    <p class="mb-0"><a href="{% url 'user-images' user.id %}" class="text-muted">See all images</a></p>
+                    <p class="mb-0"><a href="{% url 'user-images' user.id %}" class="link-body-emphasis link-underline-opacity-0 link-opacity-50-hover">See all images</a></p>
                 </div>
                 <div class="row g-2">
                     {% for image in images %}
