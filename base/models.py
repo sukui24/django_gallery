@@ -1,12 +1,15 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib import messages
 from phonenumber_field.modelfields import PhoneNumberField
 from users_app.models import User
 from .validators import FileValidator
-import os
-import fnmatch
+
 from taggit.managers import TaggableManager
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFit
 
 
 def user_directory_path(instance, filename):
@@ -28,6 +31,12 @@ class ImageModel(models.Model):
             max_size=(12 * 1024 * 1024)
         )
     ], blank=False, null=False)
+
+    image_thumbnail = ImageSpecField(source='image',
+                                     processors=[ResizeToFit(
+                                         width=550, upscale=False),],
+                                     options={'quality': 90},
+                                     format='JPEG')
 
     tags = TaggableManager(blank=True)
     is_private = models.BooleanField(default=False, blank=False, null=False)

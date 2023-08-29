@@ -2,14 +2,39 @@ from django.db.models.signals import pre_delete, pre_save, post_save
 from django.dispatch import receiver
 from .models import ImageModel
 import os
+import shutil
 
 
 @receiver(pre_delete, sender=ImageModel, dispatch_uid='image_delete_signal')
 def image_deleter(sender, instance, **kwargs):
-    _image_path = os.path.join('./media/images/', instance.image.name)
+    _images_path = './media/images/'
+    _original_image_path = os.path.join(_images_path, instance.image.name)
 
-    if os.path.isfile(_image_path):
-        os.remove(_image_path)  # remove file if it exists
+    # thumbnail folder handling
+    _tmp_thumbnail_segment = os.path.join(_images_path, 'CACHE/images')
+    _tmp_folder_name = instance.image.name.split('.')
+    # handling situation when img have multiple dots in name
+    # we forced to do this check so we won't force 'for' cycle for no reasons
+    _thumbnail_folder_name = ''
+    if len(_tmp_folder_name) > 2:
+        _tmp_folder_name = _tmp_folder_name[:-1]
+        # collecting all list items in one string
+        for i in _tmp_folder_name:
+            # if last item we don't add dot at end
+            if i == _tmp_folder_name[-1]:
+                _thumbnail_folder_name += i
+            else:
+                _thumbnail_folder_name = _thumbnail_folder_name + i + '.'
+    else:
+        # if one dot we just get first part without 'png/jpg/etc...'
+        _tmp_folder_name = _tmp_folder_name[0]
+        _thumbnail_folder_name = _tmp_folder_name
+    _thumbnail_image_path = os.path.join(
+        _tmp_thumbnail_segment, _thumbnail_folder_name)
+
+    if os.path.isfile(_original_image_path):
+        os.remove(_original_image_path)  # remove file if it exists
+        shutil.rmtree(_thumbnail_image_path)  # remove thumbnail
     else:
         pass  # if image not found we have no need to delete it so we just skip
 

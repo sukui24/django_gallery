@@ -1,6 +1,9 @@
 {% extends 'main.html' %}
 {% block content %}
 <style>
+    .btn{
+        height: 50px !important;
+    }
 </style>
 <main>
     <div class="container d-flex align-items-center">
@@ -12,9 +15,9 @@
                 <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <h1 class="m-4 fw-normal fs-1 text-center">Are you sure you want to delete {{image.unique_name}}?</h1>
-                    <div class="row">
-                        <a href="{% url 'home' %}" class="btn btn-lg btn-outline-secondary col m-2">Go back</a>
-                        <button class="btn btn-lg btn-danger col m-2" type="submit" value="Submit"><strong>Delete</strong></button>
+                    <div class="row d-flex justify-content-center">
+                        <a href="{% url 'home' %}" class="btn btn-lg btn-outline-secondary col-4 m-2">Go back</a>
+                        <button class="btn btn-lg btn-danger col-4 m-2" type="submit" value="Submit"><strong>Delete</strong></button>
                     </div>
                 </form>
             </div>

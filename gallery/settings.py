@@ -33,7 +33,6 @@ AUTH_USER_MODEL = 'users_app.User'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-
 # Application definition
 INSTALLED_APPS = [
     # django apps
@@ -52,7 +51,7 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'users_app.apps.UsersAppConfig',
     'debug_toolbar',
-    'django_resized',
+    'imagekit',
 ]
 
 MIDDLEWARE = [

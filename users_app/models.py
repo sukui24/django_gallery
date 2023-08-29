@@ -1,7 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from phonenumber_field.modelfields import PhoneNumberField
+
 from base.validators import FileValidator
+
+from phonenumber_field.modelfields import PhoneNumberField
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFit
 
 
 def user_avatar_path(instance, filename):
@@ -21,7 +25,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
 
     bio = models.TextField(max_length=8000, null=True, blank=True)
-    avatar = models.ImageField(
+    avatar = ProcessedImageField(
         upload_to=user_avatar_path, default="avatar.svg", validators=[
             FileValidator(
                 allowed_extensions=['jpg', 'jpeg',
@@ -31,7 +35,7 @@ class User(AbstractUser):
                 min_size=0,
                 max_size=(5 * 1024 * 1024)
             )
-        ])
+        ], processors=[ResizeToFit(width=222)], options={'quality': 100})
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['first_name', 'email']
 
