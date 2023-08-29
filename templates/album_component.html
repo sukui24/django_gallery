@@ -1,5 +1,32 @@
 {% load static %}
 {% if images %}
+<style>
+    .card-image{
+        height: 325px;
+    }
+    a:hover img {
+        transform: scale(1.085);
+    }
+    .card-image img {
+    max-height: 325px;
+    min-height: 270px;
+    transition: transform 0.3s;
+    }
+    .image {
+    overflow: hidden;
+    }
+    @media (max-width: 359px) {
+        .card-title{
+            height: 130px;
+        }
+        .card-image{
+            height: 230px !important;
+        }
+        .card-text{
+            height: 195px !important;
+        }
+    }
+</style>
 <!-- Image container starts -->
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
@@ -7,22 +34,19 @@
         <!-- Default dropright button -->
         {% if q == '' %}
         <div class="row">
-            {% if sort != '' and sort != 'Most popular' %}
-            <p class="fs-4 col-12 text-center"><strong>{{ sort }} images:</strong></p>
-            {% endif %}
             <form action="" method="GET">
                 {% csrf_token %}
-                <div class="btn-group dropend">
-                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        Sort by
+                <div class="btn-group dropup-center dropup">
+                    <button data-bs-offset="0,5" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <some_tag class="fs-6 fw-medium">Sort by: {{sort|lower}}</some_tag>
                     </button>
                     <div class="dropdown-menu">
                         <!-- Dropdown menu links -->
                         <div class="row">
-                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}">Most popular (default)</a>
-                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?sort=Most recent">Most recent</a>
-                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?sort=Least recent">Least recent</a>
-                            <a class="ms-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover" href="{% url 'home' %}?sort=Least popular">Least popular</a>
+                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover fs-6" href="{% url 'home' %}">Most popular (default)</a>
+                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover fs-6" href="{% url 'home' %}?sort=Most recent">Most recent</a>
+                            <a class="ms-2 mb-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover fs-6" href="{% url 'home' %}?sort=Least recent">Least recent</a>
+                            <a class="ms-2 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover fs-6" href="{% url 'home' %}?sort=Least popular">Least popular</a>
                         </div>
                     </div>
                 </div>
@@ -33,7 +57,11 @@
             {% for image in images %}
             <div class="col">
                 <div class="card shadow">
-                    <span class="card-image image"><a href="{% url 'view-image' image.id image.unique_name %}"><img class="rounded card-img-top" src="{{image.image.url}}" alt="{{ image.title }}"></a></span>
+                    <span class="card-image image">
+                        <a href="{% url 'view-image' image.id image.unique_name %}">
+                            <img class="rounded card-img-top shadow-sm" src="{{image.image.url}}" alt="{{ image.title }}" loading="lazy">
+                        </a>
+                    </span>
                     <div class="card-body">
                         <div class="card-title">
                             <div class="row">

@@ -26,7 +26,6 @@ def delete_old_image(sender, instance, **kwargs):
     except sender.DoesNotExist:
         pass
 
-
 # * update unique name while creating/updating image
 # we're not deleting user_id/ part from image db field to get url to user path
 # ex. image_url = user_id/filename.jpg (now we can display image from user folder)

@@ -1,66 +1,73 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse, Http404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView
 from django.http import FileResponse
+from django.contrib import messages
+from django.db.models import Q
+from django.views import View
+from django.views.generic.detail import DetailView
+from users_app.views import loginUser
 from .models import ImageModel
 from .forms import ImageForm
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-import os
-from django.views.generic import TemplateView
-from django.views import View
-from django.forms.models import model_to_dict
-from django.db.models import Q
-from users_app.views import loginUser
-
-# TemplateView - uses to show static pages or pages that uses GET request
-#
 
 
+# custom image sorting by predefined categories ==> 'sort'
+# or by using search bar ==> 'q'
 def images_filter(q, sort):
-    order_options = {
+    # static order options (for filtering by predefined categories)
+    _order_options = {
         'Most recent': '-created_at',
         'Least recent': 'created_at',
         'Least popular': 'image_views',
         'Most popular': '-image_views',
     }
 
-    _order = order_options.get(sort, '-image_views')
+    _order = _order_options.get(sort, '-image_views')
 
     images = ImageModel.objects.filter(
         Q(title__icontains=q) |
-        Q(description__icontains=q) |
-        Q(tags__name__in=[q]), is_private=False).order_by(_order).distinct()
-    # we use q and s for frontend displaying so sending it in context
+        Q(description__icontains=q) | Q(tags__name__in=[q]),
+        is_private=False).order_by(_order).distinct()
+    # we use 'q' and 'sort' for frontend displaying
     return {'images': images, 'q': q, 'sort': sort}
 
 
-class Home(View):
+class HomeView(View):
 
     def get(self, request):
-        # searching from categories (for ex. most popular)
+        # sorting by using one of four categories
         q = request.GET.get('q', '')
 
-        # serching from search bar
+        # serching via search bar
         sort = request.GET.get('sort', 'Most popular')
 
-        # using my custom filter for images that returns context
         context = images_filter(q, sort)
 
-        return render(self.request, 'base/home.html', context)
+        return render(request, 'base/home.html', context)
 
-    def post(self, request):  # here we got post request after logging in with using modal
-        return loginUser(self.request)  # using login user view
+    def post(self, request):  # log-in via login modal
+        return loginUser(self.request)
 
 
-class AddImage(View):
-    page = 'add'
+class AddImageView(LoginRequiredMixin, View):
+    # used for redirect unlogged users using 'LoginRequiredMixin'
+    login_url = 'register'
 
-    def get(self, requset):
-        form = ImageForm()
-        context = {'form': form, 'page': self.page}
-        return render(self.request, 'base/add_edit_image.html', context)
+    PAGE = 'add'
+    form = ImageForm
+    template_name = 'base/add_edit_image.html'
+    context = {'form': form, 'page': PAGE}
+
+    # 'get' method doesn't depend on context of class instance so no need to use 'self'
+    @staticmethod
+    def get(request):
+        form = AddImageView.form()
+        return render(request, AddImageView.template_name, AddImageView.context)
 
     def post(self, request):
-        form = ImageForm(request.POST, request.FILES)
+        form = self.form(request.POST, request.FILES)
         if form.is_valid():
             image = form.save(commit=False)
             image.host = request.user
@@ -69,62 +76,65 @@ class AddImage(View):
             form.save_m2m()
             return redirect('home')
         else:
-            return render(self.request, 'base/add_image.html', {'form': form, 'page': self.page})
+            return render(request, self.template_name, self.context)
 
 
-def viewImage(request, unique_name, id):
+class ViewImage(View):
 
-    image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+    template_name = 'base/view_image.html'
 
-    if image.is_private == True and request.user != image.host:
-        return redirect('home')
-    # image views (doesn't depend on the user's IP)
-    # we save only image_views field so DB feels ok :)
-    image.image_views += 1
-    image.save(update_fields=['image_views'])
+    def get(self, request, unique_name, id):
+        image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
 
-    image_tags = image.tags.all()
-
-    context = {'image': image, 'image_tags': image_tags}
-    return render(request, 'base/view_image.html', context)
-
-
-@login_required(login_url='register')
-def editImage(request, unique_name, id):
-
-    image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
-    form = ImageForm(instance=image)
-    image_tags = image.tags.all()
-
-    if request.user != image.host:
-        return HttpResponse("You're not allowed here !")
-
-    # updating image info
-    if request.method == "POST":
-        form = ImageForm(request.POST, request.FILES, instance=image)
-        # we have no need to force save method if user didn't change any data
-        if len(form.changed_data) <= 0:
+        if image.is_private == True and request.user != image.host:
             return redirect('home')
+
+        # image views (doesn't depend on the user's IP)
+        image.image_views += 1
+        image.save(update_fields=['image_views'])
+        image_tags = image.tags.all()
+        return render(request, self.template_name, {'image': image, 'image_tags': image_tags})
+
+    def post(self, request):
+        return loginUser(request)
+
+
+class EditImage(LoginRequiredMixin, View):
+    login_url = 'register'
+
+    template_name = 'base/add_edit_image.html'
+    form = ImageForm
+
+    def get(self, request, unique_name, id):
+        image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+        if request.user != image.host:
+            return redirect('home')
+
+        form = self.form(instance=image)
+        return render(request, self.template_name, {'image': image, 'form': form})
+
+    def post(self, request, unique_name, id):
+        image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+        form = self.form(request.POST, request.FILES, instance=image)
+
+        if not form.has_changed():
+            return redirect('user-images', request.user.id)
 
         elif form.is_valid():
             form.save()
             return redirect('user-images', request.user.id)
-
-    context = {'form': form, 'image_tags': image_tags}
-    return render(request, 'base/add_edit_image.html', context)
 
 
 @login_required(login_url='register')
 def deleteImage(request, unique_name, id):
     image = ImageModel.objects.get(id=id, unique_name=unique_name)
 
-    if request.user != image.host:
-        return redirect('home')
-    else:
+    if request.user == image.host:
         if request.method == "POST":
-
             image.delete()
             return redirect('home')
+    else:
+        return redirect('home')
 
     return render(request, 'base/delete_image.html', {'image': image})
 

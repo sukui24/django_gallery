@@ -3,6 +3,7 @@ from .models import User
 from base.models import ImageModel
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password, check_password
 import os
 from django.contrib import messages
 from .forms import MyUserCreationForm, UserForm
@@ -16,7 +17,8 @@ def loginUser(request):
     if request.method == "POST":
         username = request.POST.get('username').lower()
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username,
+                            password=password)
 
         if user is not None:
             login(request, user)
@@ -33,7 +35,9 @@ def registerUser(request):
         'username', 'email', 'avatar',
         'bio', 'phone_number', 'adress'
     ]
-    if request.method == "POST":
+    # checking if one of required fields in post request
+    # to see if it register or login via modal
+    if request.method == "POST" and 'email' in request.POST:
         form = MyUserCreationForm(request.POST, request.FILES)
 
         if form.is_valid():
@@ -43,6 +47,10 @@ def registerUser(request):
             user.save()
             login(request, user)
             return redirect('profile', user.id)
+
+    elif request.method == "POST":
+        return loginUser(request)
+
     return render(request, 'users_app/register.html', {'form': form, 'excluded_fields': excluded_fields})
 
 
@@ -56,6 +64,10 @@ def userProfile(request, id):
     user = User.objects.get(id=id)
     images = ImageModel.objects.filter(host_id=id).order_by('-created_at')
     context = {'user': user, 'images': images, }
+
+    if request.method == "POST":
+        return loginUser(request)
+
     return render(request, 'users_app/profile.html', context)
 
 
@@ -74,9 +86,14 @@ def editUser(request, id):
 
     if request.method == "POST":
         form = UserForm(request.POST, request.FILES, instance=user)
-        if form.is_valid():
+
+        if not form.has_changed():
+            return redirect('profile', id)
+
+        elif form.is_valid():
             form.save()
             return redirect('profile', id)
+
     context = {'form': form, 'excluded_fields': excluded_fields}
     return render(request, 'users_app/edit_user.html', context)
 
@@ -89,6 +106,10 @@ def userImages(request, id, privacity=False):
     # send privacity in context to show the right button on page
     context = {'images': images, 'user': user,
                'privacity': privacity}
+
+    if request.method == "POST":
+        return loginUser(request)
+
     return render(request, 'users_app/user_images.html', context)
 
 
@@ -96,16 +117,18 @@ def userImagesPrivate(request, id):
     # if user isn't host send him home
     if request.user != User.objects.get(id=id):
         return redirect('home')
-    # if we want to open private images page we just reuse userImages
-    # view but set the filter's 'is_private' attribute on True
+    # if we want to open private images page we just reuse userImages view
+    # but set the filter's 'is_private' attribute on True
     return userImages(request=request, id=id, privacity=True)
 
 
 def deleteAccout(request, id):
 
     user = User.objects.get(id=id)
+
     if request.method == "POST":
         user.delete()
         return redirect('home')
+
     context = {'user': user}
     return render(request, 'users_app/delete_account.html', context)

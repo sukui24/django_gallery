@@ -9,44 +9,26 @@
     .dropdown-menu{
         width: 173px !important;
     }
-    a:hover img {
-        transform: scale(1.085);
+    .bg-danger {
+        --bs-bg-opacity: 0.8;
     }
-    img {
-    max-height: 325px;
-    transition: transform 0.3s;
-    }
-    .image {
-    overflow: hidden;
-    }
-    @media (max-width: 359px) {
-        .card-title{
-            height: 130px;
-        }
-        .card-image{
-            height: 230px !important;
-        }
-        .card-text{
-            height: 195px !important;
-        }
-    }
-    .card-image{
-        height: 325px;
+    .top-pos{
+        top: 5% !important;
     }
 </style>
 <main>
 <!-- Error messages start -->
     {% if messages %}
     <div class="container">
-        <div aria-live="polite" aria-atomic="true" class="bg-dark position-relative">
-            <div class="messages toast-container position-fixed p-3 top-0 start-50 translate-middle-x">
+        <div aria-live="polite" aria-atomic="true" class="position-absolute top-pos start-50 translate-middle-x">
+            <div class="messages toast-container position-relative p-1 top-0 start-50 translate-middle-x">
                 {% for message in messages %}
-                <div class="toast bg-danger mb-5 fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast bg-danger fade show" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-header">
                         <strong class="me-auto fs-6">{{message.tags}}</strong>
                         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
                     </div>
-                    <div class="toast-body">
+                    <div class="toast-body fs-6">
                         {{ message }}
                     </div>
                 </div>

@@ -8,12 +8,18 @@
     textarea{
         resize: none;
     }
+    .start-pos{
+        left: 85% !important;
+    }
+    .bg-danger {
+        --bs-bg-opacity: 0.8;
+    }
 </style>
 <main>
     <!-- Register page start -->
     <div class="container d-flex justify-content-center align-items-center">
         <div class="row col-12 col-sm-8 col-md-6 col-lg-5">
-            <form action="" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
+            <form action="" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 <div class="row">
                     <h3 class="mb-3 fw-normal">Register new account</h3>
@@ -31,8 +37,8 @@
                     {% endif %}    
                     {% endfor %}
                     <div class="d-flex justify-content-between">
-                        <a href="{% url 'home' %}" class="btn btn-outline-secondary w-50 me-1 my-3">Go back</a>
-                        <button class="btn btn-primary w-50 ms-1 my-3 me-5" type="submit" value="Submit">Sign in</button>
+                        <a href="{% url 'home' %}" class="btn btn-lg btn-outline-secondary w-50 me-1 my-3">Go back</a>
+                        <button class="btn btn-lg btn-primary w-50 ms-1 my-3 me-5" type="submit" value="Submit">Sign in</button>
                     </div>
                 </div>
             </form>
@@ -42,20 +48,18 @@
     <div class="container">
     {% for field in form %}
     {% if field.errors %}
-    <div aria-live="polite" aria-atomic="true" class="bg-dark position-relative">
-        <div class="toast-container position-absolute p-3 bottom-0 end-0">
-            {% for error in field.errors %}
-            <div class="toast bg-danger mb-5 fade show" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto fs-6">{{field.name}}</strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
-                </div>
-                <div class="toast-body">
-                    {{error}}
-                </div>
+    <div class="toast-container position-relative start-pos translate-middle p-1">
+        {% for error in field.errors %}
+        <div class="toast bg-danger fade show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto fs-6">{{field.label}}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
             </div>
-            {% endfor %}
+            <div class="toast-body text-ligth fs-6">
+                {{error}}
+            </div>
         </div>
+        {% endfor %}
     </div>
     {% endif %}
     {% endfor %}

@@ -25,9 +25,9 @@ class ImageModel(models.Model):
             allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'ico'],
             allowed_mimetypes=['image/jpeg', 'image/x-png',
                                'image/png', 'image/webp', 'image/x-icon'],
-            max_size=(15 * 1024 * 1024)
+            max_size=(12 * 1024 * 1024)
         )
-    ])
+    ], blank=False, null=False)
 
     tags = TaggableManager(blank=True)
     is_private = models.BooleanField(default=False, blank=False, null=False)

@@ -3,7 +3,7 @@
 {% block content %}
 <style>
     a:hover img {
-        transform: scale(1.1);
+        transform: scale(1.05);
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
     img {
@@ -16,7 +16,7 @@
         <div class="col-12 col-md-10 col-xl-7">
         <div class="card shadow-lg">
             <div class="rounded-top text-white d-flex" style="background-color: #000; height:200px;">
-                <div class="ms-4 mt-4 d-flex flex-column" style="width: 235px;">
+                <div class="ms-4 mt-md-4 mt-5 pt-5 pt-sm-0 d-flex flex-column" style="width: 235px;">
                     
                     <img src="{{ user.avatar.url }}" alt="avatar" class="img-fluid img-thumbnail mt-4 mb-2"
                     style="width: 235px; z-index: 1">
@@ -30,24 +30,22 @@
                         </a>
                     {% endif %}
                 </div>
-                <div class="ms-3" style="margin-top: 130px;">
+                <div class="ms-3" style="margin-top: 130px; width: 400px;">
                     <h5>{{user.first_name|title}} {{user.last_name|title}}</h5>
                     <p>{{user.country|add:" | "}}{{user.city}}</p>
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-6 col-md-4 pt-4">
+                            <div class="col-sm-6 col-md-4 pt-4 fs-5">
                                 <p class="mb-1 h5">{{images.count}}</p>
                                 <p class="small text-muted mb-0">Photos</p>
                             </div>
-                            <div class="col col-md-4 pt-4">
+                            <div class="col col-md-5 pt-4 fs-5">
                                 <p class="mb-1 h5">1026</p>
                                 <p class="small text-muted mb-0">Followers</p>
-                                <small>(doesn't work rn)</small>
                             </div>
-                            <div class="col col-md-4 pt-4">
+                            <div class="col pt-4 fs-5">
                                 <p class="mb-1 h5">478</p>
                                 <p class="small text-muted mb-0">Following</p>
-                                <small>(doesn't work rn)</small>
                             </div>
                         </div>
                     </div>
@@ -55,6 +53,7 @@
             </div>
             <div class="container pt-5 mt-5">
                 <div class="px-4 pt-5 pb-0">
+                    <div><br><br><br><br></div>
                     <br>
                     <h4>User info:</h4>
                     <br>

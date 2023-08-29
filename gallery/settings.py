@@ -29,8 +29,12 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'users_app.User'
-# Application definition
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+# Application definition
 INSTALLED_APPS = [
     # django apps
     'django.contrib.admin',
@@ -47,6 +51,8 @@ INSTALLED_APPS = [
     # my apps
     'base.apps.BaseConfig',
     'users_app.apps.UsersAppConfig',
+    'debug_toolbar',
+    'django_resized',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'gallery.urls'
