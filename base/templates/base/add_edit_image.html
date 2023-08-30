@@ -5,12 +5,34 @@
     textarea{
         resize: none;
     }
+    .bg-danger {
+        --bs-bg-opacity: 0.8;
+    }
+    .start-pos{
+        left: 0% !important;
+    }
+    @media(min-width:2250px){
+        .custom-row{
+            flex: 0 0 auto;
+            width: 65%;
+            margin-top: 1.5rem !important;
+        }
+        main{
+            font-size: 1.35rem;
+        }
+        .container{
+            max-width: 2000px;
+        }
+        html{
+            font-size: 1.5rem;
+        }
+    }
 </style>
 {% if page == 'add' %}
 <div class="container py-5 d-flex justify-content-center align-items-center">
-    <div class="row my-form">
+    <div class="row custom-row col-12 col-sm-8 col-md-6 col-lg-7">
         <div class="col-md-8 offset-md-2">
-            <form action="" method="POST" enctype="multipart/form-data">
+            <form action="" method="POST" enctype="multipart/form-data" novalidate>
                 <div class="container">
                     <p class="h2">Add image</p>
                     {% csrf_token %}
@@ -73,18 +95,28 @@
             </form>
         </div>
 {% endif %}
+        </div>
+        <!-- Error messages start -->
         {% for field in form %}
         {% if field.errors %}
-        <!-- Error messages start -->
-        <ul class="messages">
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="toast-container position-relative start-pos p-1">
             {% for error in field.errors %}
-            <li {% if error.tags %} class="{{ error.tags }}"{% endif %}>{{ field.label }}: {{ error }}</li>
+            <div class="toast bg-danger fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto fs-6">{{field.label}}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                </div>
+                <div class="toast-body text-ligth fs-6">
+                    {{error}}
+                </div>
+            </div>
             {% endfor %}
-        </ul>
-        <!-- Error messages end -->
+        </div>
         {% endif %}
         {% endfor %}
-        </div>
+    <!-- Error messages end -->
     </div>
 </div>
+
 {% endblock content %}

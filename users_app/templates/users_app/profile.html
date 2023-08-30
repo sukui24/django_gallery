@@ -9,11 +9,25 @@
     img {
     transition: transform 0.28s;
     }
+    @media(min-width:2250px){
+        .profile-card{
+            flex: 0 0 auto !important;
+            width: 50% !important;
+        }
+        .col-cstm-photos{
+            flex: 0 0 auto !important;
+            width: 30% !important;
+        }
+        .col-cstm-followers{
+            flex: 0 0 auto !important;
+            width: 35% !important;
+        }
+    }
 </style>
 <section class="gradient-custom-2">
     <div class="container py-1">
     <div class="row d-flex justify-content-center">
-        <div class="col-12 col-md-10 col-xl-7">
+        <div class="col-12 col-md-10 col-xl-7 profile-card">
         <div class="card shadow-lg">
             <div class="rounded-top text-white d-flex" style="background-color: #000; height:200px;">
                 <div class="ms-4 mt-md-4 mt-5 pt-5 pt-sm-0 d-flex flex-column" style="width: 235px;">
@@ -25,8 +39,8 @@
                         <a href="{% url 'edit-user' user.id %}" type="button" class="btn btn-outline-light" data-mdb-ripple-color="dark"
                         style="z-index: 1;">Edit profile</a>
                     {% else %}
-                        <a href="/" type="button" class="btn btn-outline-light" data-mdb-ripple-color="dark" style="z-index: 1;">
-                            Follow ✓
+                        <a href="{% url 'user-images' user.id %}" type="button" class="btn btn-outline-light" data-mdb-ripple-color="dark" style="z-index: 1;">
+                            {{user.username|capfirst}}'s images
                         </a>
                     {% endif %}
                 </div>
@@ -35,15 +49,15 @@
                     <p>{{user.country|add:" | "}}{{user.city}}</p>
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-6 col-md-4 pt-4 fs-5">
+                            <div class="col-cstm-photos col-sm-6 col-md-4 pt-4 fs-5">
                                 <p class="mb-1 h5">{{images.count}}</p>
                                 <p class="small text-muted mb-0">Photos</p>
                             </div>
-                            <div class="col col-md-5 pt-4 fs-5">
+                            <div class="col-cstm-followers col col-md-5 pt-4 fs-5">
                                 <p class="mb-1 h5">1026</p>
                                 <p class="small text-muted mb-0">Followers</p>
                             </div>
-                            <div class="col pt-4 fs-5">
+                            <div class="col-cstm-following col pt-4 fs-5">
                                 <p class="mb-1 h5">478</p>
                                 <p class="small text-muted mb-0">Following</p>
                             </div>
@@ -88,10 +102,10 @@
                     {% if forloop.counter < 5 %}
                         {% if forloop.counter0|divisibleby:2 %}
                         <div class="col">
-                            <a href="{% url 'view-image' image.id image.unique_name %}"><img src="{{image.image.url}}"
+                            <a href="{% url 'view-image' image.id image.unique_name %}"><img src="{{image.image_thumbnail.url}}"
                                 alt="image {{forloop.counter}}" class="w-100 rounded-3 shadow" style="max-height: 500px;"></a>
                             {% else %}
-                            <a href="{% url 'view-image' image.id image.unique_name %}"><img src="{{image.image.url}}"
+                            <a href="{% url 'view-image' image.id image.unique_name %}"><img src="{{image.image_thumbnail.url}}"
                                 alt="image {{forloop.counter}}" class="w-100 rounded-3 shadow" style="max-height: 500px;"></a>
                         </div> 
                         {% endif %}

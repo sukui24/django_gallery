@@ -14,18 +14,41 @@
     .bg-danger {
         --bs-bg-opacity: 0.8;
     }
+    @media(min-width:2250px){
+        .register-row{
+            flex: 0 0 auto;
+            width: 65%;
+            margin-top: 1.5rem !important;
+        }
+        .form-control{
+            height: 50px;
+        }
+        .album-row>* {
+        flex: 0 0 auto;
+        width: 25%;
+    }
+        .container{
+            max-width: 2000px;
+        }
+        html{
+            font-size: 1.5rem;
+        }
+        #id_bio{
+            height: 200px;
+        }
+    }
 </style>
 <main>
     <!-- Register page start -->
     <div class="container d-flex justify-content-center align-items-center">
-        <div class="row col-12 col-sm-8 col-md-6 col-lg-5">
+        <div class="row col-12 col-sm-8 col-md-6 col-lg-5 register-row">
             <form action="" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 <div class="row">
                     <h3 class="mb-3 fw-normal">Register new account</h3>
                     {% for field in form %}
                     {% if field.name in excluded_fields %}
-                    <div class="col-lg-12 row row-gap-1">
+                    <div class="col-lg-12 row-column row row-gap-1">
                         <label for="{{field.name}}">{{field.label}}:</label>
                         {{field}}
                     </div>

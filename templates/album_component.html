@@ -26,6 +26,18 @@
             height: 195px !important;
         }
     }
+    @media(min-width:2250px){
+        .album-row>* {
+        flex: 0 0 auto;
+        width: 25%;
+        }
+        .dropdown-menu{
+            width: 250px !important;
+        }
+        .btn-form{
+            margin-bottom: 1rem !important;
+        }
+    }
 </style>
 <!-- Image container starts -->
 <div class="album py-5 bg-body-tertiary">
@@ -34,7 +46,7 @@
         <!-- Default dropright button -->
         {% if q == '' %}
         <div class="row">
-            <form action="" method="GET">
+            <form action="" method="GET" class="btn-form">
                 {% csrf_token %}
                 <div class="btn-group dropup-center dropup">
                     <button data-bs-offset="0,5" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -53,7 +65,7 @@
             </form>
         </div>
         {% endif %}
-        <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-3 shadow-sm">
+        <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 album-row g-3 shadow-sm">
             {% for image in images %}
             <div class="col">
                 <div class="card shadow">

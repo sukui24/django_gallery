@@ -11,7 +11,7 @@
             <p class="lead text-body-secondary">Here you can see all the images that {{user.username}} publishes on our website.  :)</p>
             <div class="button-group">
                 <a href="{% url 'home' %}" class="btn col col-xxl-5 btn-outline-secondary btn-lg my-2 me-2">Go home</a>
-                <a href="{% url 'profile' user.id %}" class="btn col-7 col-xxl-5 btn-primary btn-lg my-2 ms-2">Go to {{user.username}}'s profile</a>
+                <a href="{% url 'profile' user.id %}" class="btn col-7 col-xxl-5 btn-primary btn-lg my-2 ms-2">Go to {{user.username|capfirst}}'s profile</a>
                 {% if privacity == False and request.user == user %}
                 <a href = "{% url 'user-images-private' user.id %}" class="btn col-6 col-sm-4 mx-sm-0 px-sm-0 btn-outline-light btn-sm my-2 ms-2">Show private images</a>
                 {% elif request.user == user %}

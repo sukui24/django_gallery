@@ -9,16 +9,16 @@
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row">
-                        <label for="username">Username:</label>
-                        <input type="text" name="username" maxlength="150" class="col m-2 form-control">
-                        <label for="password">Password:</label>
-                        <input type="password" name="password" maxlength="150" class="col m-2 form-control">
+                        <label for="username" class="modal-element">Username:</label>
+                        <input type="text" name="username" maxlength="150" class="col m-2 form-control modal-element">
+                        <label for="password" class="modal-element">Password:</label>
+                        <input type="password" name="password" maxlength="150" class="col m-2 form-control modal-element">
                     </div>
                     <div class="row">
-                        <a data-bs-dismiss="modal" aria-label="Dismiss" class="btn btn-lg btn-outline-secondary col mx-2 my-4">Go back</a>
-                        <button class="btn btn-lg btn-primary col mx-2 my-4" type="submit" value="Submit">Log in</button>
+                        <a data-bs-dismiss="modal" aria-label="Dismiss" class="btn btn-lg btn-outline-secondary col mx-2 my-4 modal-element">Go back</a>
+                        <button class="btn btn-lg btn-primary col mx-2 my-4 modal-element" type="submit" value="Submit">Log in</button>
                     </div>
-                    <div class="modal-footer d-grid justify-content-center">
+                    <div class="modal-footer d-grid justify-content-center modal-element">
                         <small class="text-muted text-center col">Haven't signed up yet?</small>
                         <a href="{% url 'register' %}" class="link-body-emphasis link-underline-opacity-50 link-opacity-50-hover text-center fs-5"><p class="col">Sign up</p></a>
                     </div>

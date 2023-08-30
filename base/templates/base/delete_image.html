@@ -1,8 +1,17 @@
 {% extends 'main.html' %}
 {% block content %}
 <style>
-    .btn{
-        height: 50px !important;
+    .btn-cstm{
+        height: 55px !important;
+    }
+    @media(min-width:2250px){
+        .btn-cstm{
+            height: 70px !important;
+        }
+        img{
+            max-width: 1280px !important;
+            max-height: 720px !important;
+        }
     }
 </style>
 <main>
@@ -16,8 +25,8 @@
                     {% csrf_token %}
                     <h1 class="m-4 fw-normal fs-1 text-center">Are you sure you want to delete {{image.unique_name}}?</h1>
                     <div class="row d-flex justify-content-center">
-                        <a href="{% url 'home' %}" class="btn btn-lg btn-outline-secondary col-4 m-2">Go back</a>
-                        <button class="btn btn-lg btn-danger col-4 m-2" type="submit" value="Submit"><strong>Delete</strong></button>
+                        <a href="{% url 'home' %}" class="btn btn-cstm btn-lg btn-outline-secondary col-4 m-2"><p class="my-1">Go back</p></a>
+                        <button class="btn btn-cstm btn-lg btn-danger col-4 m-2" type="submit" value="Submit"><strong>Delete</strong></button>
                     </div>
                 </form>
             </div>

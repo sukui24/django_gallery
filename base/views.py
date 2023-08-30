@@ -76,7 +76,7 @@ class AddImageView(LoginRequiredMixin, View):
             form.save_m2m()
             return redirect('home')
         else:
-            return render(request, self.template_name, self.context)
+            return render(request, self.template_name, {'form': form, 'page': self.PAGE})
 
 
 class ViewImage(View):

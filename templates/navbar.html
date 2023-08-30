@@ -13,7 +13,7 @@
         height: 50px;
         width: 85px;
     }
-    #search{
+    .search-bar{
         width: 400px;
     }
     .modal-dialog{
@@ -22,6 +22,18 @@
     }
     .modal-content{
         height: 450px !important;
+    }
+    @media(min-width:2250px){
+        .modal-dialog{
+            height: 900px !important;
+            max-width: 1200px !important;
+    }
+        .modal-content{
+            height: 800px !important;
+    }
+        .modal-element{
+            margin-top: 1.5rem;
+        }
     }
 </style>
 
@@ -36,7 +48,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <form action="{% url 'home' %}?q=" class="d-flex" role="search">
-                            <input required name="q" class="form-control me-2" id="search" type="search" placeholder="Search" aria-label="Search" value="{% if q %}{{q}}{% endif %}">
+                            <input required name="q" class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search" value="{% if q %}{{q}}{% endif %}">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
                     </li>
@@ -108,7 +120,7 @@
                         </li>
                         <li class="nav-item mt-3">
                             <form class="d-flex d-xl-none" role="search">
-                                <input name="q" class="form-control me-2" id="search" type="search" placeholder="Search" aria-label="Search">
+                                <input name="q" class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search">
                                 <button class="btn btn-outline-success" type="submit">Search</button>
                             </form>
                         </li>
