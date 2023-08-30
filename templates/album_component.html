@@ -78,7 +78,13 @@
                         <div class="card-title">
                             <div class="row">
                                 <div class="col-6">
-                                    <h5 style="height: 4rem;">{{image.title|title|truncatewords:5}}</h5>
+                                    <h5 style="height: 4rem;">
+                                        {% if image.title|length > 30 %}
+                                        {{image.title|slice:30|title}}...
+                                        {% else %}
+                                        {{image.title|title|truncatewords:5}}
+                                        {% endif %}
+                                    </h5>
                                 </div>
                                 <div class="col text-end">
                                     {% if image.host == null %}
@@ -91,7 +97,11 @@
                         </div>
                         <hr>
                         <div class="card-text" style="color: var(--bs-secondary-color); height: 8rem;" >
-                            <p>{{image.description|truncatewords:30|linebreaks}}</p>
+                            {% if image.description|length > 220 %}
+                            {{ image.description|slice:220}}...
+                            {% else %}
+                            {{ image.description|truncatewords:30}}
+                            {% endif %}
                         </div>
                         <div class="row">
                             <a href="{% url 'view-image' image.id image.unique_name %}" type="button" class="btn btn-primary col-6 me-3">View</a>
