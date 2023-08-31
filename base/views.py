@@ -2,20 +2,18 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse, 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
 from django.http import FileResponse
 from django.contrib import messages
 from django.db.models import Q
 from django.views import View
-from django.views.generic.detail import DetailView
-from users_app.views import loginUser
+from users_app.views import loginUser, paginator
 from .models import ImageModel
 from .forms import ImageForm
 
 
 # custom image sorting by predefined categories ==> 'sort'
 # or by using search bar ==> 'q'
-def images_filter(q, sort):
+def images_filter(request, q, sort):
     # static order options (for filtering by predefined categories)
     _order_options = {
         'Most recent': '-created_at',
@@ -31,7 +29,8 @@ def images_filter(q, sort):
         Q(description__icontains=q) | Q(tags__name__in=[q]),
         is_private=False).order_by(_order).distinct()
     # we use 'q' and 'sort' for frontend displaying
-    return {'images': images, 'q': q, 'sort': sort}
+    page_obj = paginator(request, images)
+    return {'images': images, 'q': q, 'sort': sort, 'page_obj': page_obj}
 
 
 class HomeView(View):
@@ -43,8 +42,7 @@ class HomeView(View):
         # serching via search bar
         sort = request.GET.get('sort', 'Most popular')
 
-        context = images_filter(q, sort)
-
+        context = images_filter(request, q, sort)
         return render(request, 'base/home.html', context)
 
     def post(self, request):  # log-in via login modal

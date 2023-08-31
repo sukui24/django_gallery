@@ -11,7 +11,7 @@ def image_deleter(sender, instance, **kwargs):
     _original_image_path = os.path.join(_images_path, instance.image.name)
 
     # thumbnail folder handling
-    _tmp_thumbnail_segment = os.path.join(_images_path, 'CACHE/images')
+    _thumbnail_folder_path = os.path.join(_images_path, 'CACHE/images')
     _tmp_folder_name = instance.image.name.split('.')
     # handling situation when img have multiple dots in name
     # we forced to do this check so we won't force 'for' cycle for no reasons
@@ -27,10 +27,9 @@ def image_deleter(sender, instance, **kwargs):
                 _thumbnail_folder_name = _thumbnail_folder_name + i + '.'
     else:
         # if one dot we just get first part without 'png/jpg/etc...'
-        _tmp_folder_name = _tmp_folder_name[0]
-        _thumbnail_folder_name = _tmp_folder_name
+        _thumbnail_folder_name = _tmp_folder_name[0]
     _thumbnail_image_path = os.path.join(
-        _tmp_thumbnail_segment, _thumbnail_folder_name)
+        _thumbnail_folder_path, _thumbnail_folder_name)
 
     if os.path.isfile(_original_image_path):
         os.remove(_original_image_path)  # remove file if it exists

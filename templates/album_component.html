@@ -12,8 +12,36 @@
     min-height: 270px;
     transition: transform 0.3s;
     }
+    .page-link{
+        padding-left: 35px !important;
+        padding-right: 35px !important;
+    }
+    .page-arrow{
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
     .image {
     overflow: hidden;
+    }
+    @media(max-width: 630px){
+        .page-link{
+            padding-left: 23px !important;
+            padding-right: 23px !important;
+        }
+        .page-arrow{
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+    }
+    @media(max-width: 450px){
+        .page-link{
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+        .page-arrow{
+            padding-left: 6px !important;
+            padding-right: 6px !important;
+        }
     }
     @media (max-width: 359px) {
         .card-title{
@@ -24,6 +52,14 @@
         }
         .card-text{
             height: 195px !important;
+        }
+        .page-link{
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+        .page-arrow{
+            padding-left: 4px !important;
+            padding-right: 4px !important;
         }
     }
     @media(min-width:2250px){
@@ -36,6 +72,14 @@
         }
         .btn-form{
             margin-bottom: 1rem !important;
+        }
+        .page-link{
+            padding-left: 52.5px !important;
+            padding-right: 52.5px !important;
+        }
+        .page-arrow{
+            padding-left: 24px !important;
+            padding-right: 24px !important;
         }
     }
 </style>
@@ -66,7 +110,7 @@
         </div>
         {% endif %}
         <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 album-row g-3 shadow-sm">
-            {% for image in images %}
+            {% for image in page_obj %}
             <div class="col">
                 <div class="card shadow">
                     <span class="card-image image">
@@ -97,8 +141,8 @@
                         </div>
                         <hr>
                         <div class="card-text" style="color: var(--bs-secondary-color); height: 8rem;" >
-                            {% if image.description|length > 220 %}
-                            {{ image.description|slice:220}}...
+                            {% if image.description|length > 202 %}
+                            {{ image.description|slice:202}}...
                             {% else %}
                             {{ image.description|truncatewords:30}}
                             {% endif %}
@@ -120,6 +164,37 @@
             {% endfor %}
         </div>
     </div>
+    {% if page_obj.has_other_pages %}
+    <nav class="d-flex pt-4 justify-content-center">
+        <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link page-arrow" href="{% url 'home' %}"><<</a>  
+        </li>
+        <li class="page-item">
+            <a class="page-link page-arrow" href="?page={{ page_obj.previous_page_number }}"><</a>  
+        </li>
+        {% endif %}
+            {% for p in page_obj.paginator.page_range %}
+            {% if page_obj.number == p %}
+            <li class="page-item active" aria-current="page"><span class="page-link">{{ p }}</span></li>
+            {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ p }}">{{ p }}</a>  
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link page-arrow" href="?page={{ page_obj.next_page_number }}">></a>  
+            </li>
+            <li class="page-item">
+                <a class="page-link page-arrow" href="?page=999999999999999999999999999999999999">>></a>  
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
 </div>
 <!-- Image container starts -->
 {% else %}

@@ -1,13 +1,23 @@
+from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, redirect, HttpResponse
-from .models import User
-from base.models import ImageModel
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import make_password, check_password
-import os
+from django.core.paginator import Paginator
 from django.contrib import messages
+
+from base.models import ImageModel
 from .forms import MyUserCreationForm, UserForm
-# Create your views here.
+from .models import User
+
+import os
+
+
+def paginator(request, images):
+    # paginate after 9 images on page
+    paginator = Paginator(images, 9)
+    page_number = request.GET.get('page')  # current page
+    page_obj = paginator.get_page(page_number)
+    return page_obj
 
 
 def loginUser(request):
@@ -103,9 +113,10 @@ def userImages(request, id, privacity=False):
     user = User.objects.get(id=id)
     images = ImageModel.objects.filter(
         host_id=id, is_private=privacity).order_by('-image_views')
+    page_obj = paginator(request, images)
     # send privacity in context to show the right button on page
     context = {'images': images, 'user': user,
-               'privacity': privacity}
+               'privacity': privacity, 'page_obj': page_obj}
 
     if request.method == "POST":
         return loginUser(request)
