@@ -7,33 +7,20 @@ import shutil
 
 @receiver(pre_delete, sender=ImageModel, dispatch_uid='image_delete_signal')
 def image_deleter(sender, instance, **kwargs):
-    _images_path = './media/images/'
-    _original_image_path = os.path.join(_images_path, instance.image.name)
+    _all_images_path = './media/images/'
+    _image_path = os.path.join(_all_images_path, instance.image.name)
 
     # thumbnail folder handling
     _thumbnail_folder_path = os.path.join(_images_path, 'CACHE/images')
-    _tmp_folder_name = instance.image.name.split('.')
-    # handling situation when img have multiple dots in name
-    # we forced to do this check so we won't force 'for' cycle for no reasons
-    _thumbnail_folder_name = ''
-    if len(_tmp_folder_name) > 2:
-        _tmp_folder_name = _tmp_folder_name[:-1]
-        # collecting all list items in one string
-        for i in _tmp_folder_name:
-            # if last item we don't add dot at end
-            if i == _tmp_folder_name[-1]:
-                _thumbnail_folder_name += i
-            else:
-                _thumbnail_folder_name = _thumbnail_folder_name + i + '.'
-    else:
-        # if one dot we just get first part without 'png/jpg/etc...'
-        _thumbnail_folder_name = _tmp_folder_name[0]
-    _thumbnail_image_path = os.path.join(
+    _thumbnail_folder_name = os.path.splitext(instance.image.name)[0]
+
+    _image_thumbnail_path = os.path.join(
         _thumbnail_folder_path, _thumbnail_folder_name)
 
+    # remove file and thumbnail if it exists
     if os.path.isfile(_original_image_path):
-        os.remove(_original_image_path)  # remove file if it exists
-        shutil.rmtree(_thumbnail_image_path)  # remove thumbnail
+        os.remove(_image_path)
+        shutil.rmtree(_image_thumbnail_path)
     else:
         pass  # if image not found we have no need to delete it so we just skip
 

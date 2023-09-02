@@ -155,7 +155,7 @@
                             {% endif %}
                         </div>
                         <div class="row pt-2">
-                            <div class="col-3"><small style="color: var(--bs-gray-500)"><img class="me-1" src="{% static 'images/views_eye.ico' %}">{{image.image_views}}</small></div>
+                            <div class="col-3"><small style="color: var(--bs-gray-500)"><img class="me-1" src="{% static 'images/views_eye.ico' %}" loading="lazy">{{image.image_views}}</small></div>
                             <div class="col text-end"><small class="text-body-secondary">{{image.created_at|timesince}} ago</small></div>
                         </div>
                     </div>

@@ -11,10 +11,10 @@ from .models import ImageModel
 from .forms import ImageForm
 
 
-# custom image sorting by predefined categories ==> 'sort'
-# or by using search bar ==> 'q'
+# custom image sorting by predefined categories ==> 'sort' OR
+# by using search bar ==> 'q'
 def images_filter(request, q, sort):
-    # static order options (for filtering by predefined categories)
+    # order options (for filtering by predefined categories)
     _order_options = {
         'Most recent': '-created_at',
         'Least recent': 'created_at',
@@ -59,10 +59,10 @@ class AddImageView(LoginRequiredMixin, View):
     context = {'form': form, 'page': PAGE}
 
     # 'get' method doesn't depend on context of class instance so no need to use 'self'
-    @staticmethod
-    def get(request):
-        form = AddImageView.form()
-        return render(request, AddImageView.template_name, AddImageView.context)
+    @classmethod
+    def get(cls, request):
+        form = cls.form()
+        return render(request, cls.template_name, cls.context)
 
     def post(self, request):
         form = self.form(request.POST, request.FILES)
