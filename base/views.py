@@ -15,14 +15,14 @@ from .forms import ImageForm
 # by using search bar ==> 'q'
 def images_filter(request, q, sort):
     # order options (for filtering by predefined categories)
-    _order_options = {
+    ORDER_OPTIONS = {
         'Most recent': '-created_at',
         'Least recent': 'created_at',
         'Least popular': 'image_views',
         'Most popular': '-image_views',
     }
 
-    _order = _order_options.get(sort, '-image_views')
+    _order = ORDER_OPTIONS.get(sort, '-image_views')
 
     images = ImageModel.objects.filter(
         Q(title__icontains=q) |
@@ -52,20 +52,16 @@ class HomeView(View):
 class AddImageView(LoginRequiredMixin, View):
     # used for redirect unlogged users using 'LoginRequiredMixin'
     login_url = 'register'
-
     PAGE = 'add'
-    form = ImageForm
-    template_name = 'base/add_edit_image.html'
-    context = {'form': form, 'page': PAGE}
 
     # 'get' method doesn't depend on context of class instance so no need to use 'self'
     @classmethod
     def get(cls, request):
-        form = cls.form()
-        return render(request, cls.template_name, cls.context)
+        form = ImageForm()
+        return cls.render_form(self=cls, request=request, form=form)
 
     def post(self, request):
-        form = self.form(request.POST, request.FILES)
+        form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
             image = form.save(commit=False)
             image.host = request.user
@@ -74,7 +70,10 @@ class AddImageView(LoginRequiredMixin, View):
             form.save_m2m()
             return redirect('home')
         else:
-            return render(request, self.template_name, {'form': form, 'page': self.PAGE})
+            return self.render_form(request, form)
+
+    def render_form(self, request, form):
+        return render(request, 'base/add_edit_image.html', {'form': form, 'page': self.PAGE})
 
 
 class ViewImage(View):
@@ -84,7 +83,7 @@ class ViewImage(View):
     def get(self, request, unique_name, id):
         image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
 
-        if image.is_private == True and request.user != image.host:
+        if image.is_private and request.user != image.host:
             return redirect('home')
 
         # image views (doesn't depend on the user's IP)
@@ -100,27 +99,29 @@ class ViewImage(View):
 class EditImage(LoginRequiredMixin, View):
     login_url = 'register'
 
-    template_name = 'base/add_edit_image.html'
-    form = ImageForm
-
     def get(self, request, unique_name, id):
         image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+
         if request.user != image.host:
             return redirect('home')
 
-        form = self.form(instance=image)
-        return render(request, self.template_name, {'image': image, 'form': form})
+        form = ImageForm(instance=image)
+        return self.render_form(request, form, image)
 
     def post(self, request, unique_name, id):
         image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
-        form = self.form(request.POST, request.FILES, instance=image)
+        form = ImageForm(request.POST, request.FILES, instance=image)
 
-        if not form.has_changed():
-            return redirect('user-images', request.user.id)
+        if form.has_changed():
+            if form.is_valid():
+                form.save()
+            else:
+                return self.render_form(request, form, image)
 
-        elif form.is_valid():
-            form.save()
-            return redirect('user-images', request.user.id)
+        return redirect('user-images', request.user.id)
+
+    def render_form(self, request, form, image):
+        return render(request, 'base/add_edit_image.html', {'form': form, 'image': image})
 
 
 @login_required(login_url='register')

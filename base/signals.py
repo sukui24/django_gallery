@@ -11,16 +11,18 @@ def image_deleter(sender, instance, **kwargs):
     _image_path = os.path.join(_all_images_path, instance.image.name)
 
     # thumbnail folder handling
-    _thumbnail_folder_path = os.path.join(_images_path, 'CACHE/images')
+    _thumbnail_folder_path = os.path.join(_all_images_path, 'CACHE/images')
     _thumbnail_folder_name = os.path.splitext(instance.image.name)[0]
 
     _image_thumbnail_path = os.path.join(
         _thumbnail_folder_path, _thumbnail_folder_name)
 
     # remove file and thumbnail if it exists
-    if os.path.isfile(_original_image_path):
+    if os.path.isfile(_image_path):
         os.remove(_image_path)
-        shutil.rmtree(_image_thumbnail_path)
+
+        if os.path.exists(_image_thumbnail_path):
+            shutil.rmtree(_image_thumbnail_path)
     else:
         pass  # if image not found we have no need to delete it so we just skip
 

@@ -1,4 +1,3 @@
-from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -91,28 +90,31 @@ def editUser(request, id):
         'username', 'email', 'avatar',
         'bio', 'phone_number', 'adress'
     ]
+    context = {'form': form, 'excluded_fields': excluded_fields}
+
     if user != request.user:
         return HttpResponse("You're not allowed here!")
 
     if request.method == "POST":
         form = UserForm(request.POST, request.FILES, instance=user)
 
-        if not form.has_changed():
-            return redirect('profile', id)
+        if form.has_changed():
+            if form.is_valid():
+                form.save()
+            else:
+                return render(request, 'users_app/edit_user.html', context)
+        return redirect('profile', id)
 
-        elif form.is_valid():
-            form.save()
-            return redirect('profile', id)
-
-    context = {'form': form, 'excluded_fields': excluded_fields}
     return render(request, 'users_app/edit_user.html', context)
 
 
 def userImages(request, id, privacity=False):
 
     user = User.objects.get(id=id)
+
     images = ImageModel.objects.filter(
         host_id=id, is_private=privacity).order_by('-image_views')
+
     page_obj = paginator(request, images)
     # send privacity in context to show the right button on page
     context = {'images': images, 'user': user,
