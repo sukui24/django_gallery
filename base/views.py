@@ -1,10 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse, Http404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.utils.decorators import method_decorator
 from django.http import FileResponse
-from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, F
 from django.views import View
 from users_app.views import loginUser, paginator
 from .models import ImageModel
@@ -23,7 +21,6 @@ def images_filter(request, q, sort):
     }
 
     _order = ORDER_OPTIONS.get(sort, '-image_views')
-
     images = ImageModel.objects.filter(
         Q(title__icontains=q) |
         Q(description__icontains=q) | Q(tags__name__in=[q]),
@@ -86,9 +83,10 @@ class ViewImage(View):
         if image.is_private and request.user != image.host:
             return redirect('home')
 
-        # image views (doesn't depend on the user's IP)
-        image.image_views += 1
-        image.save(update_fields=['image_views'])
+        # simple image views counter
+        ImageModel.objects.filter(
+            id=image.id).update(image_views=F('image_views') + 1)
+
         image_tags = image.tags.all()
         return render(request, self.template_name, {'image': image, 'image_tags': image_tags})
 
@@ -126,7 +124,7 @@ class EditImage(LoginRequiredMixin, View):
 
 @login_required(login_url='register')
 def deleteImage(request, unique_name, id):
-    image = ImageModel.objects.get(id=id, unique_name=unique_name)
+    image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
 
     if request.user == image.host:
         if request.method == "POST":
@@ -140,5 +138,5 @@ def deleteImage(request, unique_name, id):
 
 @login_required(login_url='register')
 def downloadImage(request, id):
-    image = ImageModel.objects.get(id=id)
+    image = get_object_or_404(ImageModel, id=id)
     return FileResponse(image.image.open(), as_attachment=True)

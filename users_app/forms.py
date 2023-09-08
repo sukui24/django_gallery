@@ -1,4 +1,4 @@
-from django.forms import Textarea, ModelForm, FileInput, TextInput, Select
+from django.forms import Textarea, ModelForm, FileInput, TextInput
 from .models import User
 from django.contrib.auth.forms import UserCreationForm
 from phonenumber_field.widgets import PhoneNumberPrefixWidget

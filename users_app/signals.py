@@ -23,7 +23,7 @@ def delete_old_avatar(sender, instance, **kwargs):
     if not instance._state.adding:
         try:
             _old_instance = sender.objects.get(id=instance.id)
-            if _old_instance.avatar.name != instance.avatar.name:  # compare to see if image changed
+            if _old_instance.avatar.name != instance.avatar.name:  # compare to see if avatar changed
                 avatar_delete(sender=User, instance=_old_instance, **kwargs)
         except sender.DoesNotExist:
             pass
@@ -31,32 +31,25 @@ def delete_old_avatar(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=User, dispatch_uid='update_avatar_name_signal')
 def update_avatar_name(sender, instance, **kwargs):
-    # we do nothing if we create user without avatar (avatar.svg - default)
-    if instance.avatar.name == 'avatar.svg':
+    # if user didn't add avatar we return default avatar (sets post save)
+    if instance.avatar.name == 'default_avatar_4a846998d2c63d936cd7b796c67790343adf5d5b.png':
         return True
 
-    # if
+    # if image didn't change we return nothing(True)
     if not instance._state.adding:
-        # if image doesn't change we return nothing(True)
         _old_instance = sender.objects.get(id=instance.id)
         if _old_instance.avatar.name == instance.avatar.name:
             return True
 
-    # if image changes or created user with avatar we change
-    # avatar name to format "imagename_avatar.jpg"
-    _name_start = instance.avatar.name.split('.')[0]
-    _name_end = instance.avatar.name.split('.')[-1]
-    _filename = f'{_name_start}_avatar.{_name_end}'
-    # rename avatar to visually see it in user folder/DB
-    instance.avatar.name = _filename
+    # changing avatar name to format "avatar_imagename.jpg"
+    instance.avatar.name = 'avatar_%s' % (instance.avatar.name)
 
 
 @receiver(pre_save, sender=User, dispatch_uid='set_user_id_signal')
 def set_user_id(sender, instance, **kwargs):
     if instance._state.adding:
-        _futureID = User.objects.last().id + 1
-        instance.id = _futureID
-
+        _future_id = User.objects.last().id + 1
+        instance.id = _future_id
 # * ====================== POST_SAVE SIGNALS ======================
 
 

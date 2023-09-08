@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -8,11 +8,9 @@ from base.models import ImageModel
 from .forms import MyUserCreationForm, UserForm
 from .models import User
 
-import os
-
 
 def paginator(request, images):
-    # paginate after 9 images on page
+    # paginate after 9 images
     paginator = Paginator(images, 9)
     page_number = request.GET.get('page')  # current page
     page_obj = paginator.get_page(page_number)
@@ -70,9 +68,11 @@ def logoutUser(request):
 
 
 def userProfile(request, id):
-    user = User.objects.get(id=id)
+
+    user = get_object_or_404(User, id=id)
+
     images = ImageModel.objects.filter(host_id=id).order_by('-created_at')
-    context = {'user': user, 'images': images, }
+    context = {'user': user, 'images': images}
 
     if request.method == "POST":
         return loginUser(request)
@@ -83,7 +83,8 @@ def userProfile(request, id):
 @login_required(login_url='login')
 def editUser(request, id):
 
-    user = User.objects.get(id=id)
+    user = get_object_or_404(User, id=id)
+
     form = UserForm(instance=user)
     # using excluded_fields to manage frontend decoration
     excluded_fields = [
@@ -110,7 +111,7 @@ def editUser(request, id):
 
 def userImages(request, id, privacity=False):
 
-    user = User.objects.get(id=id)
+    user = get_object_or_404(User, id=id)
 
     images = ImageModel.objects.filter(
         host_id=id, is_private=privacity).order_by('-image_views')
@@ -128,16 +129,15 @@ def userImages(request, id, privacity=False):
 
 def userImagesPrivate(request, id):
     # if user isn't host send him home
-    if request.user != User.objects.get(id=id):
+    user = get_object_or_404(User, id=id)
+    if request.user != user:
         return redirect('home')
-    # if we want to open private images page we just reuse userImages view
-    # but set the filter's 'is_private' attribute on True
+    # set privacity on True to see private images
     return userImages(request=request, id=id, privacity=True)
 
 
 def deleteAccout(request, id):
-
-    user = User.objects.get(id=id)
+    user = get_object_or_404(User, id=id)
 
     if request.method == "POST":
         user.delete()

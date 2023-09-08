@@ -45,13 +45,13 @@
                     {% endif %}
                 </div>
                 <div class="ms-3" style="margin-top: 130px; width: 400px;">
-                    <h5>{{user.first_name|title}} {{user.last_name|title}}</h5>
+                    <h5>{{user.get_full_name|title}}</h5>
                     <p>{{user.country|add:" | "}}{{user.city}}</p>
                     <div class="container">
                         <div class="row">
                             <div class="col-cstm-photos col-sm-6 col-md-4 pt-4 fs-5">
                                 <p class="mb-1 h5">{{images.count}}</p>
-                                <p class="small text-muted mb-0">Photos</p>
+                                <p class="small text-muted mb-0">Images</p>
                             </div>
                             <div class="col-cstm-followers col col-md-5 pt-4 fs-5">
                                 <p class="mb-1 h5">1026</p>

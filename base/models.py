@@ -1,9 +1,5 @@
-import os
-
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.contrib import messages
-from phonenumber_field.modelfields import PhoneNumberField
+
 from users_app.models import User
 from .validators import FileValidator
 
