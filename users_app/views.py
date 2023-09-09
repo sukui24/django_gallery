@@ -1,20 +1,12 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from django.contrib import messages
 
 from base.models import ImageModel
+from gallery.utils import paginator
 from .forms import MyUserCreationForm, UserForm
 from .models import User
-
-
-def paginator(request, images):
-    # paginate after 9 images
-    paginator = Paginator(images, 9)
-    page_number = request.GET.get('page')  # current page
-    page_obj = paginator.get_page(page_number)
-    return page_obj
 
 
 def loginUser(request):

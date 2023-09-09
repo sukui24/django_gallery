@@ -2,16 +2,11 @@ from django.db import models
 
 from users_app.models import User
 from .validators import FileValidator
+from gallery.utils import user_directory_path
 
 from taggit.managers import TaggableManager
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
-
-
-def user_directory_path(instance, filename):
-
-    # file will be uploaded to MEDIA_ROOT / user_<id>/<filename>
-    return f'user_{instance.host.id}/{filename}'
 
 
 class ImageModel(models.Model):

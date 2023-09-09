@@ -2,15 +2,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 from base.validators import FileValidator
+from gallery.utils import user_avatar_path
 
 from phonenumber_field.modelfields import PhoneNumberField
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFit
-
-
-def user_avatar_path(instance, filename):
-
-    return f'user_{instance.id}/{filename}'
 
 
 class User(AbstractUser):
