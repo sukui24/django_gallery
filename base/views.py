@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import FileResponse
 from django.db.models import Q, F
 from django.views import View
+
 from users_app.views import loginUser, paginator
 from .models import ImageModel
 from .forms import ImageForm
@@ -51,7 +52,8 @@ class AddImageView(LoginRequiredMixin, View):
     login_url = 'register'
     PAGE = 'add'
 
-    # 'get' method doesn't depend on context of class instance so no need to use 'self'
+    # 'get' method doesn't depend on context of class instance
+    # so no need to use 'self'
     @classmethod
     def get(cls, request):
         form = ImageForm()
@@ -70,7 +72,8 @@ class AddImageView(LoginRequiredMixin, View):
             return self.render_form(request, form)
 
     def render_form(self, request, form):
-        return render(request, 'base/add_edit_image.html', {'form': form, 'page': self.PAGE})
+        return render(request, 'base/add_edit_image.html', {
+            'form': form, 'page': self.PAGE})
 
 
 class ViewImage(View):
@@ -88,7 +91,8 @@ class ViewImage(View):
             id=image.id).update(image_views=F('image_views') + 1)
 
         image_tags = image.tags.all()
-        return render(request, self.template_name, {'image': image, 'image_tags': image_tags})
+        return render(request, self.template_name, {
+            'image': image, 'image_tags': image_tags})
 
     def post(self, request):
         return loginUser(request)
@@ -119,7 +123,8 @@ class EditImage(LoginRequiredMixin, View):
         return redirect('user-images', request.user.id)
 
     def render_form(self, request, form, image):
-        return render(request, 'base/add_edit_image.html', {'form': form, 'image': image})
+        return render(request, 'base/add_edit_image.html', {
+            'form': form, 'image': image})
 
 
 @login_required(login_url='register')

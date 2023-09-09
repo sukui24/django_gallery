@@ -34,20 +34,29 @@ def delete_old_image(sender, instance, **kwargs):
 
     try:
         _old_instance = sender.objects.get(pk=instance.pk)
-        if _old_instance.image.name != instance.image.name:  # compare to see if image changed
+        # compare to see if image changed
+        if _old_instance.image.name != instance.image.name:
             image_deleter(sender=ImageModel, instance=_old_instance, **kwargs)
     except sender.DoesNotExist:
         pass
 
 
-# * update unique name while creating/updating image
-# we're not deleting user_id/ part from image db field to get url to user path
-# ex. image_url = user_id/filename.jpg (now we can display image from user folder)
 @receiver(post_save, sender=ImageModel)
 def update_unique_name(sender, instance, created, **kwargs):
+    """
+    # * update unique name while creating/updating image
+        we're not deleting user_id/ part from image db field
+        to get correct url to user path
+
+        Example:
+        image_name = user_id/filename.jpg
+        so image.url will return path to:
+            'MEDIA_ROOT/user_id/filename.jpg'
+
+    split filename on 2 pieces ['user_id/', 'filename']
+    and getting last element - 'filename.jpg'
+    """
     if created or instance.unique_name:
-        # split filename on 2 pieces ['user_id/', 'filename']
-        # and getting last element - 'filename.jpg'
         _filename = instance.image.name.split('/')[-1]
         instance.__class__.objects.filter(pk=instance.pk).update(
-            unique_name=_filename)  # now unique_name = filename without 'user_id/'
+            unique_name=_filename)

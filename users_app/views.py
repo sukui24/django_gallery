@@ -42,8 +42,7 @@ def registerUser(request):
         'username', 'email', 'avatar',
         'bio', 'phone_number', 'adress'
     ]
-    # checking if one of required fields in post request
-    # to see if it register or login via modal
+    # if 'email' in POST that means user register
     if request.method == "POST" and 'email' in request.POST:
         form = MyUserCreationForm(request.POST, request.FILES)
 
@@ -58,7 +57,8 @@ def registerUser(request):
     elif request.method == "POST":
         return loginUser(request)
 
-    return render(request, 'users_app/register.html', {'form': form, 'excluded_fields': excluded_fields})
+    return render(request, 'users_app/register.html',
+                  {'form': form, 'excluded_fields': excluded_fields})
 
 
 @login_required(login_url='login')
