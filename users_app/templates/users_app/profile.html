@@ -57,16 +57,16 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-cstm-photos col-sm-6 col-md-4 pt-4 fs-5">
-                                <p class="mb-1 h5">{{images.count}}</p>
+                                <p class="mb-1 h5">{{images_count}}</p>
                                 <p class="small text-muted mb-0">Images</p>
                             </div>
                             <div class="col-cstm-followers col col-md-5 pt-4 fs-5">
-                                <p class="mb-1 h5">1026</p>
-                                <p class="small text-muted mb-0">Followers</p>
+                                <p class="mb-1 h5">{{ images.count }}</p>
+                                <p class="small text-muted mb-0">Public</p>
                             </div>
                             <div class="col-cstm-following col pt-4 fs-5">
-                                <p class="mb-1 h5">478</p>
-                                <p class="small text-muted mb-0">Following</p>
+                                <p class="mb-1 h5">{{ private_images_count }}</p>
+                                <p class="small text-muted mb-0">Private</p>
                             </div>
                         </div>
                     </div>

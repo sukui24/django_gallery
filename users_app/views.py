@@ -63,8 +63,19 @@ def userProfile(request, id):
 
     user = get_object_or_404(User, id=id)
 
-    images = ImageModel.objects.filter(host_id=id, is_private=False).order_by('-created_at')
-    context = {'user': user, 'images': images}
+    images = ImageModel.objects.filter(
+        host_id=id, is_private=False).order_by('-created_at')
+
+    # that all should be done by frontend through API
+    images_count = ImageModel.objects.filter(host_id=id).count()
+    public_images_count = images.count()
+    private_images_count = ImageModel.objects.filter(
+        host_id=id, is_private=True).count()
+
+    context = {'user': user, 'images': images,
+               'public_images_count': public_images_count,
+               'private_images_count': private_images_count,
+               'images_count': images_count}
 
     if request.method == "POST":
         return loginUser(request)
