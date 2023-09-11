@@ -10,12 +10,13 @@ import os
 
 @receiver(pre_delete, sender=User, dispatch_uid='avatar_delete_signal')
 def avatar_delete(sender, instance, **kwargs):
-    _avatar_path = os.path.join('./media/images/', instance.avatar.name)
+    if instance.avatar.name != 'default_avatar_4a846998d2c63d936cd7b796c67790343adf5d5b.png':
+        _avatar_path = os.path.join('./media/images/', instance.avatar.name)
 
-    if os.path.isfile(_avatar_path):
-        os.remove(_avatar_path)  # remove file if it exists
+        if os.path.isfile(_avatar_path):
+            os.remove(_avatar_path)  # remove file if it exists
     else:
-        pass  # pass if already no image
+        pass
 
 # * ====================== PRE_SAVE SIGNALS ======================
 
