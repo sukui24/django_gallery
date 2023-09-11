@@ -23,6 +23,9 @@
             width: 35% !important;
         }
     }
+    tag{
+        margin: 1.2%;
+    }
 </style>
 <section class="gradient-custom-2">
     <div class="container py-1">
@@ -45,8 +48,12 @@
                     {% endif %}
                 </div>
                 <div class="ms-3" style="margin-top: 130px; width: 400px;">
-                    <h5>{{user.get_full_name|title}}</h5>
-                    <p>{{user.country|add:" | "}}{{user.city}}</p>
+                    <h5>{{user.get_full_name|title}} {% if user.is_superuser %}&nbsp&nbsp<small class="border rounded-3 border-2 border-primary bg-info bg-opacity-50"><tag>admin</tag></small>{% endif %}</h5>
+                    <p>{% if user.country %}
+                        {{user.country|add:" | "}}{% endif %}
+                        {% if user.city %}
+                        {{user.city}}{% else %}&nbsp
+                    {% endif %}</p>
                     <div class="container">
                         <div class="row">
                             <div class="col-cstm-photos col-sm-6 col-md-4 pt-4 fs-5">
@@ -75,15 +82,19 @@
                         <li>
                             <strong>Username:</strong> {{user.username|title}}
                         </li>
+                        {% if user.phone_number %}
                         <li>
                             <strong>Phone_number:</strong> {{user.phone_number}}
                         </li>
+                        {% endif %}
                         <li>
                             <strong>Email:</strong> {{user.email|urlize}}
                         </li>
+                        {% if user.adress %}
                         <li>
                             <strong>Adress:</strong> {{user.adress}}
                         </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -92,11 +103,13 @@
                 <p class="font-italic mb-1">{{user.bio|linebreaks|urlize}}</p>
             </div>
             <div class="card-body p-4 bg-body-tertiary">
-                
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <p class="lead fw-normal mb-0 fs-4"><strong>Recent images</strong></p>
+                    {% if images %}
                     <p class="mb-0"><a href="{% url 'user-images' user.id %}" class="link-body-emphasis link-underline-opacity-0 link-opacity-50-hover">See all images</a></p>
+                    {% endif %}
                 </div>
+                {% if images %}
                 <div class="row g-2">
                     {% for image in images %}
                     {% if forloop.counter < 5 %}
@@ -111,6 +124,14 @@
                         {% endif %}
                     {% endif %}
                     {% endfor %}
+                {% else %}
+                <div class="album py-5 bg-body-tertiary">
+                    <div class="container">
+                        <h3 class="d-flex justify-content-center py-5"><p class="text-center">User {{user.username}} don't have images yet or all of them are private...</p></h3>
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 shadow-sm"></div>
+                    </div>
+                </div>
+                {% endif %}
                 </div>
             </div>
         </div>
@@ -118,5 +139,4 @@
     </div>
     </div>
 </section>
-
 {% endblock content %}

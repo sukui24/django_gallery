@@ -93,8 +93,10 @@ class ViewImage(View):
             id=image.id).update(image_views=F('image_views') + 1)
 
         image_tags = image.tags.all()
+        tags_amount = len(image_tags)
         return render(request, self.template_name, {
-            'image': image, 'image_tags': image_tags})
+            'image': image, 'image_tags': image_tags,
+            'tags_amount': tags_amount})
 
     def post(self, request):
         return loginUser(request)
@@ -125,8 +127,9 @@ class EditImage(LoginRequiredMixin, View):
         return redirect('user-images', request.user.id)
 
     def render_form(self, request, form, image):
+        image_tags = image.tags.all()
         return render(request, 'base/add_edit_image.html', {
-            'form': form, 'image': image})
+            'form': form, 'image': image, 'image_tags': image_tags, })
 
 
 @login_required(login_url='register')

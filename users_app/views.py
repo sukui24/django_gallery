@@ -63,7 +63,7 @@ def userProfile(request, id):
 
     user = get_object_or_404(User, id=id)
 
-    images = ImageModel.objects.filter(host_id=id).order_by('-created_at')
+    images = ImageModel.objects.filter(host_id=id, is_private=False).order_by('-created_at')
     context = {'user': user, 'images': images}
 
     if request.method == "POST":

@@ -35,9 +35,7 @@ def delete_old_avatar(sender, instance, **kwargs):
 @receiver(pre_save, sender=User, dispatch_uid='update_avatar_name_signal')
 def update_avatar_name(sender, instance, **kwargs):
     # if user didn't add avatar we return default avatar (sets post save)
-    _default_avatar == '''
-    default_avatar_4a846998d2c63d936cd7b796c67790343adf5d5b.png
-    '''
+    _default_avatar = 'default_avatar_4a846998d2c63d936cd7b796c67790343adf5d5b.png'
     if instance.avatar.name == _default_avatar:
         return True
 

@@ -27,7 +27,7 @@
                         {% if image.host == null %}
                         <p style="color: var(--bs-secodary-color)">user deleted :(</p>
                         {% else %}
-                        <a href="{rl 'profile' image.host.id %}" style="text-decoration: none; color: var(--bs-secodary-color)">
+                        <a href="{% url 'profile' image.host.id %}" style="text-decoration: none; color: var(--bs-secodary-color)">
                             <img class="bg-info rounded-circle justify-content-end" src="{{image.host.avatar.url}}" style="width: 55px; text-decoration: none;">  
                             @{{image.host.username}}</a>
                         {% endif %}
@@ -38,7 +38,7 @@
             <p>{{image.description|linebreaks }}</p>
             {% if image_tags %}
             <hr>
-            <p class="lead text-body-secondary">Tags: {% for tag in image_tags %} {{tag.name}} {% endfor %}</p>
+            <p class="lead text-body-secondary">Tags: {% for tag in image_tags %} {{tag.name}}{% if forloop.counter != tags_amount %},{% endif %}{% endfor %}</p>
             {% endif %}
             <div class="col-md-12">
                 <a href="{% url 'download-image' image.id %}" class="btn btn-primary my-2 col-md-5 me-5">Download image</a>
