@@ -53,7 +53,13 @@ def update_avatar_name(sender, instance, **kwargs):
 @receiver(pre_save, sender=User, dispatch_uid='set_user_id_signal')
 def set_user_id(sender, instance, **kwargs):
     if instance._state.adding:
-        _future_id = User.objects.last().id + 1
+        _last_user = User.objects.last()
+
+        if _last_user == None:
+            _last_user_id = 0
+        else:
+            _last_user_id = _last_user.id
+        _future_id = _last_user_id + 1
         instance.id = _future_id
 # * ====================== POST_SAVE SIGNALS ======================
 

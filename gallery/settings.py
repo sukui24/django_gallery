@@ -32,8 +32,9 @@ if not SECRET_KEY:
                          for i in range(32))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG")
-HOSTS = os.getenv("ALLOWED_HOSTS")
+DEBUG = int(os.environ.get("DEBUG", default=0))
+CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED")]
+HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS")
 
 ALLOWED_HOSTS = [HOSTS]
 
