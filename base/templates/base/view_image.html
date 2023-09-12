@@ -21,7 +21,10 @@
                 <div class="row">
                     <div class="col-sm-10">
                         <h1 class="fw-light"><b>{{image.title|title}}</b></h1>
-                        <p style="font-size: 12px; color: grey;">created {{image.created_at|timesince}} ago</p>
+                        <p class="mb-1" style="font-size: 12px; color: grey;">created {{image.created_at|timesince}} ago</p>
+                        {% if image.created_at != image.updated_at %}
+                        <p class="mb-1" style="font-size: 12px; color: grey;">updated {{image.updated_at|timesince}} ago</p>
+                        {% endif %}
                     </div>
                     <div class="col-sm-2 text-center">
                         {% if image.host == null %}

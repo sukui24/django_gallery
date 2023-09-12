@@ -21,6 +21,7 @@ def images_filter(request, q, sort):
         'Least recent': 'created_at',
         'Least popular': 'image_views',
         'Most popular': '-image_views',
+        'Last updated': '-updated_at',
     }
 
     _order = ORDER_OPTIONS.get(sort, '-image_views')
