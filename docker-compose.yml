@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./core
+      dockerfile: Dockerfile
+    command: gunicorn gallery.wsgi:application -c "python:config.gunicorn"
+    volumes:
+      - ./core/logs/:/usr/src/app/core/logs
+      - static_volume:/usr/src/app/core/staticfiles
+      - media_volume:/usr/src/app/core/data
+    expose:
+      - 80
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    links:
+      - db:db
+    networks:
+      - djangonetwork
+  db:
+    image: postgres:12
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    networks:
+      - djangonetwork
+    env_file:
+      - ./.env.db
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/usr/src/app/core/staticfiles
+      - media_volume:/usr/src/app/core/data
+    ports:
+      - 80:80
+    depends_on:
+      - app
+    networks:
+      - djangonetwork
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+
+networks:
+  djangonetwork:
+    driver: bridge

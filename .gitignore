@@ -1,4 +1,5 @@
 # Django #
+logs
 *.log
 *.pot
 *.pyc
@@ -8,6 +9,8 @@ media
 .vscode
 local_settings.py
 *_new.html
+debug_toolbar
+data
 # Backup files # 
 *.bak 
 
@@ -99,7 +102,7 @@ celerybeat-schedule.*
 *.sage.py 
 
 # Environments 
-.env 
+.env*
 .venv 
 env/ 
 venv/ 
