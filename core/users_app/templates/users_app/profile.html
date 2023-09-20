@@ -9,6 +9,11 @@
     img {
     transition: transform 0.28s;
     }
+    .avatar-image{
+        max-width: 240px;
+        max-height: 325px;
+        z-index: 1;
+    }
     @media(min-width:2250px){
         .profile-card{
             flex: 0 0 auto !important;
@@ -35,8 +40,7 @@
             <div class="rounded-top text-white d-flex" style="background-color: #000; height:200px;">
                 <div class="ms-4 mt-md-4 mt-5 pt-5 pt-sm-0 d-flex flex-column" style="width: 235px;">
                     
-                    <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'images/default_avatar.png' %}{% endif %}" alt="avatar" class="img-fluid img-thumbnail mt-4 mb-2"
-                    style="width: 235px; z-index: 1">
+                    <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'images/default_avatar.png' %}{% endif %}" alt="avatar" class="img-fluid img-thumbnail mt-4 mb-2 avatar-image">
 
                     {% if user.id == request.user.id %}
                         <a href="{% url 'edit-user' user.id %}" type="button" class="btn btn-outline-light" data-mdb-ripple-color="dark"

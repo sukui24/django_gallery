@@ -5,6 +5,7 @@ services:
     build:
       context: ./core
       dockerfile: Dockerfile
+    restart: always
     command: gunicorn gallery.wsgi:application -c "python:config.gunicorn"
     volumes:
       - ./core/logs/:/usr/src/app/core/logs
