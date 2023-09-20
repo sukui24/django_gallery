@@ -22,8 +22,8 @@ class User(AbstractUser):
 
     bio = models.TextField(max_length=8000, null=True, blank=True)
     avatar = ProcessedImageField(
+        blank=True,
         upload_to=user_avatar_path,
-        default="default_avatar_4a846998d2c63d936cd7b796c67790343adf5d5b.png",
         validators=[
             FileValidator(
                 allowed_extensions=['jpg', 'jpeg',
@@ -34,7 +34,7 @@ class User(AbstractUser):
                 min_size=0,
                 max_size=(5 * 1024 * 1024)
             )
-        ], processors=[ResizeToFit(width=222)], options={'quality': 100})
+        ], processors=[ResizeToFit(width=222)], options={'quality': 100},)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['first_name', 'email']
 

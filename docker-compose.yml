@@ -9,7 +9,7 @@ services:
     volumes:
       - ./core/logs/:/usr/src/app/core/logs
       - static_volume:/usr/src/app/core/staticfiles
-      - media_volume:/usr/src/app/core/data
+      - ./data:/usr/src/app/data
     expose:
       - 80
     env_file:
@@ -34,7 +34,7 @@ services:
     build: ./nginx
     volumes:
       - static_volume:/usr/src/app/core/staticfiles
-      - media_volume:/usr/src/app/core/data
+      - ./data:/usr/src/app/data
     ports:
       - 80:80
     depends_on:
@@ -44,7 +44,6 @@ services:
 volumes:
   postgres_data:
   static_volume:
-  media_volume:
 
 
 networks:

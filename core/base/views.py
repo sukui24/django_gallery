@@ -90,7 +90,7 @@ class ViewImage(View):
 
         # simple image views counter
         ImageModel.objects.filter(
-            id=image.id).update(image_views=F('image_views') + 1)
+            id=id).update(image_views=F('image_views') + 1)
 
         image_tags = image.tags.all()
         tags_amount = len(image_tags)

@@ -1,3 +1,4 @@
+{% load static %}
 <style>
     .dropdown-item{
         font-size: 1.2rem;
@@ -99,7 +100,7 @@
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                 <div class="offcanvas-header">
                 <a href="{% url 'profile' request.user.id %}" class="h1 link-body-emphasis link-underline-opacity-0 link-opacity-50-hover offcanvas-title" id="offcanvasNavbarLabel">
-                    <img class="rounded-circle" src="{{ request.user.avatar.url }}" loading="lazy" style="width: 80px; height: 69.3px; text-decoration: none;">
+                    <img class="rounded-circle" src="{% if request.user.avatar %}{{ request.user.avatar.url }}{% else %}{% static 'images/default_avatar.png' %}{% endif %}" loading="lazy" style="width: 80px; height: 69.3px; text-decoration: none;">
                     {% if request.user.username|length > 18 %}
                     {{ request.user.username|title|slice:16 }}...
                     {% else %}

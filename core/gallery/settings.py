@@ -156,7 +156,7 @@ STATIC_URL = '/staticfiles/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')
 
 MEDIA_URL = '/data/'
-MEDIA_ROOT = '/usr/src/app/core/data'
+MEDIA_ROOT = '/usr/src/app/data'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'staticfiles/'

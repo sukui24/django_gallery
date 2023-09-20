@@ -14,7 +14,7 @@ class ImageForm(ModelForm):
             'title': TextInput(attrs={'class': 'form-control'}),
             'description': Textarea(attrs={
                 'class': 'form-control', 'cols': '100', 'rows': '12'}),
-            'image': FileInput(attrs={'class': 'form-control', }),
+            'image': FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
             'tags': TextInput(attrs={'class': 'form-control', }),
             'is_private': CheckboxInput(attrs={'class': 'form-check-input'})
         }
