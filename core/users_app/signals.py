@@ -42,7 +42,7 @@ def update_avatar_name(sender, instance, **kwargs):
             return True
 
     # changing avatar name to format "avatar_imagename.jpg"
-    if instance.avatar.name is not None:
+    if instance.avatar.name != '':
         instance.avatar.name = 'avatar_%s' % (instance.avatar.name)
     else:
         pass
