@@ -1,4 +1,7 @@
-from django.forms import Textarea, ModelForm, FileInput, TextInput
+from django.forms import (
+    Textarea, ModelForm,
+    FileInput, TextInput
+)
 from django.contrib.auth.forms import UserCreationForm
 
 from .models import User

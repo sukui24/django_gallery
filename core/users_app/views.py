@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -14,16 +14,15 @@ def loginUser(request):
         return redirect('home')
 
     if request.method == "POST":
-        username = request.POST.get('username').lower()
-        password = request.POST.get('password')
-        user = authenticate(request, username=username,
-                            password=password)
-
-        if user is not None:
+        username = request.POST['username']
+        password = request.POST['password']
+        user = User.objects.get(username=username)
+        if user.check_password(password):
             login(request, user)
             return redirect('home')
         else:
             messages.error(request, 'Username or Password is incorrect')
+
     return redirect('home')
 
 
@@ -85,7 +84,8 @@ def userProfile(request, id):
 
 @login_required(login_url='login')
 def editUser(request, id):
-
+    # TODO: Add password confirmation for edit
+    # TODO: Ability to change password
     user = get_object_or_404(User, id=id)
 
     form = UserForm(instance=user)

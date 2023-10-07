@@ -40,3 +40,9 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'id: {str(self.id)} | username: {self.username}'
+
+    # set is_active on true after create/update user
+    def save(self, *args, **kwargs):
+        if not self.is_active:
+            self.is_active = True
+        super().save(*args, **kwargs)

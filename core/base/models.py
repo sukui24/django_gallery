@@ -25,7 +25,7 @@ class ImageModel(models.Model):
 
     image_thumbnail = ImageSpecField(source='image',
                                      processors=[ResizeToFit(
-                                         width=550, upscale=False),],
+                                         width=550, upscale=False), ],
                                      options={'quality': 90},
                                      format='JPEG')
 
@@ -33,7 +33,7 @@ class ImageModel(models.Model):
     is_private = models.BooleanField(default=False, blank=False, null=False)
 
     image_views = models.IntegerField(default=0)
-    description = models.TextField(max_length=3000, null=True, blank=True)
+    description = models.TextField(max_length=3000, default='', blank=True)
 
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -42,6 +42,5 @@ class ImageModel(models.Model):
                              null=True, on_delete=models.SET_NULL)
 
     # DB displaying
-
     def __str__(self):
         return f'id: {str(self.id)} | image: {self.image}'

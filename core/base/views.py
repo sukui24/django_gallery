@@ -16,18 +16,19 @@ from gallery.utils import paginator
 
 def images_filter(request, q, sort):
     # order options (for filtering by predefined categories)
-    ORDER_OPTIONS = {
-        'Most recent': '-created_at',
-        'Least recent': 'created_at',
-        'Least popular': 'image_views',
-        'Most popular': '-image_views',
-        'Last updated': '-updated_at',
+    ORDER_OPTIONS_MAP = {
+        'most_recent': '-created_at',
+        'least_recent': 'created_at',
+        'least_popular': 'image_views',
+        'most_popular': '-image_views',
+        'last_updated': '-updated_at',
     }
 
-    _order = ORDER_OPTIONS.get(sort, '-image_views')
+    _ordering = ORDER_OPTIONS_MAP.get(sort, '-image_views')
     images = ImageModel.objects.filter(
-        Q(title__icontains=q) | Q(description__icontains=q) | Q(tags__name__in=[q]),
-        is_private=False).order_by(_order).distinct()
+        Q(title__icontains=q) | Q(
+            description__icontains=q) | Q(tags__name__in=[q]),
+        is_private=False).order_by(_ordering).distinct()
     # we use 'q' and 'sort' for frontend displaying
     page_obj = paginator(request, images)
     return {'images': images, 'q': q, 'sort': sort, 'page_obj': page_obj}
@@ -40,7 +41,7 @@ class HomeView(View):
         q = request.GET.get('q', '')
 
         # serching via search bar
-        sort = request.GET.get('sort', 'Most popular')
+        sort = request.GET.get('sort', 'most_popular')
 
         context = images_filter(request, q, sort)
         return render(request, 'base/home.html', context)
@@ -129,7 +130,8 @@ class EditImage(LoginRequiredMixin, View):
     def render_form(self, request, form, image):
         image_tags = image.tags.all()
         return render(request, 'base/add_edit_image.html', {
-            'form': form, 'image': image, 'image_tags': image_tags, })
+            'form': form, 'image': image, 'image_tags': image_tags,
+        })
 
 
 @login_required(login_url='register')

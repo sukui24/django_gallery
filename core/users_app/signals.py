@@ -10,7 +10,7 @@ import os
 
 @receiver(pre_delete, sender=User, dispatch_uid='avatar_delete_signal')
 def avatar_delete(sender, instance, **kwargs):
-    _avatar_path = os.path.join('../data', str(instance.avatar.name))
+    _avatar_path = os.path.join('./data', str(instance.avatar.name))
 
     if os.path.isfile(_avatar_path):
         os.remove(_avatar_path)  # remove file if it exists
@@ -64,5 +64,5 @@ def set_user_id(sender, instance, **kwargs):
 
 @receiver(post_save, sender=User, dispatch_uid='create_user_path_signal')
 def create_user_path(sender, instance, created, **kwargs):
-    if not os.path.exists(f'../data/user_{instance.id}'):
-        os.mkdir(f'../data/user_{instance.id}')
+    if not os.path.exists(f'./data/user_{instance.id}'):
+        os.mkdir(f'./data/user_{instance.id}')

@@ -9,7 +9,10 @@ class ImageForm(ModelForm):
     class Meta:
         model = ImageModel
         fields = '__all__'
-        exclude = ['unique_name', 'host', 'image_views']
+        exclude = [
+            'unique_name', 'host', 'image_views',
+            'url',
+        ]
         widgets = {
             'title': TextInput(attrs={'class': 'form-control'}),
             'description': Textarea(attrs={

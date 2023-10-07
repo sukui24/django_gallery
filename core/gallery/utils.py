@@ -1,6 +1,4 @@
 from django.core.paginator import Paginator
-import os
-import mimetypes
 
 
 def paginator(request, images):

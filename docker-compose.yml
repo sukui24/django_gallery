@@ -23,6 +23,7 @@ services:
       - djangonetwork
   db:
     image: postgres:12
+    restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
@@ -33,6 +34,7 @@ services:
       - ./.env.db
   nginx:
     build: ./nginx
+    restart: always
     volumes:
       - static_volume:/usr/src/app/core/staticfiles
       - ./data:/usr/src/app/data
