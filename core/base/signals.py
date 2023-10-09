@@ -7,7 +7,7 @@ import shutil
 
 @receiver(pre_delete, sender=ImageModel, dispatch_uid='image_delete_signal')
 def image_deleter(sender, instance, **kwargs):
-    _all_images_path = '../data/'
+    _all_images_path = './data/'
     _image_path = os.path.join(_all_images_path, instance.image.name)
 
     # thumbnail folder handling
