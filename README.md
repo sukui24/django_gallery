@@ -12,6 +12,7 @@ cd "folder_name"
 ```
 In settings.py change all prod settings to dev, example:
 > SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") => SECRET_KEY = 'Your key here'
+
 Now you should run migrations:
 ```
 python manage.py makemigrations && python manage.py migrate
