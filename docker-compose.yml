@@ -9,7 +9,7 @@ services:
     command: gunicorn gallery.wsgi:application -c "python:config.gunicorn"
     volumes:
       - ./core/logs/:/usr/src/app/core/logs
-      - static_volume:/usr/src/app/core/staticfiles
+      - ./core/staticfiles/:/usr/src/app/core/staticfiles/
       - ./data:/usr/src/app/data
     expose:
       - 80
@@ -36,7 +36,7 @@ services:
     build: ./nginx
     restart: always
     volumes:
-      - static_volume:/usr/src/app/core/staticfiles
+      - ./core/staticfiles/:/usr/src/app/core/staticfiles/
       - ./data:/usr/src/app/data
     ports:
       - 80:80
@@ -46,7 +46,6 @@ services:
       - djangonetwork
 volumes:
   postgres_data:
-  static_volume:
 
 
 networks:

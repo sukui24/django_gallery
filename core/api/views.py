@@ -1,4 +1,5 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.authentication import SessionAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.decorators import (
@@ -37,7 +38,7 @@ class ImageViewSet(viewsets.ModelViewSet):
     queryset = ImageModel.objects.all()
     serializer_class = ListImageSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
 
     SAFE_ACTIONS = ['list', 'retrieve', 'create']
     PRIVATE_ACTIONS = ['update', 'destroy', 'partial_update']
@@ -142,7 +143,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication, SessionAuthentication]
 
     SAFE_ACTIONS = ['list', 'retrieve']
     PRIVATE_ACTIONS = ['update', 'destroy', 'partial_update']
