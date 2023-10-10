@@ -31,6 +31,8 @@ def images_filter(request, q, sort):
         is_private=False).order_by(_ordering).distinct()
     # we use 'q' and 'sort' for frontend displaying
     page_obj = paginator(request, images)
+    # make correct displaying on frontend
+    sort = ' '.join(sort.split('_'))
     return {'images': images, 'q': q, 'sort': sort, 'page_obj': page_obj}
 
 

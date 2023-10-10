@@ -10,7 +10,8 @@ media
 local_settings.py
 *_new.html
 debug_toolbar
-data
+data/C*
+data/u*
 # Backup files # 
 *.bak 
 

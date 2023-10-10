@@ -11,12 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
-from dotenv import load_dotenv
 import os
-import string
-import random
-
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,22 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
-
-if not SECRET_KEY:
-    SECRET_KEY = ''.join(random.choice(string.ascii_lowercase)
-                         for i in range(32))
-
+SECRET_KEY = 'django-insecure-88+n-ljbasfl_kn12*u!5w*pnukijf*l*!#l(hrre^)r&c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = bool(int(os.environ.get("DEBUG", default=0)))
+DEBUG = True
 
-CSRF_TRUSTED_ORIGINS = ['https://*.asion.tk']
-
-HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")
-
-ALLOWED_HOSTS = [HOSTS]
+ALLOWED_HOSTS = ['127.0.0.1']
 
 AUTH_USER_MODEL = 'users_app.User'
 
@@ -76,24 +62,19 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
-
-    # CORS
-    'corsheaders',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-
-    'corsheaders.middleware.CorsMiddleware',
-
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'gallery.urls'
@@ -124,13 +105,9 @@ WSGI_APPLICATION = 'gallery.wsgi.application'
 
 
 DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("DB_NAME", os.path.join(BASE_DIR, "db.sqlite3")),
-        "USER": os.environ.get("DB_USER", "user"),
-        "PASSWORD": os.environ.get("DB_PASS", "password"),
-        "HOST": os.environ.get("DB_HOST", "localhost"),
-        "PORT": os.environ.get("DB_PORT", "5432"),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -174,7 +151,7 @@ STATIC_URL = '/staticfiles/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')
 
 MEDIA_URL = '/data/'
-MEDIA_ROOT = '/usr/src/app/data'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'data/')
 
 STATICFILES_DIRS = [
     BASE_DIR / 'staticfiles/'
@@ -193,10 +170,11 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication'
     ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),  # !! 30 days token life
     "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
@@ -234,9 +212,3 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
-
-CORS_ALLOW_ALL_ORIGINS = True
-
-# Setup support for proxy headers
-USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
