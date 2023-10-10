@@ -1,6 +1,22 @@
 # General
 Public web gallery based on Django web framework. Allows users to private/public image upload and look other users images. Provided download functional, user profiles, CRUD operations with users and images and more.
 
+**Currently hosted on [this](https://automode.asion.tk/) domain**
+
+## Technologies
+Project made by using this technologies:
+* [Python 3.11.0](https://www.python.org/)
+* [Django 4.2.3](https://www.djangoproject.com/)
+* [Django REST Framework 3.14.0](https://www.django-rest-framework.org/)
+* [PostgreSQL 12](https://www.postgresql.org/)
+* [Nginx](https://nginx.org/)
+* [Docker](https://www.docker.com/)
+* [Docker compose V2](https://docs.docker.com/compose/)
+* [Gunicorn 21.2.0](https://gunicorn.org/)
+* [Swagger UI (drf-yasg)](https://drf-yasg.readthedocs.io/en/stable/)
+
+**And also a few more supporting libraries that I did not use much, you can find them in `requirements.txt`**
+
 ## Local setup
 * To set-up project on your computer first of all you shoud **clone repository**:
 ```bash
