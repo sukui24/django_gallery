@@ -20,24 +20,24 @@ Project made by using this technologies:
 ## Local setup
 * To set-up project on your computer first of all you shoud **clone repository**:
 ```bash
-> git clone https://github.com/Diazord/django_gallery "folder_name"
+$ git clone https://github.com/Diazord/django_gallery "folder_name"
 ```
 
 * Then go in your folder (if added):
 ```bash
-> cd "folder_name"
+$ cd "folder_name"
 ```
 
 * Rename `dev_settings.py` to `settings.py`
 
 * Now you should run migrations:
 ```bash
-> python manage.py makemigrations && python manage.py migrate
+$ python manage.py makemigrations && python manage.py migrate
 ```
 
 * After all preparing you can run server:
 ```bash
-> python manage.py runserver 127.0.0.1:8000
+$ python manage.py runserver 127.0.0.1:8000
 ```
 
 **If you using different folder for data make sure you support it**
@@ -56,7 +56,7 @@ Docker deployment is little harder since you need to manage `.env` and `.env.db`
 **Now you're ready to run container:**
 * Make sure you're in the top project folder which contains `docker-compose.yml`:
 ```bash
-> pwd
+$ pwd
 
 Path
 ----
@@ -65,7 +65,7 @@ C:\your\project\folder
 
 * Then run docker compose build:
 ```bash
-> docker compose up -d --build
+$ docker compose up -d --build
 ```
 
 **if you didn't change port - default is `80`**
