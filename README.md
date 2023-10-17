@@ -17,16 +17,21 @@ Project made by using this technologies:
 
 **And also a few more supporting libraries that I did not use much, you can find them in `requirements.txt`**
 
-## Local setup
+### Clonning repository
 * To set-up project on your computer first of all you shoud **clone repository**:
 ```bash
-$ git clone https://github.com/Diazord/django_gallery "folder_name"
+$ git clone https://github.com/sukui24/django_gallery
+```
+You can change folder for clonning into by setting folder name after git link, but make sure to use it properly later
+
+* Then go in project folder:
+```bash
+$ cd djnago_gallery
 ```
 
-* Then go in your folder (if added):
-```bash
-$ cd "folder_name"
-```
+## Local setup
+
+**Make sure to clone the project first**
 
 * Rename `dev_settings.py` to `settings.py`
 
@@ -40,18 +45,23 @@ $ python manage.py makemigrations && python manage.py migrate
 $ python manage.py runserver 127.0.0.1:8000
 ```
 
-**If you using different folder for data make sure you support it**
-* data directory used in `base(and users_app)/signals.py`, `settings.py`, `docker-compose.yml` and `nginx.conf`
+**!!! If you using different folder for data (media) make sure you support it !!!**
+* data directory used in: `base(and users_app)/signals.py`, `settings.py`, `docker-compose.yml` and `nginx.conf`
 
 **Now you're done with local deployment!**
 
 ## Docker setup
+
+**Make sure to clone the project first**
 
 Docker deployment is little harder since you need to manage `.env` and `.env.db` files with your data:
 
 * First fill the `.env.example` and `.env.db.example` with your data, then rename them to: `.env` and `.env.db`
 
 * Secondary in settings.py change `CSRF_TRUSTED_ORIGINS` to your domain/ip
+
+**!!! If you using different folder for data (media) make sure you support it !!!**
+* data directory used in: `base(and users_app)/signals.py`, `settings.py`, `docker-compose.yml` and `nginx.conf`
 
 **Now you're ready to run container:**
 * Make sure you're in the top project folder which contains `docker-compose.yml`:
@@ -71,3 +81,6 @@ $ docker compose up -d --build
 **if you didn't change port - default is `80`**
 
 **Now you're done with docker deployment!**
+## P.S.
+I can forgot to handle some operations in this `README`, but i hope you can handle it by your own or you can contact me :)
+I'm trying to improve and would be glad if someone will help me to write documentation or to optimize my code.
