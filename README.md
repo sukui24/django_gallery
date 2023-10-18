@@ -33,14 +33,18 @@ $ cd djnago_gallery
 
 **Make sure to clone the project first**
 
-* Rename `dev_settings.py` to `settings.py`
+* First rename the settings files:
+
+1. `setting.py` to something else, for example `prod_settings.py`
+
+2. `dev_settings.py` to `settings.py`
 
 * Now you should run migrations:
 ```bash
 $ python manage.py makemigrations && python manage.py migrate
 ```
 
-* After all preparing you can run server:
+* Use this command to run server:
 ```bash
 $ python manage.py runserver 127.0.0.1:8000
 ```
