@@ -17,7 +17,7 @@ Project made by using this technologies:
 
 **And also a few more supporting libraries that I did not use much, you can find them in `requirements.txt`**
 
-### Clonning repository
+## Clonning repository
 * To set-up project on your computer first of all you shoud **clone repository**:
 ```bash
 $ git clone https://github.com/sukui24/django_gallery
@@ -29,6 +29,38 @@ You can change folder for clonning into by setting folder name after git link, b
 $ cd djnago_gallery
 ```
 
+## Fixtures using
+**Fixtures is preset data that i made for project testing purpose**
+
+**If you want to get preset data and don't fill website by yourself follow this steps:**
+ 1. Setup the project (local or docker)
+ 2. Make sure you're in `core` folder: execute ```$ pwd```
+ 3. Execute this command:
+    ```bash
+    $ python manage.py loaddata fixtures.json
+    ```
+ 4. In .env you have field `DATA`, set it to `'fixtures_data/'`
+ 5. Restart django server
+
+## Fixtures loaddata decoding issue
+If you have decode issue (for example UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte) then follow this steps:
+* Check the file encoding:
+    - Open file with Notepad++ or another text editor
+    - (for notepad++) you will see encoding on the bottom of work window
+* Execute this command:
+  ```bash
+  $ python -c "import codecs; codecs.open('OUTPUT.json', 'w', 'utf-8').write(codecs.open('INPUT.json', 'r', 'ENCODING')
+  ```
+  `OUTPUT`: name of the file for re-coding output (fixtures.json)
+  
+  `INPUT`: name of wrong decoded file (rename it from fixtures.json to wrong_fixtures.json for example and put in `INPUT`)
+  
+  `ENCODING`: the wrong fixtures.json encoding (in my case it was `utf-16`)
+  
+* Now check again encoding or just try to load data again
+
+**If something goes wrong anyways you can contact me or find solution by yourself** 
+
 ## Local setup
 
 **Make sure to clone the project first**
@@ -38,6 +70,8 @@ $ cd djnago_gallery
 1. `setting.py` to something else, for example `prod_settings.py`
 
 2. `dev_settings.py` to `settings.py`
+
+* Rename .env.example to .env and set `DATA` field to `'data/'`, or `'fixtures_data/'` if you're using fixtures. 
 
 * Now you should run migrations:
 ```bash
