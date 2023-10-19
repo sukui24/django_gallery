@@ -4,9 +4,10 @@ from django.forms import (
 )
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import User
 
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
+
+from users_app.models import User
 
 
 class MyUserCreationForm(UserCreationForm):

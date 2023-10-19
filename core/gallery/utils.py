@@ -9,11 +9,15 @@ def paginator(request, images):
     return page_obj
 
 
+# TODO: Type checking for instance
+# TODO: Make it as method of model ImageModel
 def user_avatar_path(instance, filename):
 
     return f'user_{instance.id}/{filename}'
 
 
+# TODO: Type checking for instance
+# TODO: Make it as method of model User
 def user_directory_path(instance, filename):
 
     # file will be uploaded to MEDIA_ROOT / user_<id>/<filename>

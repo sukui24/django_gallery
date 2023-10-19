@@ -1,12 +1,13 @@
 from django.db import models
 
 from users_app.models import User
-from .validators import FileValidator
 from gallery.utils import user_directory_path
 
 from taggit.managers import TaggableManager
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
+
+from base.validators import FileValidator
 
 
 class ImageModel(models.Model):

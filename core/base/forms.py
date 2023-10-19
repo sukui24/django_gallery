@@ -2,7 +2,7 @@ from django.forms import (
     ModelForm, TextInput, Textarea,
     FileInput, CheckboxInput
 )
-from .models import ImageModel
+from base.models import ImageModel
 
 
 class ImageForm(ModelForm):

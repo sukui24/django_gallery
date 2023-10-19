@@ -21,6 +21,7 @@ services:
       - db:db
     networks:
       - djangonetwork
+
   db:
     image: postgres:12
     restart: always
@@ -32,6 +33,7 @@ services:
       - djangonetwork
     env_file:
       - ./.env.db
+
   nginx:
     build: ./nginx
     restart: always
@@ -44,6 +46,7 @@ services:
       - app
     networks:
       - djangonetwork
+
 volumes:
   postgres_data:
 

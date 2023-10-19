@@ -5,8 +5,9 @@ from django.contrib import messages
 
 from base.models import ImageModel
 from gallery.utils import paginator
-from .forms import MyUserCreationForm, UserForm
-from .models import User
+
+from users_app.forms import MyUserCreationForm, UserForm
+from users_app.models import User
 
 
 def loginUser(request):

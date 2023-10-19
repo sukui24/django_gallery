@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -145,13 +147,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+cwd = os.getcwd()
+parent_dir = os.path.dirname(os.path.abspath(cwd))
+# media folder path
+data_path = os.path.join(parent_dir, os.environ.get("DATA"))
 
 STATIC_URL = '/staticfiles/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')
 
 MEDIA_URL = '/data/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'data/')
+MEDIA_ROOT = data_path
 
 STATICFILES_DIRS = [
     BASE_DIR / 'staticfiles/'
@@ -205,7 +211,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 
-    "TOKEN_OBTAIN_SERIALIZER": "api.serializers.MyTokenObtainPairSerializer",
+    "TOKEN_OBTAIN_SERIALIZER": "api_rest.serializers.MyTokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
     "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
     "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",

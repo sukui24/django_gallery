@@ -6,14 +6,14 @@ from django.db.models import Q, F
 from django.views import View
 
 from users_app.views import loginUser
-from .models import ImageModel
-from .forms import ImageForm
 from gallery.utils import paginator
+
+from base.models import ImageModel
+from base.forms import ImageForm
+
 
 # custom image sorting by predefined categories ==> 'sort' OR
 # by using search bar ==> 'q'
-
-
 def images_filter(request, q, sort):
     # order options (for filtering by predefined categories)
     ORDER_OPTIONS_MAP = {

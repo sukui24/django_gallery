@@ -1,16 +1,25 @@
+import os
+
 from django.db.models.signals import pre_delete, pre_save, post_save
 from django.dispatch import receiver
 
-from .models import User
+from dotenv import load_dotenv
 
-import os
+from users_app.models import User
+
+load_dotenv()
+
+cwd = os.getcwd()
+parent_dir = os.path.dirname(os.path.abspath(cwd))
+# media folder path
+data_path = os.path.join(parent_dir, os.environ.get("DATA"))
 
 # * ====================== PRE_DELETE SIGNALS ======================
 
 
 @receiver(pre_delete, sender=User, dispatch_uid='avatar_delete_signal')
 def avatar_delete(sender, instance, **kwargs):
-    _avatar_path = os.path.join('./data', str(instance.avatar.name))
+    _avatar_path = os.path.join(data_path, str(instance.avatar.name))
 
     if os.path.isfile(_avatar_path):
         os.remove(_avatar_path)  # remove file if it exists
@@ -43,7 +52,7 @@ def update_avatar_name(sender, instance, **kwargs):
 
     # changing avatar name to format "avatar_imagename.jpg"
     if instance.avatar.name != '':
-        instance.avatar.name = 'avatar_%s' % (instance.avatar.name)
+        instance.avatar.name = 'avatar_%s' % str(instance.avatar.name)
     else:
         pass
 
@@ -64,5 +73,6 @@ def set_user_id(sender, instance, **kwargs):
 
 @receiver(post_save, sender=User, dispatch_uid='create_user_path_signal')
 def create_user_path(sender, instance, created, **kwargs):
-    if not os.path.exists(f'./data/user_{instance.id}'):
-        os.mkdir(f'./data/user_{instance.id}')
+    path = os.path.join(data_path, f"user_{instance.id}")
+    if not os.path.exists(path):
+        os.mkdir(path)

@@ -1,13 +1,26 @@
-from django.db.models.signals import pre_delete, pre_save, post_save
-from django.dispatch import receiver
-from .models import ImageModel
 import os
 import shutil
+
+from django.db.models.signals import pre_delete, pre_save, post_save
+from django.dispatch import receiver
+
+from dotenv import load_dotenv
+
+from base.models import ImageModel
+
+load_dotenv()
+
+cwd = os.getcwd()
+parent_dir = os.path.dirname(os.path.abspath(cwd))
+# media folder path
+data_path = os.path.join(parent_dir, os.environ.get("DATA"))
+
+# ! TODO: Delete related tags after image deleting if they doesn't used on another image
 
 
 @receiver(pre_delete, sender=ImageModel, dispatch_uid='image_delete_signal')
 def image_deleter(sender, instance, **kwargs):
-    _all_images_path = './data/'
+    _all_images_path = data_path
     _image_path = os.path.join(_all_images_path, instance.image.name)
 
     # thumbnail folder handling
