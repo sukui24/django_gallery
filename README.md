@@ -17,35 +17,46 @@ Project made by using this technologies:
 
 **And also a few more supporting libraries that I did not use much, you can find them in `requirements.txt`**
 
-## Local setup
+### Clonning repository
 * To set-up project on your computer first of all you shoud **clone repository**:
 ```bash
-> git clone https://github.com/Diazord/django_gallery "folder_name"
+$ git clone https://github.com/sukui24/django_gallery
 ```
+You can change folder for clonning into by setting folder name after git link, but make sure to use it properly later
 
-* Then go in your folder (if added):
+* Then go in project folder:
 ```bash
-> cd "folder_name"
+$ cd djnago_gallery
 ```
 
-* Rename `dev_settings.py` to `settings.py`
+## Local setup
+
+**Make sure to clone the project first**
+
+* First rename the settings files:
+
+1. `setting.py` to something else, for example `prod_settings.py`
+
+2. `dev_settings.py` to `settings.py`
 
 * Now you should run migrations:
 ```bash
-> python manage.py makemigrations && python manage.py migrate
+$ python manage.py makemigrations && python manage.py migrate
 ```
 
-* After all preparing you can run server:
+* Use this command to run server:
 ```bash
-> python manage.py runserver 127.0.0.1:8000
+$ python manage.py runserver 127.0.0.1:8000
 ```
 
-**If you using different folder for data make sure you support it**
-* data directory used in `base(and users_app)/signals.py`, `settings.py`, `docker-compose.yml` and `nginx.conf`
+**!!! If you using different folder for data (media) make sure you support it !!!**
+* data directory used in: `base(and users_app)/signals.py`, `settings.py`, `docker-compose.yml` and `nginx.conf`
 
 **Now you're done with local deployment!**
 
 ## Docker setup
+
+**Make sure to clone the project first**
 
 Docker deployment is little harder since you need to manage `.env` and `.env.db` files with your data:
 
@@ -53,10 +64,13 @@ Docker deployment is little harder since you need to manage `.env` and `.env.db`
 
 * Secondary in settings.py change `CSRF_TRUSTED_ORIGINS` to your domain/ip
 
+**!!! If you using different folder for data (media) make sure you support it !!!**
+* data directory used in: `base(and users_app)/signals.py`, `settings.py`, `docker-compose.yml` and `nginx.conf`
+
 **Now you're ready to run container:**
 * Make sure you're in the top project folder which contains `docker-compose.yml`:
 ```bash
-> pwd
+$ pwd
 
 Path
 ----
@@ -65,9 +79,12 @@ C:\your\project\folder
 
 * Then run docker compose build:
 ```bash
-> docker compose up -d --build
+$ docker compose up -d --build
 ```
 
 **if you didn't change port - default is `80`**
 
 **Now you're done with docker deployment!**
+## P.S.
+I can forgot to handle some operations in this `README`, but i hope you can handle it by your own or you can contact me :)
+I'm trying to improve and would be glad if someone will help me to write documentation or to optimize my code.
