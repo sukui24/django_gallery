@@ -45,9 +45,11 @@ $ cd djnago_gallery
 ## Fixtures loaddata decoding issue
 If you have decode issue (for example UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte) then follow this steps:
 * Check the file encoding:
-    - Open file with Notepad++ or another text editor
-    - (for notepad++) you will see encoding on the bottom of work window
-* Execute this command:
+    - Open file in VSCode or another text editor
+    - You will see encoding on the bottom of work window
+    - (In VSCode) type on encoding and select `Save with encoding` then choose `utf-8`
+
+* **If you can't change encoding manually then execute this command**:
   ```bash
   $ python -c "import codecs; codecs.open('OUTPUT.json', 'w', 'utf-8').write(codecs.open('INPUT.json', 'r', 'ENCODING')
   ```
