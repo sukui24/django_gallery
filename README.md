@@ -42,6 +42,16 @@ $ cd djnago_gallery
  4. In .env you have field `DATA`, set it to `'fixtures_data/'`
  5. Restart django server
 
+**There's 2 test accounts:**
+1. Super user (admin):
+   * Login: superuser
+   * Password: superuser
+2. Defaut user:
+   * Login: defaultuser
+   * Password: SoMePassword20231910
+ 
+This test accounts allowed only if you use fixtures
+
 ## Fixtures loaddata decoding issue
 If you have decode issue (for example UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte) then follow this steps:
 * Check the file encoding:
