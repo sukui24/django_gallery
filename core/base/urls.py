@@ -4,12 +4,12 @@ from base import views
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
     path('add_image/', views.AddImageView.as_view(), name='add-image'),
-    path('view_image/<str:id>/<str:unique_name>',
+    path('view_image/<str:id>',
          views.ViewImage.as_view(), name='view-image'),
-    path('delete_image/<str:id>/<str:unique_name>',
-         views.deleteImage, name='delete-image'),
-    path('edit_image/<str:id>/<str:unique_name>',
+    path('delete_image/<str:id>',
+         views.delete_image, name='delete-image'),
+    path('edit_image/<str:id>',
          views.EditImage.as_view(), name='edit-image'),
     path('download_image/<str:id>',
-         views.downloadImage, name='download-image'),
+         views.download_image, name='download-image'),
 ]

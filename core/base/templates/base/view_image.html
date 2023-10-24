@@ -55,8 +55,8 @@
             <div class="col-md-12">
                 <a href="{% url 'download-image' image.id %}" class="btn btn-primary my-2 col-md-5 me-5">Download image</a>
                 {% if request.user == image.host %}
-                <a href="{% url 'edit-image' image.id image.unique_name %}" type="button" class="btn btn-outline-info col-md-2 ms-5 me-5">Edit</a>
-                <a href="{% url 'delete-image' image.id image.unique_name %}" type="button" class="btn btn-outline-danger col-md-2">Delete</a>
+                <a href="{% url 'edit-image' image.id %}" type="button" class="btn btn-outline-info col-md-2 ms-5 me-5">Edit</a>
+                <a href="{% url 'delete-image' image.id %}" type="button" class="btn btn-outline-danger col-md-2">Delete</a>
             </div>
             {% endif %}
         </div>

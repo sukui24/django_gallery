@@ -134,10 +134,10 @@
                     {% if forloop.counter < 5 %}
                         {% if forloop.counter0|divisibleby:2 %}
                         <div class="col">
-                            <a href="{% url 'view-image' image.id image.unique_name %}"><img src="{{image.image_thumbnail.url}}"
+                            <a href="{% url 'view-image' image.id %}"><img src="{{image.image_thumbnail.url}}"
                                 alt="image {{forloop.counter}}" class="w-100 rounded-3 shadow" style="max-height: 500px;"></a>
                             {% else %}
-                            <a href="{% url 'view-image' image.id image.unique_name %}"><img src="{{image.image_thumbnail.url}}"
+                            <a href="{% url 'view-image' image.id %}"><img src="{{image.image_thumbnail.url}}"
                                 alt="image {{forloop.counter}}" class="w-100 rounded-3 shadow" style="max-height: 500px;"></a>
                         </div> 
                         {% endif %}

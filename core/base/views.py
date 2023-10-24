@@ -10,25 +10,22 @@ from gallery.utils import paginator
 
 from base.models import ImageModel
 from base.forms import ImageForm
+from base.constans import ORDER_OPTIONS_MAP
 
 
 # custom image sorting by predefined categories ==> 'sort' OR
 # by using search bar ==> 'q'
+
+
 def images_filter(request, q, sort):
-    # order options (for filtering by predefined categories)
-    ORDER_OPTIONS_MAP = {
-        'most_recent': '-created_at',
-        'least_recent': 'created_at',
-        'least_popular': 'image_views',
-        'most_popular': '-image_views',
-        'last_updated': '-updated_at',
-    }
 
     _ordering = ORDER_OPTIONS_MAP.get(sort, '-image_views')
+
     images = ImageModel.objects.filter(
         Q(title__icontains=q) | Q(
             description__icontains=q) | Q(tags__name__in=[q]),
         is_private=False).order_by(_ordering).distinct()
+
     # we use 'q' and 'sort' for frontend displaying
     page_obj = paginator(request, images)
     # make correct displaying on frontend
@@ -55,7 +52,7 @@ class HomeView(View):
 class AddImageView(LoginRequiredMixin, View):
     # used for redirect unlogged users using 'LoginRequiredMixin'
     login_url = 'register'
-    PAGE = 'add'
+    _PAGE = 'add'
 
     # 'get' method doesn't depend on context of class instance
     # so no need to use 'self'
@@ -78,15 +75,15 @@ class AddImageView(LoginRequiredMixin, View):
 
     def render_form(self, request, form):
         return render(request, 'base/add_edit_image.html', {
-            'form': form, 'page': self.PAGE})
+            'form': form, 'page': self._PAGE})
 
 
 class ViewImage(View):
 
     template_name = 'base/view_image.html'
 
-    def get(self, request, unique_name, id):
-        image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+    def get(self, request, id):
+        image = get_object_or_404(ImageModel, id=id)
 
         if image.is_private and request.user != image.host:
             return redirect('home')
@@ -108,8 +105,8 @@ class ViewImage(View):
 class EditImage(LoginRequiredMixin, View):
     login_url = 'register'
 
-    def get(self, request, unique_name, id):
-        image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+    def get(self, request, id):
+        image = get_object_or_404(ImageModel, id=id)
 
         if request.user != image.host:
             return redirect('home')
@@ -117,8 +114,8 @@ class EditImage(LoginRequiredMixin, View):
         form = ImageForm(instance=image)
         return self.render_form(request, form, image)
 
-    def post(self, request, unique_name, id):
-        image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+    def post(self, request, id):
+        image = get_object_or_404(ImageModel, id=id)
         form = ImageForm(request.POST, request.FILES, instance=image)
 
         if form.has_changed():
@@ -137,8 +134,8 @@ class EditImage(LoginRequiredMixin, View):
 
 
 @login_required(login_url='register')
-def deleteImage(request, unique_name, id):
-    image = get_object_or_404(ImageModel, id=id, unique_name=unique_name)
+def delete_image(request, id):
+    image = get_object_or_404(ImageModel, id=id)
 
     if request.user == image.host:
         if request.method == "POST":
@@ -151,6 +148,6 @@ def deleteImage(request, unique_name, id):
 
 
 @login_required(login_url='register')
-def downloadImage(request, id):
+def download_image(request, id):
     image = get_object_or_404(ImageModel, id=id)
     return FileResponse(image.image.open(), as_attachment=True)

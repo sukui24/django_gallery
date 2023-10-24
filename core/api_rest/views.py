@@ -28,6 +28,12 @@ from api_rest.serializers import (
     PublicUserSerializer
 
 )
+from api_rest.constans import (
+    IMAGE_SAFE_ACTIONS,
+    USER_SAFE_ACTIONS,
+    PRIVATE_ACTIONS,
+    ORDER_OPTIONS_MAP
+)
 
 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -39,9 +45,6 @@ class ImageViewSet(viewsets.ModelViewSet):
     serializer_class = ListImageSerializer
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [JWTAuthentication, SessionAuthentication]
-
-    _SAFE_ACTIONS = ['list', 'retrieve', 'create']
-    _PRIVATE_ACTIONS = ['update', 'destroy', 'partial_update']
 
     def perform_create(self, serializer):
         serializer.save(host=self.request.user)
@@ -106,7 +109,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         """
         if self.action == 'retrieve':
             return ViewImageSerializer
-        elif self.action in self._PRIVATE_ACTIONS:
+        elif self.action in PRIVATE_ACTIONS:
             return DetailImageSerializer
         return self.serializer_class
 
@@ -114,9 +117,9 @@ class ImageViewSet(viewsets.ModelViewSet):
         """
         Method returns permission based on user role
         """
-        if self.action in self._SAFE_ACTIONS:
+        if self.action in IMAGE_SAFE_ACTIONS:
             return [permissions.IsAuthenticated()]
-        elif self.action in self._PRIVATE_ACTIONS:
+        elif self.action in PRIVATE_ACTIONS:
             return [IsHostOrAdminOrReadOnly()]
         return []
 
@@ -128,14 +131,6 @@ class ImageViewSet(viewsets.ModelViewSet):
         Since it's specific for images model we made it as staticmethod
         """
         sort = request.query_params.get('sort', 'most_popular')
-
-        ORDER_OPTIONS_MAP = {
-            'most_recent': '-created_at',
-            'least_recent': 'created_at',
-            'least_popular': 'image_views',
-            'most_popular': '-image_views',
-            'last_updated': '-updated_at',
-        }
 
         ordering = ORDER_OPTIONS_MAP.get(sort, '-image_views')
         return ordering
@@ -207,7 +202,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
         Action permission handles according to this lists:
 
-        `SAFE_ACTIONS` = ['list', 'retrieve', 'create'] - Authenticated only
+        `IMAGE_SAFE_ACTIONS` = ['list', 'retrieve', 'create'] - Authenticated only
         `PRIVATE_ACTIONS` = ['update', 'destroy', 'partial_update'] -\
         Host or admin or read only
 
@@ -226,11 +221,6 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = [JWTAuthentication, SessionAuthentication]
-
-    _SAFE_ACTIONS = ['list', 'retrieve']
-    _PRIVATE_ACTIONS = ['update', 'destroy', 'partial_update']
-
-    # * For login just use login/ endpoint which will return tokens
 
     @action(detail=False, methods=['POST'])
     def register(self, request):
@@ -267,9 +257,9 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         Method returns permission based on user role
         """
-        if self.action in self._SAFE_ACTIONS:
+        if self.action in USER_SAFE_ACTIONS:
             return [permissions.IsAuthenticated()]
-        elif self.action in self._PRIVATE_ACTIONS:
+        elif self.action in PRIVATE_ACTIONS:
             return [IsUserOrAdmin()]
         elif self.action == 'create':
             return [permissions.AllowAny()]
@@ -365,7 +355,7 @@ class UserViewSet(viewsets.ModelViewSet):
         Action permission handles according to this pattern:
 
         `create` - Any
-        `SAFE_ACTIONS` = ['list', 'retrieve'] - Authenticated only
+        `USER_SAFE_ACTIONS` = ['list', 'retrieve'] - Authenticated only
         `PRIVATE_ACTIONS` = ['update', 'destroy', 'partial_update'] - User or admin
 
         Private actions allowed only for admins

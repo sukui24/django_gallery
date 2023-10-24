@@ -85,7 +85,7 @@ def userProfile(request, id):
 
 @login_required(login_url='login')
 def editUser(request, id):
-    # TODO: Add password confirmation for edit
+    # TODO: Add password confirmation if editing
     # TODO: Ability to change password
     user = get_object_or_404(User, id=id)
 
