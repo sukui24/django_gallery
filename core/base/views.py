@@ -5,7 +5,7 @@ from django.http import FileResponse
 from django.db.models import Q, F
 from django.views import View
 
-from users_app.views import loginUser
+from users_app.views import login_user
 from gallery.utils import paginator
 
 from base.models import ImageModel
@@ -46,7 +46,7 @@ class HomeView(View):
         return render(request, 'base/home.html', context)
 
     def post(self, request):  # log-in via login modal
-        return loginUser(self.request)
+        return login_user(self.request)
 
 
 class AddImageView(LoginRequiredMixin, View):
@@ -99,7 +99,7 @@ class ViewImage(View):
             'tags_amount': tags_amount})
 
     def post(self, request):
-        return loginUser(request)
+        return login_user(request)
 
 
 class EditImage(LoginRequiredMixin, View):

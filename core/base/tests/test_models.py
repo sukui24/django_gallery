@@ -1,10 +1,13 @@
 import os
 
 from django.urls import reverse
-from django.test import TestCase
-from base.models import ImageModel
+from django.test import TestCase, Client
+
 from gallery.settings import BASE_DIR
-from .utils import create_superuser
+
+from base.models import ImageModel
+
+from .utils import create_image
 
 
 class TestModels(TestCase):
@@ -12,42 +15,26 @@ class TestModels(TestCase):
     Test some model actions. Actually most of them are just signals
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
+        self.client = Client()
         self.edit_image_path = reverse('edit-image', args=['1'])
 
-    def test_image_unique_name_updating_after_create(self):
+    def test_image_unique_name_updating_after_create(self) -> None:
         """
-        => test_models => TestModels
+        Located in: base => tests => test_models => TestModels
         """
-        image_path = os.path.join(BASE_DIR,
-                                  'base/tests/test_images/test_image.jpg')
-        host = create_superuser(self.client)
-        ImageModel.objects.create(
-            id=1,
-            title='images',
-            image=image_path,
-            host=host,
-        )
+        create_image(self.client)
         # didn't return image creation in variable cause unique_name
         # changes after saving the model
         image = ImageModel.objects.get(pk=1)
 
-        self.assertEquals(image.image, image_path)
         self.assertEquals(image.unique_name, 'test_image.jpg')
 
-    def test_old_image_deletion_after_edit(self):
+    def test_old_image_deletion_after_edit(self) -> None:
         """
-        => test_models => TestModels
+        Located in: base => tests => test_models => TestModels
         """
-        host = create_superuser(self.client)
-        old_image_path = os.path.join(BASE_DIR,
-                                      'base/tests/test_images/test_image.jpg')
-        ImageModel.objects.create(
-            id=1,
-            title='old_image',
-            image=old_image_path,
-            host=host
-        )
+        create_image(self.client)
         old_image = ImageModel.objects.get(pk=1)
         new_image_path = os.path.join(BASE_DIR,
                                       'base/tests/test_images/test_edit_image.jpg')

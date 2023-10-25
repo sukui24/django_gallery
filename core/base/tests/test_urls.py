@@ -2,9 +2,10 @@
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from .utils import create_image, create_superuser
-from users_app.models import User
 from base.models import ImageModel
+from users_app.models import User
+
+from .utils import create_image, create_superuser
 
 
 class TestUrlsStatic(TestCase):
@@ -14,23 +15,23 @@ class TestUrlsStatic(TestCase):
 
     __slots__ = ['client', 'home_url', 'add_image_url']
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.client = Client()
         self.home_url = reverse('home')
         self.add_image_url = reverse('add-image')
 
-    def test_home_url_GET(self):
+    def test_home_url_GET(self) -> None:
         """
-        => test_urls => TestUrlsStatic
+        Located in: base => tests => test_urls => TestUrlsStatic
         """
         response = self.client.get(self.home_url)
 
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/home.html')
 
-    def test_add_image_GET(self):
+    def test_add_image_GET(self) -> None:
         """
-        => test_urls => TestUrlsStatic
+        Located in: base => tests => test_urls => TestUrlsStatic
         """
         response = self.client.get(self.add_image_url)
 
@@ -54,15 +55,15 @@ class TestUrlsDynamic(TestCase):
     __slots__ = ['client', 'view_image_url',
                  'edit_image_url', 'download_image_url']
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.client = Client()
         self.view_image_url = reverse('view-image', args=['1'])
         self.edit_image_url = reverse('edit-image', args=['1'])
         self.download_image_url = reverse('download-image', args=['1'])
 
-    def test_edit_image_GET(self):
+    def test_edit_image_GET(self) -> None:
         """
-        => test_urls => TestUrlsDynamic
+        Located in: base => tests => test_urls => TestUrlsDynamic
         """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
@@ -79,9 +80,9 @@ class TestUrlsDynamic(TestCase):
         # code 302(redirect) because user unlogged-in and has no permissions
         self.assertEquals(response.status_code, 302)
 
-    def test_view_image_GET(self):
+    def test_view_image_GET(self) -> None:
         """
-        => test_urls => TestUrlsDynamic
+        Located in: base => tests => test_urls => TestUrlsDynamic
         """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
@@ -90,9 +91,9 @@ class TestUrlsDynamic(TestCase):
 
         self.assertEquals(response.status_code, 200)
 
-    def test_download_image_GET(self):
+    def test_download_image_GET(self) -> None:
         """
-        => test_urls => TestUrlsDynamic
+        Located in: base => tests => test_urls => TestUrlsDynamic
         """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
@@ -102,9 +103,9 @@ class TestUrlsDynamic(TestCase):
         self.assertEquals(type(response).__name__, 'FileResponse')
         self.assertEquals(type(response.streaming_content).__name__, 'map')
 
-    def test_download_image_GET_wrong_pk(self):
+    def test_download_image_GET_wrong_pk(self) -> None:
         """
-        => test_urls => TestUrlsDynamic
+        Located in: base => tests => test_urls => TestUrlsDynamic
         """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)

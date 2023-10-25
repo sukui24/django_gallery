@@ -8,6 +8,7 @@ from gallery.settings import BASE_DIR
 
 from base.models import ImageModel
 from users_app.models import User
+
 from .utils import create_image, create_superuser
 
 
@@ -15,14 +16,14 @@ class TestViewsWithPk(TestCase):
 
     __slots__ = ['delete_image_url', 'edit_image_url', 'client']
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.client = Client()
         self.delete_image_url = reverse('delete-image', args=['1'])
         self.edit_image_url = reverse('edit-image', args=['1'])
 
-    def test_edit_image_POST(self):
+    def test_edit_image_POST(self) -> None:
         """
-        => test_views => TestViewsWithoutPk
+        Located in: base => tests => test_views => TestViewsWithoutPk
 
         Test image editing `POST` request
 
@@ -55,9 +56,9 @@ class TestViewsWithPk(TestCase):
         self.assertEquals(image.title, 'edited_title')
         self.assertEquals(image.is_private, True)
 
-    def test_delete_image_POST(self):
+    def test_delete_image_POST(self) -> None:
         """
-        => test_views => TestViewsWithPk
+        Located in: base => tests => test_views => TestViewsWithPk
         """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
@@ -67,9 +68,9 @@ class TestViewsWithPk(TestCase):
         self.assertEquals(response.status_code, 302)
         self.assertEquals(ImageModel.objects.count(), 0)
 
-    def test_delete_image_POST_unlogged_in(self):
+    def test_delete_image_POST_unlogged_in(self) -> None:
         """
-        => test_views => TestViewsWithPk
+        Located in: base => tests => test_views => TestViewsWithPk
         """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
@@ -80,9 +81,9 @@ class TestViewsWithPk(TestCase):
         self.assertEquals(response.status_code, 302)
         self.assertEquals(ImageModel.objects.count(), 1)
 
-    def test_delete_image_POST_wrong_id(self):
+    def test_delete_image_POST_wrong_id(self) -> None:
         """
-        => test_views => TestViewsWithPk
+        Located in: base => tests => test_views => TestViewsWithPk
         """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
@@ -104,13 +105,13 @@ class TestViewsWithoutPk(TestCase):
     """
     __slots__ = ['client', 'home_url', 'add_image_url',]
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.client = Client()
         self.home_url = reverse('home')
         self.add_image_url = reverse('add-image')
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """
         Deleting useless folders that makes by signals
         """
@@ -124,9 +125,9 @@ class TestViewsWithoutPk(TestCase):
             shutil.rmtree(cache_path)
         super().tearDownClass()
 
-    def test_home_GET_with_image(self):
+    def test_home_GET_with_image(self) -> None:
         """
-        => test_views => TestViewsWithoutPk
+        Located in: base => tests => test_views => TestViewsWithoutPk
         """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
@@ -136,9 +137,9 @@ class TestViewsWithoutPk(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/home.html')
 
-    def test_add_image_POST(self):
+    def test_add_image_POST(self) -> None:
         """
-        => test_views => TestViewsWithoutPk
+        Located in: base => tests => test_views => TestViewsWithoutPk
 
         On start:
         - No User account
@@ -173,9 +174,9 @@ class TestViewsWithoutPk(TestCase):
         self.assertEquals(image.title, 'images')
         self.assertEquals(image.unique_name, 'test_add_image.jpg')
 
-    def test_add_image_POST_no_data(self):
+    def test_add_image_POST_no_data(self) -> None:
         """
-        => test_views => TestViewsWithoutPk
+        Located in: base => tests => test_views => TestViewsWithoutPk
         """
         response = self.client.post(self.add_image_url, {})
 
@@ -183,9 +184,9 @@ class TestViewsWithoutPk(TestCase):
         self.assertEquals(response.content, b'')
         self.assertEquals(ImageModel.objects.count(), 0)
 
-    def test_for_properly_tags_adding_POST_creating(self):
+    def test_for_properly_tags_adding_POST_creating(self) -> None:
         """
-        => test_views => TestViewsWithoutPk
+        Located in: base => tests => test_views => TestViewsWithoutPk
         """
         host = create_superuser(self.client)
 

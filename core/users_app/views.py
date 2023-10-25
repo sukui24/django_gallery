@@ -10,7 +10,7 @@ from users_app.forms import MyUserCreationForm, UserForm
 from users_app.models import User
 
 
-def loginUser(request):
+def login_user(request):
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -27,7 +27,7 @@ def loginUser(request):
     return redirect('home')
 
 
-def registerUser(request):
+def register_user(request):
     form = MyUserCreationForm()
     # using excluded_fields to manage frontend decoration
     excluded_fields = [
@@ -47,19 +47,19 @@ def registerUser(request):
             return redirect('profile', user.id)
 
     elif request.method == "POST":
-        return loginUser(request)
+        return login_user(request)
 
     return render(request, 'users_app/register.html',
                   {'form': form, 'excluded_fields': excluded_fields})
 
 
 @login_required(login_url='login')
-def logoutUser(request):
+def logout_user(request):
     logout(request)
     return redirect('home')
 
 
-def userProfile(request, id):
+def user_profile(request, id):
 
     user = get_object_or_404(User, id=id)
 
@@ -78,13 +78,13 @@ def userProfile(request, id):
                'images_count': images_count}
 
     if request.method == "POST":
-        return loginUser(request)
+        return login_user(request)
 
     return render(request, 'users_app/profile.html', context)
 
 
 @login_required(login_url='login')
-def editUser(request, id):
+def edit_user(request, id):
     # TODO: Add password confirmation if editing
     # TODO: Ability to change password
     user = get_object_or_404(User, id=id)
@@ -98,7 +98,7 @@ def editUser(request, id):
     context = {'form': form, 'excluded_fields': excluded_fields}
 
     if user != request.user:
-        return HttpResponse("You're not allowed here!")
+        return HttpResponse("You're not allowed here!", status=302)
 
     if request.method == "POST":
         form = UserForm(request.POST, request.FILES, instance=user)
@@ -113,7 +113,7 @@ def editUser(request, id):
     return render(request, 'users_app/edit_user.html', context)
 
 
-def userImages(request, id, privacity=False):
+def user_images(request, id, privacity=False):
 
     user = get_object_or_404(User, id=id)
 
@@ -126,22 +126,25 @@ def userImages(request, id, privacity=False):
                'privacity': privacity, 'page_obj': page_obj}
 
     if request.method == "POST":
-        return loginUser(request)
+        return login_user(request)
 
     return render(request, 'users_app/user_images.html', context)
 
 
-def userImagesPrivate(request, id):
+def user_images_private(request, id):
     # if user isn't host send him home
     user = get_object_or_404(User, id=id)
     if request.user != user:
         return redirect('home')
     # set privacity on True to see private images
-    return userImages(request=request, id=id, privacity=True)
+    return user_images(request=request, id=id, privacity=True)
 
 
-def deleteAccout(request, id):
+def delete_accout(request, id):
     user = get_object_or_404(User, id=id)
+
+    if request.user != user:
+        return redirect('home')
 
     if request.method == "POST":
         user.delete()

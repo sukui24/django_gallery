@@ -1,8 +1,9 @@
+import os
+import mimetypes
+
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import filesizeformat
 from django.utils.deconstruct import deconstructible
-import os
-import mimetypes
 
 
 @deconstructible

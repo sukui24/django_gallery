@@ -2,9 +2,10 @@ import os
 
 from gallery.settings import BASE_DIR
 
+from django.test import Client
+
 from base.models import ImageModel
 from users_app.models import User
-from django.test import Client
 
 
 def create_superuser(client: Client) -> User:
@@ -30,12 +31,12 @@ def create_image(client: Client) -> ImageModel:
     - `ImageModel` - `base.models.ImageModel` instance
     """
     host = create_superuser(client)
+    image_path = os.path.join(
+        BASE_DIR, 'base/tests/test_images/test_image.jpg')
     image = ImageModel.objects.create(
         id=1,
         title='images',
-        image=os.path.join(
-            BASE_DIR, 'base/tests/test_images/test_image.jpg'),
-        host=host,
-        unique_name='test_image.jpg'
+        image=image_path,
+        host=host
     )
     return image
