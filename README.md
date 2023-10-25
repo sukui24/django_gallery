@@ -136,7 +136,8 @@ $ docker compose up -d --build
 * After container start i recommend to run tests to make sure everything is ok:
 ```bash
 $ docker exec -it app-app-1 bash
-
+```
+```bash
 username:/usr/src/app/core# python manage.py test
 ```
 
