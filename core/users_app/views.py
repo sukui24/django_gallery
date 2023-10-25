@@ -5,8 +5,9 @@ from django.contrib import messages
 
 from base.models import ImageModel
 from gallery.utils import paginator
-from .forms import MyUserCreationForm, UserForm
-from .models import User
+
+from users_app.forms import MyUserCreationForm, UserForm
+from users_app.models import User
 
 
 def loginUser(request):
@@ -84,7 +85,7 @@ def userProfile(request, id):
 
 @login_required(login_url='login')
 def editUser(request, id):
-    # TODO: Add password confirmation for edit
+    # TODO: Add password confirmation if editing
     # TODO: Ability to change password
     user = get_object_or_404(User, id=id)
 

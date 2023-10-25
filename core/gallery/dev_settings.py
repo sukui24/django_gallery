@@ -9,9 +9,15 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
+import sys
+
 from datetime import timedelta
 from pathlib import Path
-import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,6 +30,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-88+n-ljbasfl_kn12*u!5w*pnukijf*l*!#l(hrre^)r&c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+if 'test' in sys.argv:
+    DEFAULT_FILE_STORAGE = 'base.tests.custom_storage.CustomStorage'
+    STATICFILES_STORAGE = 'base.tests.custom_storage.CustomStorage'
 
 DEBUG = True
 
@@ -145,13 +155,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+cwd = os.getcwd()
+parent_dir = os.path.dirname(os.path.abspath(cwd))
+# media folder path
+data_path = os.path.join(parent_dir, os.environ.get("DATA"))
 
 STATIC_URL = '/staticfiles/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')
 
 MEDIA_URL = '/data/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'data/')
+MEDIA_ROOT = data_path
 
 STATICFILES_DIRS = [
     BASE_DIR / 'staticfiles/'
@@ -205,7 +219,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 
-    "TOKEN_OBTAIN_SERIALIZER": "api.serializers.MyTokenObtainPairSerializer",
+    "TOKEN_OBTAIN_SERIALIZER": "api_rest.serializers.MyTokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
     "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
     "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",

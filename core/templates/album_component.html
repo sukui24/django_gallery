@@ -115,7 +115,7 @@
             <div class="col">
                 <div class="card shadow">
                     <span class="card-image image">
-                        <a href="{% url 'view-image' image.id image.unique_name %}">
+                        <a href="{% url 'view-image' image.id %}">
                             <img class="rounded card-img-top shadow-sm" src="{{ image.image_thumbnail.url }}" alt="{{ image.title }}" loading="lazy">
                         </a>
                     </span>
@@ -149,10 +149,10 @@
                             {% endif %}
                         </div>
                         <div class="row">
-                            <a href="{% url 'view-image' image.id image.unique_name %}" type="button" class="btn btn-primary col-6 me-3">View</a>
+                            <a href="{% url 'view-image' image.id %}" type="button" class="btn btn-primary col-6 me-3">View</a>
                             {% if request.user == image.host %}
-                            <a href="{% url 'edit-image' image.id image.unique_name %}" type="button" class="btn btn-outline-info col mx-2">Edit</a>
-                            <a href="{% url 'delete-image' image.id image.unique_name %}" type="button" class="btn btn-outline-danger col mx-1">Delete</a>
+                            <a href="{% url 'edit-image' image.id %}" type="button" class="btn btn-outline-info col mx-2">Edit</a>
+                            <a href="{% url 'delete-image' image.id %}" type="button" class="btn btn-outline-danger col mx-1">Delete</a>
                             {% endif %}
                         </div>
                         <div class="row pt-2">

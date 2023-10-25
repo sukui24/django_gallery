@@ -1,0 +1,6 @@
+.vscode
+env
+.env.db.example
+.env.example
+README.md
+fixtures_data
