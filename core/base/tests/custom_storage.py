@@ -11,7 +11,7 @@ class CustomStorage(FileSystemStorage):
     def __init__(self, location=None, base_url=None):
         if location is None:
             location = os.path.join(
-                settings.BASE_DIR, "base/tests/test_images")
+                settings.BASE_DIR, "base/tests/test_images/")
         if base_url is None:
             base_url = '/data/'
 

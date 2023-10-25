@@ -16,8 +16,11 @@ class TestModels(TestCase):
         self.edit_image_path = reverse('edit-image', args=['1'])
 
     def test_image_unique_name_updating_after_create(self):
+        """
+        => test_models => TestModels
+        """
         image_path = os.path.join(BASE_DIR,
-                                  'base\\tests\\test_images\\test_image.jpg')
+                                  'base/tests/test_images/test_image.jpg')
         host = create_superuser(self.client)
         ImageModel.objects.create(
             id=1,
@@ -33,9 +36,12 @@ class TestModels(TestCase):
         self.assertEquals(image.unique_name, 'test_image.jpg')
 
     def test_old_image_deletion_after_edit(self):
+        """
+        => test_models => TestModels
+        """
         host = create_superuser(self.client)
         old_image_path = os.path.join(BASE_DIR,
-                                      'base\\tests\\test_images\\test_image.jpg')
+                                      'base/tests/test_images/test_image.jpg')
         ImageModel.objects.create(
             id=1,
             title='old_image',
@@ -44,7 +50,7 @@ class TestModels(TestCase):
         )
         old_image = ImageModel.objects.get(pk=1)
         new_image_path = os.path.join(BASE_DIR,
-                                      'base\\tests\\test_images\\test_edit_image.jpg')
+                                      'base/tests/test_images/test_edit_image.jpg')
 
         with open(new_image_path, 'rb') as image:
             response = self.client.post(self.edit_image_path, {

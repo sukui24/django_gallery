@@ -22,6 +22,8 @@ class TestViewsWithPk(TestCase):
 
     def test_edit_image_POST(self):
         """
+        => test_views => TestViewsWithoutPk
+
         Test image editing `POST` request
 
         Edited fields:
@@ -54,7 +56,9 @@ class TestViewsWithPk(TestCase):
         self.assertEquals(image.is_private, True)
 
     def test_delete_image_POST(self):
-
+        """
+        => test_views => TestViewsWithPk
+        """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
 
@@ -64,7 +68,9 @@ class TestViewsWithPk(TestCase):
         self.assertEquals(ImageModel.objects.count(), 0)
 
     def test_delete_image_POST_unlogged_in(self):
-
+        """
+        => test_views => TestViewsWithPk
+        """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
         self.client.logout()
@@ -75,7 +81,9 @@ class TestViewsWithPk(TestCase):
         self.assertEquals(ImageModel.objects.count(), 1)
 
     def test_delete_image_POST_wrong_id(self):
-
+        """
+        => test_views => TestViewsWithPk
+        """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
 
@@ -117,7 +125,9 @@ class TestViewsWithoutPk(TestCase):
         super().tearDownClass()
 
     def test_home_GET_with_image(self):
-
+        """
+        => test_views => TestViewsWithoutPk
+        """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
 
@@ -128,6 +138,8 @@ class TestViewsWithoutPk(TestCase):
 
     def test_add_image_POST(self):
         """
+        => test_views => TestViewsWithoutPk
+
         On start:
         - No User account
         - No ImageModel instances
@@ -142,7 +154,7 @@ class TestViewsWithoutPk(TestCase):
         self.assertEquals(User.objects.count(), 1)
 
         image_path = os.path.join(
-            BASE_DIR, 'base\\tests\\test_images\\test_add_image.jpg')
+            BASE_DIR, 'base/tests/test_images/test_add_image.jpg')
 
         with open(image_path, "rb") as image:
             response = self.client.post(self.add_image_url, {
@@ -162,7 +174,9 @@ class TestViewsWithoutPk(TestCase):
         self.assertEquals(image.unique_name, 'test_add_image.jpg')
 
     def test_add_image_POST_no_data(self):
-
+        """
+        => test_views => TestViewsWithoutPk
+        """
         response = self.client.post(self.add_image_url, {})
 
         self.assertEquals(response.status_code, 302)
@@ -170,10 +184,13 @@ class TestViewsWithoutPk(TestCase):
         self.assertEquals(ImageModel.objects.count(), 0)
 
     def test_for_properly_tags_adding_POST_creating(self):
+        """
+        => test_views => TestViewsWithoutPk
+        """
         host = create_superuser(self.client)
 
         image_path = os.path.join(BASE_DIR,
-                                  'base\\tests\\test_images\\test_image.jpg')
+                                  'base/tests/test_images/test_image.jpg')
 
         # in `taggit` every tag is a instance of model `Tag`
         # that means we cannot send more that one tag in our request
@@ -189,7 +206,10 @@ class TestViewsWithoutPk(TestCase):
         # code 302 cause we do redirect after image posting
         self.assertEquals(response.status_code, 302)
         self.assertEquals(ImageModel.objects.count(), 1)
-        image = ImageModel.objects.get(pk=1)
+
+        # on prod for some reason DB works differently from local dev
+        # so we will get last created image (usually it's id=2)
+        image = ImageModel.objects.latest('id')
         self.assertEquals(image.tags.count(), 1)
 
         image.tags.add("some new tag")

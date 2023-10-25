@@ -90,6 +90,11 @@ If you have decode issue (for example UnicodeDecodeError: 'utf-8' codec can't de
 $ python manage.py makemigrations && python manage.py migrate
 ```
 
+* Before app start i recommend to run tests to make sure everything is ok:
+```bash
+$ python manage.py test
+```
+
 * Use this command to run server:
 ```bash
 $ python manage.py runserver 127.0.0.1:8000
@@ -126,6 +131,13 @@ C:\your\project\folder
 * Then run docker compose build:
 ```bash
 $ docker compose up -d --build
+```
+
+* After container start i recommend to run tests to make sure everything is ok:
+```bash
+$ docker exec -it app-app-1 bash
+
+username:/usr/src/app/core# python manage.py test
 ```
 
 **if you didn't change port - default is `80`**

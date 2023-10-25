@@ -34,7 +34,7 @@ def create_image(client: Client) -> ImageModel:
         id=1,
         title='images',
         image=os.path.join(
-            BASE_DIR, 'base\\tests\\test_images\\test_image.jpg'),
+            BASE_DIR, 'base/tests/test_images/test_image.jpg'),
         host=host,
         unique_name='test_image.jpg'
     )

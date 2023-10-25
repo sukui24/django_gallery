@@ -20,13 +20,18 @@ class TestUrlsStatic(TestCase):
         self.add_image_url = reverse('add-image')
 
     def test_home_url_GET(self):
-
+        """
+        => test_urls => TestUrlsStatic
+        """
         response = self.client.get(self.home_url)
 
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'base/home.html')
 
     def test_add_image_GET(self):
+        """
+        => test_urls => TestUrlsStatic
+        """
         response = self.client.get(self.add_image_url)
 
         # code 302(redirect) because user unlogged-in and has no permissions
@@ -56,7 +61,9 @@ class TestUrlsDynamic(TestCase):
         self.download_image_url = reverse('download-image', args=['1'])
 
     def test_edit_image_GET(self):
-
+        """
+        => test_urls => TestUrlsDynamic
+        """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
 
@@ -73,7 +80,9 @@ class TestUrlsDynamic(TestCase):
         self.assertEquals(response.status_code, 302)
 
     def test_view_image_GET(self):
-
+        """
+        => test_urls => TestUrlsDynamic
+        """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
 
@@ -82,17 +91,21 @@ class TestUrlsDynamic(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_download_image_GET(self):
-
+        """
+        => test_urls => TestUrlsDynamic
+        """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
-
         response = self.client.get(self.download_image_url)
+
         self.assertEquals(response.status_code, 200)
         self.assertEquals(type(response).__name__, 'FileResponse')
         self.assertEquals(type(response.streaming_content).__name__, 'map')
 
     def test_download_image_GET_wrong_pk(self):
-
+        """
+        => test_urls => TestUrlsDynamic
+        """
         create_image(self.client)
         self.assertEquals(ImageModel.objects.count(), 1)
 
