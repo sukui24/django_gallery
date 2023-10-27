@@ -40,3 +40,33 @@ def create_image(client: Client) -> ImageModel:
         host=host
     )
     return image
+
+
+def create_multiple_images(client: Client) -> None:
+    """
+    Created 3 images for current test session, but didn't return anything
+    """
+    host = create_superuser(client)
+
+    image_path_1 = os.path.join(
+        BASE_DIR, 'base/tests/test_images/test_image.jpg')
+    image_path_2 = os.path.join(
+        BASE_DIR, 'base/tests/test_images/test_image_2.jpg')
+    image_path_3 = os.path.join(
+        BASE_DIR, 'base/tests/test_images/test_image_3.jpg')
+
+    ImageModel.objects.create(
+        title='test_image_1',
+        image=image_path_1,
+        host=host
+    )
+    ImageModel.objects.create(
+        title='test_image_2',
+        image=image_path_2,
+        host=host
+    )
+    ImageModel.objects.create(
+        title='test_image_3',
+        image=image_path_3,
+        host=host
+    )

@@ -34,10 +34,9 @@ urlpatterns = [
                                          cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc',
                                        cache_timeout=0), name='schema-redoc'),
+    path("graphql/", include('api_graphql.urls'))
 ]
 
 if bool(settings.DEBUG):
-    import debug_toolbar
-    urlpatterns += [path('__debug__/', include("debug_toolbar.urls"))]
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)

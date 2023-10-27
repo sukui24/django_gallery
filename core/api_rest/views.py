@@ -66,7 +66,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         queryset = queryset.filter(
             Q(title__icontains=q) | Q(
                 description__icontains=q) | Q(tags__name__icontains=q),
-        ).order_by(_order).distinct()
+        )
+        queryset = queryset.order_by(_order).distinct()
 
         return queryset
 

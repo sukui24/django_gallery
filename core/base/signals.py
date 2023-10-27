@@ -34,10 +34,7 @@ def image_deleter(sender, instance, **kwargs):
     if os.path.isfile(_image_path):
         if instance.unique_name == 'test_image.jpg':
             # `If` block for testing purposes. Sorry i can't do it other way rn :<
-            print("""
-        ✓ `Image deletion signal` used. This text wrote instead of actual deleting image from folder
-        ✓ This message means test passed.
-            """)
+            return None
         else:
             os.remove(_image_path)
 

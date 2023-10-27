@@ -19,7 +19,7 @@ router.register(r'users', UserViewSet, basename='user')
 urlpatterns = [
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('', include(router.urls)),
-    # customized View by new serializer
+
     path('login/',
          TokenObtainPairView.as_view(),
          name='token_obtain_pair'),

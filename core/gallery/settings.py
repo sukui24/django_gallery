@@ -87,6 +87,9 @@ INSTALLED_APPS = [
 
     # CORS
     'corsheaders',
+
+    # GraphQL
+    'graphene_django'
 ]
 
 MIDDLEWARE = [

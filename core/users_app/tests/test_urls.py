@@ -1,12 +1,10 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from .utils import create_defaultuser, create_superuser
+from .fixtures import create_defaultuser, create_superuser
 
 
 class TestUrlsWithoutPk(TestCase):
-
-    __slots__ = ['client', 'register_url', 'logout_url', 'login_url']
 
     def setUp(self) -> None:
         self.client = Client()
@@ -41,9 +39,6 @@ class TestUrlsWithoutPk(TestCase):
 
 
 class TestUrlsWithPkGetRequests(TestCase):
-
-    __slots__ = ['client', 'profile_url', 'edit_user_url', 'user_images_url',
-                 'user_images_private_url', 'delete_account_url']
 
     def setUp(self) -> None:
         self.client = Client()

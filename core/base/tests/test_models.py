@@ -7,7 +7,7 @@ from gallery.settings import BASE_DIR
 
 from base.models import ImageModel
 
-from .utils import create_image
+from .fixtures import create_image
 
 
 class TestModels(TestCase):

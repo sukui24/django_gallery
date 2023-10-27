@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     # my apps
     'base.apps.BaseConfig',
     'users_app.apps.UsersAppConfig',
-    'debug_toolbar',
     'imagekit',
 
     # REST Framework
@@ -73,6 +72,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
+
+    # GraphQL
+    'graphene_django'
 ]
 
 MIDDLEWARE = [
@@ -84,7 +86,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'gallery.urls'

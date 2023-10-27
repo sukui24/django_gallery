@@ -9,12 +9,10 @@ from gallery.settings import BASE_DIR
 from base.models import ImageModel
 from users_app.models import User
 
-from .utils import create_image, create_superuser
+from .fixtures import create_image, create_superuser, create_multiple_images
 
 
 class TestViewsWithPk(TestCase):
-
-    __slots__ = ['delete_image_url', 'edit_image_url', 'client']
 
     def setUp(self) -> None:
         self.client = Client()
@@ -103,7 +101,6 @@ class TestViewsWithoutPk(TestCase):
     `...WithoutPk` means there's no pk in link. Just splitted on this
     two classes for better readability
     """
-    __slots__ = ['client', 'home_url', 'add_image_url',]
 
     def setUp(self) -> None:
         self.client = Client()
@@ -224,3 +221,15 @@ class TestViewsWithoutPk(TestCase):
 
         response = image.tags.remove("some unreal tag")
         self.assertEquals(response, None)
+
+    def test_multiple_images_create_properly(self) -> None:
+        """
+        Located in: base => tests => test_views => TestViewsWithoutPk
+        """
+        create_multiple_images(self.client)
+
+        self.assertEquals(ImageModel.objects.count(), 3)
+
+        self.assertIsNotNone(ImageModel.objects.get(pk=1))
+        self.assertIsNotNone(ImageModel.objects.get(pk=2))
+        self.assertIsNotNone(ImageModel.objects.get(pk=3))

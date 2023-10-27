@@ -5,15 +5,13 @@ from django.urls import reverse
 from base.models import ImageModel
 from users_app.models import User
 
-from .utils import create_image, create_superuser
+from .fixtures import create_image, create_superuser
 
 
 class TestUrlsStatic(TestCase):
     """
     Static urls means urls without `pk`
     """
-
-    __slots__ = ['client', 'home_url', 'add_image_url']
 
     def setUp(self) -> None:
         self.client = Client()
@@ -51,9 +49,6 @@ class TestUrlsDynamic(TestCase):
     """
     Dynamic urls means urls with `pk`
     """
-
-    __slots__ = ['client', 'view_image_url',
-                 'edit_image_url', 'download_image_url']
 
     def setUp(self) -> None:
         self.client = Client()

@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 
 from users_app.models import User
 
-from .utils import create_defaultuser
+from .fixtures import create_defaultuser
 
 
 class TestModel(TestCase):

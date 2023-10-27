@@ -3,12 +3,10 @@ from django.urls import reverse
 
 from users_app.models import User
 
-from .utils import create_defaultuser, create_superuser
+from .fixtures import create_defaultuser, create_superuser, create_multiple_users
 
 
 class TestViews(TestCase):
-
-    __slots__ = ['client', 'edit_user_url', 'delete_account_url']
 
     def setUp(self) -> None:
         self.client = Client()
@@ -101,3 +99,15 @@ class TestViews(TestCase):
 
         self.assertEquals(response.status_code, 302)
         self.assertEquals(User.objects.count(), 2)
+
+    def test_multiple_users_create_properly(self) -> None:
+        """
+        Located in: users_app => tests => test_views =>  TestUrlsWithPkPostRequests
+        """
+        create_multiple_users()
+
+        self.assertEquals(User.objects.count(), 3)
+
+        self.assertIsNotNone(User.objects.get(pk=1))
+        self.assertIsNotNone(User.objects.get(pk=2))
+        self.assertIsNotNone(User.objects.get(pk=3))
