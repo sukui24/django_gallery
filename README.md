@@ -8,6 +8,7 @@ Project made by using this technologies:
 * [Python 3.11.0](https://www.python.org/)
 * [Django 4.2.3](https://www.djangoproject.com/)
 * [Django REST Framework 3.14.0](https://www.django-rest-framework.org/)
+* [Graphene-Django (GraphQL)](https://docs.graphene-python.org/projects/django/en/latest/)
 * [PostgreSQL 12](https://www.postgresql.org/)
 * [Nginx](https://nginx.org/)
 * [Docker](https://www.docker.com/)
