@@ -17,9 +17,13 @@ def get_model_by_id_or_error(obj: ModelBase, id: id) -> Union[Model, GraphQLErro
     - in type hinting set `ModelBase` because all `Model` instances
     are of the `ModelBase` meta class
     """
-    # ! TODO: Filter sql request for getting user provided fields
     if isinstance(obj, ModelBase):
-        return obj.objects.get(pk=id)
+        try:
+            return obj.objects.get(pk=id)
+        except obj.DoesNotExist:
+            return GraphQLError(f"Object {obj.__name__} of id {id} does not exist")
+        except Exception as e:
+            return GraphQLError(f"Something went wrong: {e}")
     else:
         message = f"{obj} should be a Model, got '{type(obj).__name__}' instead"
         return GraphQLError(message)
@@ -36,9 +40,13 @@ def get_queryset_or_error(obj: ModelBase) -> Union[QuerySet, GraphQLError]:
     - in type hinting set `ModelBase` because all `Model` instances
     are of the `ModelBase` meta class
     """
-    try:
-        objects = obj.objects.all()
-    except Exception as e:
-        return GraphQLError(f"Something went wrong: {e}")
+    if isinstance(obj, ModelBase):
+        try:
+            return obj.objects.all()
+        except obj.DoesNotExist:
+            return GraphQLError(f"There's no available records in {obj.__name__}")
+        except Exception as e:
+            return GraphQLError(f"Something went wrong: {e}")
     else:
-        return objects
+        message = f"{obj} should be a Model, got '{type(obj).__name__}' instead"
+        return GraphQLError(message)

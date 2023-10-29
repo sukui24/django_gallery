@@ -37,7 +37,7 @@ class UserRegisterMutation(graphene.Mutation):
 
     def mutate(self, info: GraphQLResolveInfo, input_: UserRegisterInput):
 
-        user = UserRegisterService.register_user(input_, info)
+        user = UserRegisterService.register_user(info, input_)
 
         return UserRegisterMutation(success=True, data=user)
 

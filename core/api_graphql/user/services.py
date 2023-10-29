@@ -12,7 +12,7 @@ class UserRegisterService:
     create and return instance of `User`
     """
     @classmethod
-    def register_user(cls, input_, info: GraphQLResolveInfo) -> User:
+    def register_user(cls, info: GraphQLResolveInfo, input_: UserRegisterInput) -> User:
         """
         Input:
         - `info` - `GraphQLResolveInfo` instance obj. Usually it's automatically
@@ -30,7 +30,7 @@ class UserRegisterService:
             return cls._create_user(input_, context)
 
     @staticmethod
-    def _validate_request(input_, context) -> bool:
+    def _validate_request(input_: UserRegisterInput, context) -> bool:
 
         if context.method != "POST":
             raise GraphQLError(
@@ -42,7 +42,7 @@ class UserRegisterService:
         return True
 
     @classmethod
-    def _create_user(cls, input_, context) -> User:
+    def _create_user(cls, input_: UserRegisterInput, context) -> User:
 
         avatar = context.FILES['0'] if context.FILES else None
 
@@ -99,12 +99,16 @@ class UserDeleteService:
         if cls._validate_request(context):
             user = cls._get_user_or_error(context, id)
             user.delete()
-            return True
+            if cls._check_user_deletion(id):
+                return True
 
         return False
 
     @staticmethod
     def _validate_request(context) -> bool:
+
+        if not context.user.is_authenticated:
+            raise GraphQLError("Only authenticated users can delete account")
 
         if context.method != "POST":
             raise GraphQLError(
@@ -129,11 +133,20 @@ class UserDeleteService:
         except User.DoesNotExist:
             raise GraphQLError("User with this id does not exists")
 
+    @staticmethod
+    def _check_user_deletion(id):
+        try:
+            User.objects.get(pk=id)
+        except User.DoesNotExist:
+            return True
+        else:
+            return False
+
 
 class UserUpdateService:
 
     @classmethod
-    def update_account(cls, info: GraphQLResolveInfo, input_, id: int) -> User:
+    def update_account(cls, info: GraphQLResolveInfo, input_: UserRegisterInput, id: int) -> User:
         """
         Function to update users account. It works like `PATCH` request, can update
         only one of fields, or every field. (fields `is_staff` and `is_active` is also
@@ -160,6 +173,9 @@ class UserUpdateService:
 
     @staticmethod
     def _validate_request(context) -> bool:
+
+        if not context.user.is_authenticated:
+            raise GraphQLError("Only authenticated users can update account")
 
         if context.method != "POST":
             raise GraphQLError(
@@ -188,7 +204,7 @@ class UserUpdateService:
             raise GraphQLError("User with this id does not exists")
 
     @staticmethod
-    def _apply_user_updates(context, input_, user: User) -> User:
+    def _apply_user_updates(context, input_: UserRegisterInput, user: User) -> User:
 
         avatar = context.FILES['0'] if context.FILES else user.avatar
 

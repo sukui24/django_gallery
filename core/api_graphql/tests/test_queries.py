@@ -100,7 +100,7 @@ class TestQueriesImageModel(TestCase):
         response = self.client.execute(query, variable_values={'id': 2})
         self.assertIsNotNone(response)
 
-        excpected_response = "{'errors': [{'message': 'ImageModel matching query does not exist.', \
+        excpected_response = "{'errors': [{'message': 'Object ImageModel of id 2 does not exist', \
 'locations': [{'line': 3, 'column': 13}], 'path': ['imageById']}], 'data': {'imageById': None}}"
 
         self.assertEquals(str(response), excpected_response)
