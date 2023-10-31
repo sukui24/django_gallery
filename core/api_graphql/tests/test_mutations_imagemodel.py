@@ -18,6 +18,18 @@ class ImageModelCreateMutations(TestCase):
     def setUp(self):
         self.client = GraphQLClient(schema)
         self.django_client = Client()
+        self.query = """
+        mutation ($title: String!, $isPrivate: Boolean!){
+            createImage(input_: {title: $title, isPrivate: $isPrivate}) {
+                data {
+                id
+                title
+                image
+                isPrivate
+                }
+            }
+        }
+        """
 
     def test_image_creation_without_image_mutation(self):
         """
@@ -30,20 +42,13 @@ class ImageModelCreateMutations(TestCase):
 
         self.assertEquals(ImageModel.objects.count(), 0)
 
-        query = """
-        mutation {
-            createImage(input_: {title: "123", isPrivate: false}) {
-                data {
-                id
-                title
-                image
-                isPrivate
-                }
-            }
-        }
-        """
+        values = {"title": "123", "isPrivate": False}
         context = MockContext(user=user, method='POST')
-        response = self.client.execute(query, context=context)
+        response = self.client.execute(
+            self.query,
+            variable_values=values,
+            context=context
+        )
         self.assertIsNotNone(response)
 
         expected_response = "{'errors': [{'message': 'Image was not provided in the POST request', 'locations': [{'line': 3, 'column': 13}], 'path': ['createImage']}], 'data': {'createImage': None}}"
@@ -58,18 +63,6 @@ class ImageModelCreateMutations(TestCase):
         self.assertEquals(User.objects.count(), 1)
         user = User.objects.get(pk=1)
 
-        query = """
-        mutation {
-            createImage(input_: {title: "123", isPrivate: false}) {
-                data {
-                id
-                title
-                image
-                isPrivate
-                }
-            }
-        }
-        """
         image_path = os.path.join(
             BASE_DIR, 'api_graphql/tests/test_images/test_image.jpg')
 
@@ -77,7 +70,12 @@ class ImageModelCreateMutations(TestCase):
         context = MockContext(user=user, method='POST',
                               FILES=image, is_authenticated=False)
 
-        response = self.client.execute(query, context=context)
+        values = {"title": "123", "isPrivate": False}
+        response = self.client.execute(
+            self.query,
+            variable_values=values,
+            context=context
+        )
         self.assertIsNotNone(response)
 
         expected_response = "{'errors': [{'message': 'Only authenticated users can upload images', \
@@ -91,6 +89,22 @@ class TestImageModelMutations(TestCase):
     def setUp(self):
         self.client = GraphQLClient(schema)
         self.django_client = Client()
+        self.update_query = """
+        mutation ($id: ID, $title: String){
+            updateImage(id: $id, input_: {title: $title}) {
+                success
+                data {
+                title
+                }
+            }
+        }"""
+        self.deletion_query = """
+        mutation ($id:ID) {
+            deleteImage(id: $id) {
+                success
+            }
+        }
+        """
 
     def test_image_delete_mutation(self):
         """
@@ -101,15 +115,12 @@ class TestImageModelMutations(TestCase):
 
         user = User.objects.latest('id')
 
-        query = """
-        mutation ($id:ID) {
-            deleteImage(id: $id) {
-                success
-            }
-        }
-        """
-        response = self.client.execute(query, variable_values={
-                                       'id': 1}, context=MockContext(user=user, method='POST'))
+        context = MockContext(user=user, method='POST')
+        response = self.client.execute(
+            self.deletion_query,
+            variable_values={'id': 1},
+            context=context
+        )
         self.assertIsNotNone(response)
 
         expected_response = "{'data': {'deleteImage': {'success': True}}}"
@@ -133,15 +144,12 @@ class TestImageModelMutations(TestCase):
 
         user = User.objects.get(pk=2)
 
-        query = """
-        mutation ($id:ID) {
-            deleteImage(id: $id) {
-                success
-            }
-        }
-        """
-        response = self.client.execute(query, variable_values={
-                                       'id': 1}, context=MockContext(user=user, method='POST'))
+        context = MockContext(user=user, method='POST')
+        response = self.client.execute(
+            self.deletion_query,
+            variable_values={'id': 1},
+            context=context
+        )
         self.assertIsNotNone(response)
 
         expected_response = "{'errors': [{'message': 'Only image host can delete it', \
@@ -164,17 +172,14 @@ class TestImageModelMutations(TestCase):
         self.assertEquals(ImageModel.objects.count(), 1)
         user = User.objects.latest('id')
 
-        query = """
-        mutation {
-            updateImage(id: "1", input_: {title: "updated_image_title"}) {
-                success
-                data {
-                title
-                }
-            }
-        }"""
+        values = {"id": "1", "title": "updated_image_title"}
+        context = MockContext(user=user, method='POST')
         response = self.client.execute(
-            query, context=MockContext(user=user, method='POST'))
+            self.update_query,
+            variable_values=values,
+            context=context
+        )
+
         self.assertIsNotNone(response)
 
         expected_response = "{'data': {'updateImage': {'success': True, 'data': {'title': 'updated_image_title'}}}}"
@@ -193,20 +198,44 @@ class TestImageModelMutations(TestCase):
 
         user = User.objects.get(pk=2)
 
-        query = """
-        mutation {
-            updateImage(id: "1", input_: {title: "updated_image_title"}) {
-                success
-                data {
-                title
-                }
-            }
-        }"""
+        values = {"id": "1", "title": "updated_image_title"}
+        context = MockContext(user=user, method='POST')
         response = self.client.execute(
-            query, context=MockContext(user=user, method='POST'))
+            self.update_query,
+            variable_values=values,
+            context=context
+        )
         self.assertIsNotNone(response)
 
         expected_response = "{'errors': [{'message': \"You're not allowed to edit this image\", \
 'locations': [{'line': 3, 'column': 13}], 'path': ['updateImage']}], 'data': {'updateImage': None}}"
+
+        self.assertEquals(str(response), expected_response)
+
+    def test_dont_update_any_field_mutation(self):
+        """
+        Located in: api_graphql => tests => test_mutations_imagemodel => TestImageModelMutations
+
+        Image before updating:
+        - title= 'images'
+
+        Image after updating:
+        - title = 'updated_image_title'
+        """
+
+        create_image(self.django_client)
+        self.assertEquals(ImageModel.objects.count(), 1)
+        user = User.objects.latest('id')
+
+        values = {"id": "1"}
+        context = MockContext(user=user, method='POST')
+        response = self.client.execute(
+            self.update_query,
+            variable_values=values,
+            context=context
+        )
+        self.assertIsNotNone(response)
+
+        expected_response = "{'data': {'updateImage': {'success': True, 'data': {'title': 'images'}}}}"
 
         self.assertEquals(str(response), expected_response)

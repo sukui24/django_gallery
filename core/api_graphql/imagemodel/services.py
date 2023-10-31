@@ -139,6 +139,9 @@ class ImageModelUpdateService:
         Function to update image. It works like `PATCH` request, can update
         only one of fields, or every field.
 
+        Image updates only if was provided atleast one field. Otherwise just returns
+        image data.
+
         Input:
         - `info` - `GraphQLResolveInfo` instance obj. Usually it's automatically
                     collect all needed data and transfer it as `info` object, but it's also mutable
@@ -154,13 +157,18 @@ class ImageModelUpdateService:
         context = info.context
 
         cls._validate_request(context)
+
         image_instance = cls._get_image_or_error(context, id)
-        image_updated = cls._apply_image_updates(
-            context, input_, image_instance)
-        return image_updated
+        # if no input there's no need to do anything
+        if len(input_) < 1:
+            return image_instance
+        else:
+            updated_image = cls._apply_image_updates(
+                context, input_, image_instance)
+            return updated_image
 
     @staticmethod
-    def _validate_request(context) -> bool:
+    def _validate_request(context) -> None:
 
         if not context.user.is_authenticated:
             raise GraphQLError("Only authenticated users can edit images")
@@ -171,8 +179,6 @@ class ImageModelUpdateService:
 
         if len(context.FILES) > 1:
             raise GraphQLError("You should send only one image!")
-
-        return True
 
     @staticmethod
     def _get_image_or_error(context, id: str) -> ImageModel:
@@ -206,10 +212,16 @@ class ImageModelUpdateService:
             "image": image_file,
         }
 
+        # counter for updated fields
+        counter = 0
         for attribute, value in attributes_to_update.items():
             if value is not None:
+                if getattr(image, attribute) == value:
+                    continue
                 setattr(image, attribute, value)
+                counter += 1
 
-        image.save()
+        if counter > 0:
+            image.save()
 
         return image

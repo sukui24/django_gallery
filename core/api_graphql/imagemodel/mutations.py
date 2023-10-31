@@ -60,7 +60,15 @@ class ImageModelDeleteMutation(graphene.Mutation):
 
 
 class ImageUpdateMutation(graphene.Mutation):
+    """
+    Image update mutation
 
+    Send `POST` and function will handle all upgrades. This
+    mutation works like `PATCH` method, you're not forced to send
+    all fields, you can update only few of them
+
+    Only hosts and admins can update images
+    """
     class Arguments:
         id = graphene.ID()
         input_ = ImageModelDetailnput()
@@ -69,19 +77,13 @@ class ImageUpdateMutation(graphene.Mutation):
     data = graphene.Field(ImageModelOutputType)
 
     def mutate(self, info: GraphQLResolveInfo, input_, id):
-        """
-        Image update mutation
 
-        Send `POST` and function will handle all upgrades. This
-        mutation works like `PATCH` method, you're not forced to send
-        all fields, you can update only few of them
-
-        Only hosts and admins can update images
-        """
-
+        # setting `else` just in case if something went wrong
+        # and excpetion wasn't catched
         if image := ImageModelUpdateService.update_image(info, input_, id):
             success = True
-            return ImageUpdateMutation(success=success, data=image)
         else:
+            image = None
             success = False
-            return ImageUpdateMutation(success=success, data=None)
+
+        return ImageUpdateMutation(success=success, data=image)
